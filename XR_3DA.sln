@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XR_3DA", "xr_3da\XR_3DA.vcxproj", "{0DB2A4C8-CA68-817A-A642-E53AD0391178}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xrCPU_Pipe", "xr_3da\xrCPU_Pipe\xrCPU_Pipe.vcxproj", "{20009DD9-08C4-EAF7-625C-01A707261157}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xrGame", "xr_3da\xrGame\xrGame.vcxproj", "{08E82980-7A35-EB47-609E-4A17C390B99D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Mixed|Win32 = Mixed|Win32
+		Release|Win32 = Release|Win32
+		Template|Win32 = Template|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0DB2A4C8-CA68-817A-A642-E53AD0391178}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0DB2A4C8-CA68-817A-A642-E53AD0391178}.Debug|Win32.Build.0 = Debug|Win32
+		{0DB2A4C8-CA68-817A-A642-E53AD0391178}.Mixed|Win32.ActiveCfg = Mixed|Win32
+		{0DB2A4C8-CA68-817A-A642-E53AD0391178}.Mixed|Win32.Build.0 = Mixed|Win32
+		{0DB2A4C8-CA68-817A-A642-E53AD0391178}.Release|Win32.ActiveCfg = Release|Win32
+		{0DB2A4C8-CA68-817A-A642-E53AD0391178}.Release|Win32.Build.0 = Release|Win32
+		{0DB2A4C8-CA68-817A-A642-E53AD0391178}.Template|Win32.ActiveCfg = Release|Win32
+		{0DB2A4C8-CA68-817A-A642-E53AD0391178}.Template|Win32.Build.0 = Release|Win32
+		{20009DD9-08C4-EAF7-625C-01A707261157}.Debug|Win32.ActiveCfg = Debug|Win32
+		{20009DD9-08C4-EAF7-625C-01A707261157}.Debug|Win32.Build.0 = Debug|Win32
+		{20009DD9-08C4-EAF7-625C-01A707261157}.Mixed|Win32.ActiveCfg = Template|Win32
+		{20009DD9-08C4-EAF7-625C-01A707261157}.Mixed|Win32.Build.0 = Template|Win32
+		{20009DD9-08C4-EAF7-625C-01A707261157}.Release|Win32.ActiveCfg = Release|Win32
+		{20009DD9-08C4-EAF7-625C-01A707261157}.Release|Win32.Build.0 = Release|Win32
+		{20009DD9-08C4-EAF7-625C-01A707261157}.Template|Win32.ActiveCfg = Template|Win32
+		{20009DD9-08C4-EAF7-625C-01A707261157}.Template|Win32.Build.0 = Template|Win32
+		{08E82980-7A35-EB47-609E-4A17C390B99D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{08E82980-7A35-EB47-609E-4A17C390B99D}.Debug|Win32.Build.0 = Debug|Win32
+		{08E82980-7A35-EB47-609E-4A17C390B99D}.Mixed|Win32.ActiveCfg = Mixed|Win32
+		{08E82980-7A35-EB47-609E-4A17C390B99D}.Mixed|Win32.Build.0 = Mixed|Win32
+		{08E82980-7A35-EB47-609E-4A17C390B99D}.Release|Win32.ActiveCfg = Release|Win32
+		{08E82980-7A35-EB47-609E-4A17C390B99D}.Release|Win32.Build.0 = Release|Win32
+		{08E82980-7A35-EB47-609E-4A17C390B99D}.Template|Win32.ActiveCfg = Template|Win32
+		{08E82980-7A35-EB47-609E-4A17C390B99D}.Template|Win32.Build.0 = Template|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

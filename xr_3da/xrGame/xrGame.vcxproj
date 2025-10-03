@@ -1,0 +1,416 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Mixed|Win32">
+      <Configuration>Mixed</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <ProjectGuid>{08E82980-7A35-EB47-609E-4A17C390B99D}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>x:\game\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">
+    <OutDir>x:\game\</OutDir>
+    <IntDir>.\Mixed\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>x:\game\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;XRGAME_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Release\xrGame.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+      <CallingConvention>StdCall</CallingConvention>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>x:\game\xrGame.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>x:\game\xrGame.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>x:\game\xrGame.dll</OutputFile>
+      <ImportLibrary>x:\game\xrGame.lib</ImportLibrary>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;x:\game\xr_3da.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <OmitFramePointers>false</OmitFramePointers>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;XRGAME_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Mixed\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Mixed\xrGame.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Mixed\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Mixed\</ProgramDataBaseFileName>
+      <CallingConvention>StdCall</CallingConvention>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>x:\game\xrGame.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>x:\game\xrGame.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>x:\game\xrGame.dll</OutputFile>
+      <ImportLibrary>x:\game\xrGame.lib</ImportLibrary>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;x:\game\xr_3da.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;XRGAME_EXPORTS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeaderOutputFile>.\Debug\xrGame.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <CallingConvention>StdCall</CallingConvention>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>x:\game\xrGame.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>x:\game\xrGame.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>x:\game\xrGame.dll</OutputFile>
+      <ImportLibrary>x:\game\xrGame.lib</ImportLibrary>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;x:\game\xr_3da.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="clsid_game.h" />
+    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="MovementControl.h" />
+    <ClInclude Include="SoundHelper.h" />
+    <ClInclude Include="ai_commands.h" />
+    <ClInclude Include="AI_Console.h" />
+    <ClInclude Include="ai_goals.h" />
+    <ClInclude Include="AI_PathNodes.h" />
+    <ClInclude Include="CustomMonster.h" />
+    <ClInclude Include="CustomMonster_VisTrack.h" />
+    <ClInclude Include="Weapon.h" />
+    <ClInclude Include="WeaponAutoRifle.h" />
+    <ClInclude Include="WeaponHUD.h" />
+    <ClInclude Include="WeaponMagazined.h" />
+    <ClInclude Include="WeaponM134.h" />
+    <ClInclude Include="WeaponRail.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="WeaponProtecta.h" />
+    <ClInclude Include="EffectorNoise.h" />
+    <ClInclude Include="EffectorRecoil.h" />
+    <ClInclude Include="EffectorShot.h" />
+    <ClInclude Include="WeaponAK74.h" />
+    <ClInclude Include="WeaponLR300.h" />
+    <ClInclude Include="WeaponFN2000.h" />
+    <ClInclude Include="WeaponHPSA.h" />
+    <ClInclude Include="xr_weapon_list.h" />
+    <ClInclude Include="CustomDoor.h" />
+    <ClInclude Include="CustomItem.h" />
+    <ClInclude Include="CustomLift.h" />
+    <ClInclude Include="CustomEvent.h" />
+    <ClInclude Include="Actor.h" />
+    <ClInclude Include="Actor_Flags.h" />
+    <ClInclude Include="ActorAnimation.h" />
+    <ClInclude Include="EffectorBobbing.h" />
+    <ClInclude Include="DemoActor.h" />
+    <ClInclude Include="DummyObject.h" />
+    <ClInclude Include="Flyer.h" />
+    <ClInclude Include="AI\Hen\ai_hen.h" />
+    <ClInclude Include="AI\Hen\ai_hen_selectors.h" />
+    <ClInclude Include="AI\Rat\ai_rat.h" />
+    <ClInclude Include="AI\Rat\ai_rat_selectors.h" />
+    <ClInclude Include="AI\Soldier\ai_soldier.h" />
+    <ClInclude Include="AI\Soldier\ai_soldier_selectors.h" />
+    <ClInclude Include="AI\Zomby\ai_zomby.h" />
+    <ClInclude Include="AI\Zomby\ai_zomby_selectors.h" />
+    <ClInclude Include="AI\Crow\ai_crow.h" />
+    <ClInclude Include="AI\ai_monsters.h" />
+    <ClInclude Include="TestPhysics.h" />
+    <ClInclude Include="Group.h" />
+    <ClInclude Include="Level.h" />
+    <ClInclude Include="UI.h" />
+    <ClInclude Include="UICursor.h" />
+    <ClInclude Include="UICustomItem.h" />
+    <ClInclude Include="UIDynamicItem.h" />
+    <ClInclude Include="UIGroup.h" />
+    <ClInclude Include="UIHealth.h" />
+    <ClInclude Include="UIStaticItem.h" />
+    <ClInclude Include="UIWeapon.h" />
+    <ClInclude Include="UIZoneMap.h" />
+    <ClInclude Include="ContextMenu.h" />
+    <ClInclude Include="HitMarker.h" />
+    <ClInclude Include="HUDCursor.h" />
+    <ClInclude Include="HUDManager.h" />
+    <ClInclude Include="xrMessages.h" />
+    <ClInclude Include="xrServer.h" />
+    <ClInclude Include="DynamicHeightMap.h" />
+    <ClInclude Include="Rain.h" />
+    <ClInclude Include="Tracer.h" />
+    <ClInclude Include="ai_a_star.h" />
+    <ClInclude Include="AI_Space.h" />
+    <ClInclude Include="Spawn.h" />
+    <ClInclude Include="Spawn_Event.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="xrGame.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="MovementControl.cpp" />
+    <ClCompile Include="AI_PathNodes.cpp" />
+    <ClCompile Include="CustomMonster.cpp" />
+    <ClCompile Include="CustomMonster_VCPU.cpp" />
+    <ClCompile Include="CustomMonster_VisTrack.cpp" />
+    <ClCompile Include="dbg_draw_frustum.cpp" />
+    <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="WeaponAutoRifle.cpp" />
+    <ClCompile Include="WeaponHUD.cpp" />
+    <ClCompile Include="WeaponMagazined.cpp" />
+    <ClCompile Include="WeaponM134.cpp" />
+    <ClCompile Include="WeaponRail.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="WeaponProtecta.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="EffectorNoise.cpp" />
+    <ClCompile Include="EffectorRecoil.cpp" />
+    <ClCompile Include="EffectorShot.cpp" />
+    <ClCompile Include="WeaponAK74.cpp" />
+    <ClCompile Include="WeaponLR300.cpp" />
+    <ClCompile Include="WeaponFN2000.cpp" />
+    <ClCompile Include="WeaponHPSA.cpp" />
+    <ClCompile Include="xr_weapon_list.cpp" />
+    <ClCompile Include="CustomDoor.cpp" />
+    <ClCompile Include="CustomItem.cpp" />
+    <ClCompile Include="CustomLift.cpp" />
+    <ClCompile Include="CustomEvent.cpp" />
+    <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="ActorAnimation.cpp" />
+    <ClCompile Include="ActorCameras.cpp" />
+    <ClCompile Include="ActorInput.cpp" />
+    <ClCompile Include="EffectorBobbing.cpp" />
+    <ClCompile Include="DemoActor.cpp" />
+    <ClCompile Include="DemoActorCameras.cpp" />
+    <ClCompile Include="DummyObject.cpp" />
+    <ClCompile Include="Flyer.cpp" />
+    <ClCompile Include="FlyerCameras.cpp" />
+    <ClCompile Include="FlyerInput.cpp" />
+    <ClCompile Include="AI\Hen\ai_hen.cpp" />
+    <ClCompile Include="AI\Hen\ai_hen_selectors.cpp" />
+    <ClCompile Include="AI\Rat\ai_rat.cpp" />
+    <ClCompile Include="AI\Rat\ai_rat_selectors.cpp" />
+    <ClCompile Include="AI\Soldier\ai_soldier.cpp" />
+    <ClCompile Include="AI\Soldier\ai_soldier_selectors.cpp" />
+    <ClCompile Include="AI\Zomby\ai_zomby.cpp" />
+    <ClCompile Include="AI\Zomby\ai_zomby_selectors.cpp" />
+    <ClCompile Include="AI\Crow\ai_crow.cpp" />
+    <ClCompile Include="AI\ai_monsters.cpp" />
+    <ClCompile Include="TestPhysics.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Group.cpp" />
+    <ClCompile Include="Level.cpp" />
+    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="UICursor.cpp" />
+    <ClCompile Include="UICustomItem.cpp" />
+    <ClCompile Include="UIDynamicItem.cpp" />
+    <ClCompile Include="UIGroup.cpp" />
+    <ClCompile Include="UIHealth.cpp" />
+    <ClCompile Include="UIStaticItem.cpp" />
+    <ClCompile Include="UIWeapon.cpp" />
+    <ClCompile Include="UIZoneMap.cpp" />
+    <ClCompile Include="ContextMenu.cpp" />
+    <ClCompile Include="HitMarker.cpp" />
+    <ClCompile Include="HUDCursor.cpp" />
+    <ClCompile Include="HUDManager.cpp" />
+    <ClCompile Include="xrServer.cpp" />
+    <ClCompile Include="xrServer_Entities.cpp" />
+    <ClCompile Include="DynamicHeightMap.cpp" />
+    <ClCompile Include="Rain.cpp" />
+    <ClCompile Include="Tracer.cpp" />
+    <ClCompile Include="ai_a_star.cpp" />
+    <ClCompile Include="AI_qNode.cpp" />
+    <ClCompile Include="AI_qRange.cpp" />
+    <ClCompile Include="AI_Space.cpp" />
+    <ClCompile Include="AI_Utilities.cpp" />
+    <ClCompile Include="Spawn.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Spawn_Event.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="X:\game\engine.log">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="notes.txt" />
+    <CustomBuild Include="Shedule.txt" />
+    <CustomBuild Include="todo.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
