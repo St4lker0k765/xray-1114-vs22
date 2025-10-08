@@ -14,10 +14,12 @@ std::vector <char *>	LogFileAddons;
 
 void AddOne(char *split) {
 	LogFile.push_back(split);
-#ifdef _DEBUG
-	OutputDebugString(split);
-	OutputDebugString("\n");
-#endif
+
+	if (IsDebuggerPresent())
+	{
+		OutputDebugString(split);
+		OutputDebugString("\n");
+	}
 	if (GetCurrentThreadId()==dwMainThreadID) {
 		if (LogFileAddons.size()) {
 			// firstly we transfer other threads output to window
