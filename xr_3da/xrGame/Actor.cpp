@@ -152,8 +152,8 @@ CActor::~CActor()
 	for (int i=0; i<eacMaxCam; i++) _DELETE(cameras[i]);
 
 	// sounds
-	for (i=0; i<SND_HIT_COUNT; i++) pSounds->Delete3D(sndHit[i]);
-	for (i=0; i<SND_DIE_COUNT; i++) pSounds->Delete3D(sndDie[i]);
+	for (int i=0; i<SND_HIT_COUNT; i++) pSounds->Delete3D(sndHit[i]);
+	for (int i=0; i<SND_DIE_COUNT; i++) pSounds->Delete3D(sndDie[i]);
 	pSounds->Delete2D(sndStep[0]);
 	pSounds->Delete2D(sndStep[1]);
 	pSounds->Delete3D(sndRespawn);

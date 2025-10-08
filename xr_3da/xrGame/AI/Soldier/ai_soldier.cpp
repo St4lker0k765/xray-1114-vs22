@@ -196,44 +196,42 @@ bool CAI_Soldier::bfCheckPath(AI::Path &Path) {
 #define LEFT_NODE(Index)  ((Index + 3) & 3)
 #define RIGHT_NODE(Index) ((Index + 5) & 3)
 
-void CAI_Soldier::SetLessCoverLook(NodeCompressed *tNode)
+void CAI_Soldier::SetLessCoverLook(NodeCompressed* tNode)
 {
-	for (int i=1, iMaxOpenIndex=0, iMaxOpen = tNode->cover[0]; i<4; i++)
-		if (tNode->cover[i] > iMaxOpen) {
-			iMaxOpenIndex = i; 
-			iMaxOpen = tNode->cover[i];
-		}
-	
-	if (tNode->cover[iMaxOpenIndex]) {
-		float fAngleOfView = eye_fov/180.f*PI;
-		float fDirection = fAngleOfView/2 + (PI - fAngleOfView)*(float(tNode->cover[iMaxOpenIndex])/255.f + float(tNode->cover[RIGHT_NODE(iMaxOpenIndex)])/255.f)/(2*float(tNode->cover[iMaxOpenIndex])/255.f + float(tNode->cover[LEFT_NODE(iMaxOpenIndex)])/255.f + float(tNode->cover[RIGHT_NODE(iMaxOpenIndex)])/255.f);
-		float fSinus,fCosinus;
-		_sincos(fDirection,fSinus,fCosinus);
-		switch (iMaxOpenIndex) {
-			case 0 : {
-				tWatchDirection.set(-fSinus,0,fCosinus);
-				break;
-			}
-			case 1 : {
-				tWatchDirection.set(fCosinus,0,fSinus);
-				break;
-			}
-			case 2 : {
-				tWatchDirection.set(fSinus,0,-fCosinus);
-				break;
-			}
-			case 3 : {
-				tWatchDirection.set(-fCosinus,0,-fSinus);
-				break;
-			}
-		}
-	}
-	else 
-		tWatchDirection.set(1,0,0);
-	
-	q_look.setup(AI::AIC_Look::Look, AI::t_Direction, &(tWatchDirection), 1000);
-	q_look.o_look_speed=_FB_look_speed;
+    int iMaxOpenIndex = 0;
+    int iMaxOpen = tNode->cover[0];
+    for (int i = 1; i < 4; ++i) {
+        if (tNode->cover[i] > iMaxOpen) {
+            iMaxOpenIndex = i;
+            iMaxOpen = tNode->cover[i];
+        }
+    }
+
+    if (tNode->cover[iMaxOpenIndex]) {
+        float fAngleOfView = eye_fov / 180.f * PI;
+        float fDirection = fAngleOfView / 2
+            + (PI - fAngleOfView)
+              * (float(tNode->cover[iMaxOpenIndex]) / 255.f
+                 + float(tNode->cover[RIGHT_NODE(iMaxOpenIndex)]) / 255.f)
+              / (2 * float(tNode->cover[iMaxOpenIndex]) / 255.f
+                 + float(tNode->cover[LEFT_NODE(iMaxOpenIndex)]) / 255.f
+                 + float(tNode->cover[RIGHT_NODE(iMaxOpenIndex)]) / 255.f);
+        float fSinus, fCosinus;
+        _sincos(fDirection, fSinus, fCosinus);
+        switch (iMaxOpenIndex) {
+            case 0: tWatchDirection.set(-fSinus, 0,  fCosinus); break;
+            case 1: tWatchDirection.set( fCosinus, 0, fSinus);  break;
+            case 2: tWatchDirection.set( fSinus, 0, -fCosinus); break;
+            case 3: tWatchDirection.set(-fCosinus, 0,-fSinus);  break;
+        }
+    } else {
+        tWatchDirection.set(1, 0, 0);
+    }
+
+    q_look.setup(AI::AIC_Look::Look, AI::t_Direction, &tWatchDirection, 1000);
+    q_look.o_look_speed = _FB_look_speed;
 }
+
 
 void CAI_Soldier::SetSmartLook(NodeCompressed *tNode, Fvector &tEnemyDirection)
 {

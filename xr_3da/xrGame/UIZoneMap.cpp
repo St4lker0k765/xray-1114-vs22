@@ -79,7 +79,7 @@ void CUIZoneMap::UpdateRadar(CEntity* Actor, CTeam& Team)
 		entity.Out	(P.x,P.y,COLOR_ENEMY,alLeft|alTop);
 	}
 	// render friend
-	for (i=0; i<Team.Squads.size(); i++){
+	for (DWORD i=0; i<Team.Squads.size(); i++){
 		CSquad& S = Team.Squads[i];
 		for (DWORD j=0; j<S.Groups.size(); j++){
 			CGroup& G = S.Groups[j];

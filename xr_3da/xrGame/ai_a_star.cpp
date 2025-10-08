@@ -181,23 +181,30 @@ float CAI_Space::vfFindTheXestPath(DWORD dwStartNode, DWORD dwGoalNode, AI::Path
 		// check if that node is our goal
 		if (tpBestNode->iIndex == (int)dwGoalNode) {
 
-			float fDistance = 0.0;
+			float fDistance = 0.0f;
+
+			uint pathLen = 1;
 			tpTemp1 = tpBestNode;
 			tpTemp = tpTemp1->tpBack;
-			for (uint i=1; tpTemp; tpTemp1 = tpTemp, tpTemp = tpTemp->tpBack, i++)
-				fDistance += ffCriteria(mNodeStructure(tpTemp1->iIndex),mNodeStructure(tpTemp->iIndex));
+			for (; tpTemp; tpTemp1 = tpTemp, tpTemp = tpTemp->tpBack) {
+				fDistance += ffCriteria(mNodeStructure(tpTemp1->iIndex),
+					mNodeStructure(tpTemp->iIndex));
+				++pathLen;
+			}
 
-			Result.Nodes.resize(i);
+			Result.Nodes.resize(pathLen);
 
+			uint i = pathLen;
 			tpTemp1 = tpBestNode;
 			Result.Nodes[--i] = tpBestNode->iIndex;
 			tpTemp = tpTemp1->tpBack;
-			for (uint j=1; tpTemp; tpTemp = tpTemp->tpBack, j++)
+			for (uint j = 1; tpTemp; tpTemp = tpTemp->tpBack, ++j)
 				Result.Nodes[i - j] = tpTemp->iIndex;
-				
+
 			Device.Statistic.AI_Path.End();
-			return(fDistance);
+			return fDistance;
 		}
+
 		
 		NodeLink *taLinks = (NodeLink *)((uchar *)mNode(tpBestNode->iIndex) + sizeof(NodeCompressed));
 		int iCount = iCount = mNode(tpBestNode->iIndex)->link_count, iNodeIndex;
@@ -352,22 +359,29 @@ float CAI_Space::vfFindTheXestPath(DWORD dwStartNode, DWORD dwGoalNode, AI::Path
 		// check if that node is our goal
 		if (tpBestNode->iIndex == (int)dwGoalNode) {
 
-			float fDistance = 0.0;
+			float fDistance = 0.0f;
+
+			uint pathLen = 1;
 			tpTemp1 = tpBestNode;
 			tpTemp = tpTemp1->tpBack;
-			for (uint i=1; tpTemp; tpTemp1 = tpTemp, tpTemp = tpTemp->tpBack, i++)
-				fDistance += ffAttackCriteria(mNodeStructure(tpTemp1->iIndex),mNodeStructure(tpTemp->iIndex), tEnemyNode, fOptimalEnemyDistance);
+			for (; tpTemp; tpTemp1 = tpTemp, tpTemp = tpTemp->tpBack) {
+				fDistance += ffAttackCriteria(mNodeStructure(tpTemp1->iIndex),
+					mNodeStructure(tpTemp->iIndex),
+					tEnemyNode, fOptimalEnemyDistance);
+				++pathLen;
+			}
 
-			Result.Nodes.resize(i);
+			Result.Nodes.resize(pathLen);
 
+			uint i = pathLen;
 			tpTemp1 = tpBestNode;
 			Result.Nodes[--i] = tpBestNode->iIndex;
 			tpTemp = tpTemp1->tpBack;
-			for (uint j=1; tpTemp; tpTemp = tpTemp->tpBack, j++)
+			for (uint j = 1; tpTemp; tpTemp = tpTemp->tpBack, ++j)
 				Result.Nodes[i - j] = tpTemp->iIndex;
-				
+
 			Device.Statistic.AI_Path.End();
-			return(fDistance);
+			return fDistance;
 		}
 		
 		NodeLink *taLinks = (NodeLink *)((uchar *)mNode(tpBestNode->iIndex) + sizeof(NodeCompressed));

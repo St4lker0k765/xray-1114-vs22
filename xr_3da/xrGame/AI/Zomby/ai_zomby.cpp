@@ -208,8 +208,9 @@ bool CAI_Zomby::bfCheckPath(AI::Path &Path) {
 
 void CAI_Zomby::SetLessCoverLook(NodeCompressed *tNode)
 {
-	//Fvector tWatchDirection;
-	for (int i=1, iMaxOpenIndex=0, iMaxOpen = tNode->cover[0]; i<4; i++)
+	int iMaxOpenIndex = 0;
+	int iMaxOpen = tNode->cover[0];
+	for (int i = 1; i < 4; ++i)
 		if (tNode->cover[i] > iMaxOpen) {
 			iMaxOpenIndex = i; 
 			iMaxOpen = tNode->cover[i];

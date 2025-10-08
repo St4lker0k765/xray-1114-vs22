@@ -94,16 +94,19 @@ BOOL CWeaponList::WeaponChange(int idx)
 
 BOOL CWeaponList::ActivateWeaponNext(BOOL ignore)
 {
-	if (m_Weapons.size()>1){
-		int wpn_count=m_Weapons.size();
-		for (int Q=0, cur_wpn = m_iActiveWeapon+1;cur_wpn<=wpn_count; cur_wpn++, Q++){
-			if (cur_wpn>=wpn_count)cur_wpn=0;
-			if (ignore||m_Weapons[cur_wpn]->IsValid()) break;
-			if (Q>=wpn_count) return false;
-		}
-		return WeaponChange(cur_wpn);	
-	}
-	return false;
+    if (m_Weapons.size() > 1) {
+        const int wpn_count = static_cast<int>(m_Weapons.size());
+        int cur_wpn = m_iActiveWeapon + 1;
+        int Q = 0;
+        for (; Q < wpn_count; ++Q, ++cur_wpn) {
+            if (cur_wpn >= wpn_count) cur_wpn = 0;
+            if (ignore || m_Weapons[cur_wpn]->IsValid())
+                break;
+        }
+        if (Q >= wpn_count) return FALSE;
+        return WeaponChange(cur_wpn);
+    }
+    return FALSE;
 }
 
 int	CWeaponList::FindWeapon(CLASS_ID cls)
