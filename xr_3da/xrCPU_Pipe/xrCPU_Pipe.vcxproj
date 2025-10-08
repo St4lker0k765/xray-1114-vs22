@@ -85,6 +85,7 @@
       <ObjectFileName>.\Release\</ObjectFileName>
       <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
       <CallingConvention>StdCall</CallingConvention>
+      <AdditionalIncludeDirectories>$(SolutionDir)\SDK\dx8sdk\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -106,8 +107,10 @@
       <LinkDLL>true</LinkDLL>
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <ImportLibrary>x:\game\xrCPU_Pipe.lib</ImportLibrary>
-      <AdditionalDependencies>x:\game\xr_3da.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>
+      </ImportLibrary>
+      <AdditionalDependencies>xr_3da.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\bin\;$(SolutionDir)\SDK\dx8sdk\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
