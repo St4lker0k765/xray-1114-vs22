@@ -30,6 +30,7 @@ void CCustomEvent::Load			(CInifile* ini, const char * section)
 	cNameSET					(section);
 	
 	// Geometry and transform
+	/*
 	Fvector dir,norm;
 	vPosition					= ini->ReadVECTOR(section,"position");
 	vScale						= ini->ReadVECTOR(section,"scale");
@@ -37,7 +38,7 @@ void CCustomEvent::Load			(CInifile* ini, const char * section)
 	norm						= ini->ReadVECTOR(section,"normal");
 	mRotate.rotation			(dir,norm);
 	UpdateTransform				();
-	
+	*/
 	// General stuff
 	pVisualName					= NULL;
 	pVisual						= NULL;
@@ -57,7 +58,7 @@ void CCustomEvent::Parse		(DEF_EVENT& D, LPCSTR DEF)
 	sscanf	(DEF,"%[^,],%s",Event,Param);
 	if (Event[0]) {
 		// Parse param's macroses
-		char	Parsed	[1280], sBegin[1280], sName[1280], sEnd[1280], sBuf[128];
+		char	Parsed	[1280]="", sBegin[1280]="", sName[1280]="", sEnd[1280]="", sBuf[128]="";
 		sscanf	(Param,"%[^$]$rp$%[^$]$%s",sBegin,sName,sEnd);
 		if (sName[0])	{
 			int id		= Level().get_RPID(sName);
