@@ -74,7 +74,7 @@ ENGINE_API void __fastcall _verify     (const char *expr, char *file, int line)
     sprintf(dlgLine,"%d",line);
     Debug.Update();
     int res = DialogBox(
-        GetModuleHandle(NULL),
+        GetModuleHandle("XR_3DA.exe"),
         MAKEINTRESOURCE(IDD_VERIFY),
         NULL,
         verifyProc );
@@ -184,13 +184,7 @@ BOOL    CDebugKernel::Stop()
 //------------------------------------------------------------------------------------------------------------------------
 void    CDebugKernel::Update()
 {
-	__try
-	{
-		RaiseException(0, 0, 0, NULL);
-	}
-	__except(UpdateStack(GetExceptionInformation()))
-	{
-	}
+	ShowCursor(TRUE);
 }
 int	CDebugKernel::LogStack(EXCEPTION_POINTERS *pex)
 {
