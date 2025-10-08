@@ -439,7 +439,7 @@ void CKinematics::Release()
 		_FREE((*partition)[i].Name);
 	
 	// free bones
-	for (i=0; i<bones->size(); i++)
+	for (DWORD i=0; i<bones->size(); i++)
 	{
 		CBoneData* &B = (*bones)[i];
 		_DELETE(B);
@@ -591,7 +591,7 @@ void CKinematics::Load(const char* N, CStream *data, DWORD dwFlags)
 		motion_map->insert(make_pair(strdup(strlwr(mname)),M));
 
 		DWORD dwLen = MS->Rdword();
-		for (i=0; i<bones->size(); i++)
+		for (DWORD i=0; i<bones->size(); i++)
 		{
 			CMotion TMP;
 			TMP.Keys.reserve(dwLen);

@@ -11,6 +11,9 @@ Desc:debug & initialization & other
 #include <seer.h>
 #include "internal.h"
 #include <sys/stat.h>
+#ifndef POINTER_64
+#define POINTER_64 __ptr64
+#endif
 #include <windows.h>
 
 int scErrorNo=scOK;

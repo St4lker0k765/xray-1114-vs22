@@ -42,7 +42,7 @@ struct ENGINE_API	CWallmark {
 		DWORD		C	= iFloor( a * 255.f);
 		C = D3DCOLOR_RGBA(128,128,128,C);
 
-		for (Vertex* S=verts.begin(); S!=verts.end(); S++,D++)
+		for (auto S = verts.begin(), E = verts.end(); S != E; ++S, ++D)
 		{
 			D->P.set(S->P);
 			D->C	= C;

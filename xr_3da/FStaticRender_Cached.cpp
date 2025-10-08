@@ -13,10 +13,10 @@ void __fastcall render_Cached(CList<FCached*>& cache)
 	CIndexStream*			is	= Device.Streams.Get_IB();
 
 	Device.Primitive.Reset		();
-	for (DWORD Start=0; Start<cache.size(); )
+	for (DWORD Start = 0; Start < cache.size(); )
 	{
-		// Calculate lock parameters
-		DWORD	v_count=0,i_count=0,t;
+		DWORD v_count = 0, i_count = 0, t = 0;
+		DWORD End = Start;
 		for (DWORD End=Start; End<cache.size(); End++)
 		{
 			FCached& V	=	*(cache[End]);

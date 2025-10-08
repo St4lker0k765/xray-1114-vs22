@@ -48,7 +48,7 @@ void CLightsController::Select(Fvector &pos, float fRadius)
 		if (pos.distance_to_sqr(L.position) < R*R)	Enable(num);
 		else										Disable(num);
 	}
-	for (it = SelectedProcedural.begin(); it!=SelectedProcedural.end(); it++)
+	for (vecI_it it = SelectedProcedural.begin(); it!=SelectedProcedural.end(); it++)
 	{
 		int		num = *it;
 		xrLIGHT &L	= Lights[num];
@@ -73,7 +73,7 @@ void	CLightsController::SelectDynamic(Fvector &pos, float fRadius)
 			else										Disable(num);
 		}
 	}
-	for (it=SelectedDynamic.begin(); it!=SelectedDynamic.end(); it++)
+	for (vecI_it it=SelectedDynamic.begin(); it!=SelectedDynamic.end(); it++)
 	{
 		int		num	= *it;
 		xrLIGHT &L	= LightsDynamic[num-Lights.size()];
@@ -81,7 +81,7 @@ void	CLightsController::SelectDynamic(Fvector &pos, float fRadius)
 		if (pos.distance_to_sqr(L.position) < R*R)	Enable(num);
 		else										Disable(num);
 	}
-	for (it = SelectedProcedural.begin(); it!=SelectedProcedural.end(); it++)
+	for (vecI_it it = SelectedProcedural.begin(); it!=SelectedProcedural.end(); it++)
 	{
 		int		num = *it;
 		xrLIGHT &L	= Lights[num];
@@ -97,7 +97,7 @@ void CLightsController::Load(CStream *fs)
 	DWORD count	= size/sizeof(xrLIGHT);
 	R_ASSERT(count*sizeof(xrLIGHT) == size);
 	Lights.resize(count);
-	fs->Read(Lights.begin(),size);
+	fs->Read(Lights.data(),size);
 
 	Distance.resize	(count+LightsDynamic.size());
 	Enabled.resize	(count+LightsDynamic.size());

@@ -8,6 +8,8 @@
 #include <imagehlp.h>
 #include "xrSyncronize.h"
 #include "log.h"
+#include <new>
+#include <new.h>
 
 CDebugKernel Debug;
 
@@ -61,61 +63,73 @@ ENGINE_API void __fastcall _verify     (const char *expr, char *file, int line)
 	static	CCriticalSection	CS;
 
 	CS.Enter			();
-	// Log Description
-	char _tmp_buf[1024];
-	sprintf(_tmp_buf,"Assertion failed in file %s, line %d.\nExpression was '%s'",
-		file, line, expr);
-	Log(_tmp_buf);
+    // Log Description
+    char _tmp_buf[1024];
+    sprintf(_tmp_buf,"Assertion failed in file %s, line %d.\nExpression was '%s'",
+        file, line, expr);
+    Log(_tmp_buf);
 
-	// Call the dialog
+    // Call the dialog
 	dlgExpr = expr;	dlgFile = file;
-	sprintf(dlgLine,"%d",line);
-	Debug.Update();
-	int res = DialogBox(
-		GetModuleHandle(NULL),
-		MAKEINTRESOURCE(IDD_VERIFY),
-		NULL,
-		verifyProc );
-	switch (res) {
-	case IDSTOP:
-		abort();
-		break;
-	case IDDEBUG:
-		__asm { int 3 };
-		break;
-	case IDCONTINUE:
-		break;
-	}
+    sprintf(dlgLine,"%d",line);
+    Debug.Update();
+    int res = DialogBox(
+        GetModuleHandle(NULL),
+        MAKEINTRESOURCE(IDD_VERIFY),
+        NULL,
+        verifyProc );
+    switch (res) {
+    case IDSTOP:
+        abort();
+        break;
+    case IDDEBUG:
+#ifdef _MSC_VER
+        __asm { int 3 };
+#else
+        DebugBreak();
+#endif
+        break;
+    case IDCONTINUE:
+        break;
+    }
 	CS.Leave			();
 }
 
-int __cdecl _out_of_memory(unsigned size)
+int __cdecl _out_of_memory(size_t size)
 {
-	// Log Description
-	char _tmp_buf[1024];
-	sprintf(_tmp_buf,"Fatal Error: Out of memory.\nSize queried: %d bytes",size);
-	Log(_tmp_buf);
+    // Log Description
+    char _tmp_buf[1024];
+#if defined(_WIN64)
+    sprintf(_tmp_buf,"Fatal Error: Out of memory.\nSize queried: %llu bytes",(unsigned long long)size);
+#else
+    sprintf(_tmp_buf,"Fatal Error: Out of memory.\nSize queried: %u bytes",(unsigned)size);
+#endif
+    Log(_tmp_buf);
 
-	// Call the dialog
+    // Call the dialog
 	dlgExpr = _tmp_buf;	dlgFile = "MemoryManager";	
-	strcpy(dlgLine,"unknown");
-	Debug.Update();
-	int res = DialogBox(
-		GetModuleHandle(NULL),
-		MAKEINTRESOURCE(IDD_VERIFY),
-		NULL,
-		verifyProc );
-	switch (res) {
-	case IDSTOP:
-		abort();
-		break;
-	case IDDEBUG:
-		__asm { int 3 };
-		break;
-	case IDCONTINUE:
-		return 0;
-	}
-	return 1;
+    strcpy(dlgLine,"unknown");
+    Debug.Update();
+    int res = DialogBox(
+        GetModuleHandle(NULL),
+        MAKEINTRESOURCE(IDD_VERIFY),
+        NULL,
+        verifyProc );
+    switch (res) {
+    case IDSTOP:
+        abort();
+        break;
+    case IDDEBUG:
+#ifdef _MSC_VER
+        __asm { int 3 };
+#else
+        DebugBreak();
+#endif
+        break;
+    case IDCONTINUE:
+        return 0;
+    }
+    return 1;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -124,53 +138,48 @@ int __cdecl _out_of_memory(unsigned size)
 //------------------------------------------------------------------------------------------------------------------------
 // Sets up the symbols for functions in the debug file.
 //------------------------------------------------------------------------------------------------------------------------
-typedef int (__cdecl * _PNH)( size_t );
 
-_CRTIMP int		__cdecl _set_new_mode( int );
-_CRTIMP _PNH	__cdecl _set_new_handler( _PNH );
-
-BOOL	CDebugKernel::Start()
+BOOL    CDebugKernel::Start()
 {
-	char    pathname	[_MAX_PATH+1];
-	char    directory	[_MAX_PATH+1];
-	char    drive		[10];
-	BOOL    ret;
-	HANDLE  process;
+    char    pathname    [_MAX_PATH+1];
+    char    directory   [_MAX_PATH+1];
+    char    drive       [10];
+    BOOL    ret;
+    HANDLE  process;
 
-	_set_new_mode		(1);				// gen exception if can't allocate memory
-	_set_new_handler	(_out_of_memory);	// exception-handler for 'out of memory' condition
+    _set_new_mode(1);
+    _set_new_handler(&_out_of_memory);
 
-	::SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_UNDNAME | SYMOPT_LOAD_LINES | SYMOPT_OMAP_FIND_NEAREST);
-	process=GetCurrentProcess();
-	//Get the apps name
-	::GetModuleFileName(NULL, pathname, _MAX_PATH);
-	//Turn it into a search path
-	_splitpath(pathname, drive, directory, NULL, NULL);
-	sprintf(pathname, "%s%s", drive, directory);
-	//Append the current directory to build a search path for SymInit
-	::lstrcat(pathname, ";.;.\\DLLs\\;");
-	ret=::SymInitialize(process, pathname, FALSE);
-	if( ret )
-	{
-		//Regenerate the name of the app
-		::GetModuleFileName(NULL, pathname, _MAX_PATH);
-		if(::SymLoadModule(process, NULL, pathname, NULL, 0, 0))
-		{
-			//You could load dll/lib information if you wish here...
-			//            if(::SymLoadModule(process, NULL, GLibDLLName, NULL, 0, 0))
-			{
-				return TRUE;
-			}
-		}
-		::SymCleanup(process);
-	}
-	return FALSE;
+    ::SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_UNDNAME | SYMOPT_LOAD_LINES | SYMOPT_OMAP_FIND_NEAREST);
+    process=GetCurrentProcess();
+    //Get the apps name
+    ::GetModuleFileName(NULL, pathname, _MAX_PATH);
+    //Turn it into a search path
+    _splitpath(pathname, drive, directory, NULL, NULL);
+    sprintf(pathname, "%s%s", drive, directory);
+    //Append the current directory to build a search path for SymInit
+    ::lstrcat(pathname, ";.;.\\DLLs\\;");
+    ret=::SymInitialize(process, pathname, FALSE);
+    if( ret )
+    {
+        //Regenerate the name of the app
+        ::GetModuleFileName(NULL, pathname, _MAX_PATH);
+        if(::SymLoadModule(process, NULL, pathname, NULL, 0, 0))
+        {
+            //You could load dll/lib information if you wish here...
+            {
+                return TRUE;
+            }
+        }
+        ::SymCleanup(process);
+    }
+    return FALSE;
 }
 //------------------------------------------------------------------------------------------------------------------------
-BOOL	CDebugKernel::Stop()
+BOOL    CDebugKernel::Stop()
 {
-	::SymCleanup(GetCurrentProcess());
-	return TRUE;
+    ::SymCleanup(GetCurrentProcess());
+    return TRUE;
 }
 //------------------------------------------------------------------------------------------------------------------------
 void    CDebugKernel::Update()

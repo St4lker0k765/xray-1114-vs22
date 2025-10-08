@@ -209,7 +209,7 @@ void CRender::LoadSectors(CStream* fs)
 	// load portals
 	RAPID::Collector	CL;
 	fs->FindChunk(fsL_PORTALS);
-	for (i=0; i<count; i++)
+	for (DWORD i=0; i<count; i++)
 	{
 		b_portal	P;
 		fs->Read(&P,sizeof(P));

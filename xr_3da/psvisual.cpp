@@ -56,7 +56,7 @@ void CPSVisual::Update(DWORD dt)
 	float p_size		= 0;
 	Fvector Pos; float size;
 	bv_BBox.invalidate	();
-	for (i=0; i<int(m_Particles.size()); i++)
+	for (int i=0; i<int(m_Particles.size()); i++)
 	{
 		if (fTime>m_Particles[i].m_Time.end) {
 			// Need to delete particle
@@ -176,99 +176,126 @@ void CPSVisual::Render		(float LOD)
 		Device.Primitive.Draw	(m_Stream,dwCount,dwCount/2,vOffset,Device.Streams_QuadIB);
 }
  
-DWORD CPSVisual::RenderTO	(FVF::TL* dest)
+DWORD CPSVisual::RenderTO(FVF::TL* dest)
 {
-	float fTime			= Device.fTimeGlobal;
-	
-	// build transform matrix
-	Fmatrix mSpriteTransform	= Device.mFullTransform;
-	float	fov_scale			= 1/(Device.fFOV/90.f);
-	
-    int 	mb_samples 	= 1;
-    float 	mb_step 	= 0;
-	
-	Fvector2 lt,rb;
-    lt.set	(0.f,0.f);
-	rb.set	(1.f,1.f);
-	
-	// actual rendering
-	bv_BBox.invalidate	();
-	float			p_size	= 0;
-	FVF::TL*		pv_start= dest;
-	FVF::TL*		pv		= pv_start;
-	for (PS::ParticleIt P=m_Particles.begin(); P!=m_Particles.end(); P++)
-	{
-		DWORD 	C;
-		float 	sz;
-		float 	angle;
-        if (m_Definition->m_dwFlag&PS_MOTIONBLUR)
-		{
-            float T 	=	fTime-P->m_Time.start;
-            float k 	=	T/(P->m_Time.end-P->m_Time.start);
-            float k_inv =	1-k;
-            mb_samples 	=	iFloor(m_Definition->m_BlurSubdiv.start*k_inv+m_Definition->m_BlurSubdiv.end*k+0.5f);
-            mb_step 	=	m_Definition->m_BlurTime.start*k_inv+m_Definition->m_BlurTime.end*k;
-            mb_step		/=	mb_samples;
+    float fTime = Device.fTimeGlobal;
+
+    // build transform matrix
+    Fmatrix mSpriteTransform = Device.mFullTransform;
+    float fov_scale = 1.0f / (Device.fFOV / 90.0f);
+
+    int   mb_samples = 1;
+    float mb_step    = 0.0f;
+
+    Fvector2 lt, rb;
+    lt.set(0.f, 0.f);
+    rb.set(1.f, 1.f);
+
+    // actual rendering
+    bv_BBox.invalidate();
+    float    p_size   = 0.0f;
+    FVF::TL* pv_start = dest;
+    FVF::TL* pv       = pv_start;
+
+    for (PS::ParticleIt P = m_Particles.begin(); P != m_Particles.end(); ++P)
+    {
+        const SParticle* part = &*P;
+
+        DWORD C = 0;
+        float sz = 0.0f;
+        float angle = 0.0f;
+
+        if (m_Definition->m_dwFlag & PS_MOTIONBLUR)
+        {
+            float T     = fTime - part->m_Time.start;
+            float k     = T / (part->m_Time.end - part->m_Time.start);
+            float k_inv = 1.0f - k;
+
+            mb_samples  = iFloor(m_Definition->m_BlurSubdiv.start * k_inv
+                               + m_Definition->m_BlurSubdiv.end   * k + 0.5f);
+            mb_step     =  m_Definition->m_BlurTime.start * k_inv
+                         + m_Definition->m_BlurTime.end   * k;
+            if (mb_samples < 1) mb_samples = 1;
+            mb_step    /= static_cast<float>(mb_samples);
         }
-		
+
         // update
-		for (int sample=mb_samples-1; sample>=0; sample--)
-		{
-            float T 	=	fTime-P->m_Time.start-(sample*mb_step);
-            if (T<0)		continue;
-            float mb_v	=	1-float(sample)/float(mb_samples);
-            float k 	=	T/(P->m_Time.end-P->m_Time.start);
-			if ((m_Emitter->m_dwFlag&PS_EM_PLAY_ONCE) && (k>1)) continue;
-            float k_inv =	1-k;
-			
+        for (int sample = mb_samples - 1; sample >= 0; --sample)
+        {
+            float T = fTime - part->m_Time.start - (sample * mb_step);
+            if (T < 0.0f)
+                continue;
+
+            float mb_v = 1.0f - float(sample) / float(mb_samples);
+            float k    = T / (part->m_Time.end - part->m_Time.start);
+            if ((m_Emitter->m_dwFlag & PS_EM_PLAY_ONCE) && (k > 1.0f))
+                continue;
+
+            float k_inv = 1.0f - k;
+
             Fvector Pos;
-            
-            PS::SimulatePosition(Pos,P,T,k);		// this moves the particle using the last known velocity and the time that has passed
-			bv_BBox.modify		(Pos);
-            PS::SimulateColor	(C,P,k,k_inv,mb_v);	// adjust current Color from calculated Deltas and time elapsed.
-            PS::SimulateSize	(sz,P,k,k_inv);		// adjust current Size & Angle
-			if (sz>p_size)		p_size = sz;
-			
-            Fvector D;
-			if (m_Definition->m_dwFlag&PS_ALIGNTOPATH) {
-				Fvector p;
-                float PT = T-0.1f;
-				float kk = PT/(P->m_Time.end-P->m_Time.start);
-                PS::SimulatePosition(p,P,PT,kk);
-				D.sub				(Pos,p);
-                D.normalize_safe	();
-				
-				if (m_Definition->m_dwFlag&PS_FRAME_ENABLED){
-					int frame;
-					if (m_Definition->m_dwFlag&PS_FRAME_ANIMATE)PS::SimulateAnimation(frame,m_Definition,P,T);
-					else										frame = P->m_iAnimStartFrame;
-					m_Definition->m_Animation.CalculateTC(frame,lt,rb);
-				}
-				FillSprite(pv,mSpriteTransform,Pos,lt,rb,sz*.5f,C,D,fov_scale);
-			}else{
-				PS::SimulateAngle	(angle,P,T,k,k_inv);
-				
-				if (m_Definition->m_dwFlag&PS_FRAME_ENABLED){
-					int frame;
-					if (m_Definition->m_dwFlag&PS_FRAME_ANIMATE)PS::SimulateAnimation(frame,m_Definition,P,T);
-					else										frame = P->m_iAnimStartFrame;
-					m_Definition->m_Animation.CalculateTC(frame,lt,rb);
-				}
-				FillSprite(pv,mSpriteTransform,Pos,lt,rb,sz*.5f,C,angle,fov_scale);
+            PS::SimulatePosition(Pos, part, T, k);              // ожидает SParticle*
+            bv_BBox.modify(Pos);
+
+            PS::SimulateColor(C, part, k, k_inv, mb_v);         // ожидает SParticle*
+            PS::SimulateSize(sz, part, k, k_inv);               // ожидает SParticle*
+            if (sz > p_size) p_size = sz;
+
+            if (m_Definition->m_dwFlag & PS_ALIGNTOPATH)
+            {
+                Fvector D, p;
+                float PT = T - 0.1f;
+                float kk = PT / (part->m_Time.end - part->m_Time.start);
+                PS::SimulatePosition(p, part, PT, kk);
+                D.sub(Pos, p);
+                D.normalize_safe();
+
+                if (m_Definition->m_dwFlag & PS_FRAME_ENABLED)
+                {
+                    int frame = 0;
+                    if (m_Definition->m_dwFlag & PS_FRAME_ANIMATE)
+                        PS::SimulateAnimation(frame, m_Definition, part, T);
+                    else
+                        frame = P->m_iAnimStartFrame;
+                    m_Definition->m_Animation.CalculateTC(frame, lt, rb);
+                }
+
+                FillSprite(pv, mSpriteTransform, Pos, lt, rb, sz * 0.5f, C, D, fov_scale);
+            }
+            else
+            {
+                PS::SimulateAngle(angle, part, T, k, k_inv);    // ожидает SParticle*
+
+                if (m_Definition->m_dwFlag & PS_FRAME_ENABLED)
+                {
+                    int frame = 0;
+                    if (m_Definition->m_dwFlag & PS_FRAME_ANIMATE)
+                        PS::SimulateAnimation(frame, m_Definition, part, T);
+                    else
+                        frame = P->m_iAnimStartFrame;
+                    m_Definition->m_Animation.CalculateTC(frame, lt, rb);
+                }
+
+                FillSprite(pv, mSpriteTransform, Pos, lt, rb, sz * 0.5f, C, angle, fov_scale);
             }
         }
     }
-	if (m_Particles.empty())	{
-		bv_BBox.set			(m_Emitter->m_Position,m_Emitter->m_Position);
-		bv_BBox.grow		(0.1f);
-		bv_BBox.getsphere	(bv_Position,bv_Radius);
-	} else {
-		bv_BBox.grow		(p_size);
-		bv_BBox.getsphere	(bv_Position,bv_Radius);
-	}
-	
-	return pv-pv_start;
+
+    if (m_Particles.empty())
+    {
+        bv_BBox.set(m_Emitter->m_Position, m_Emitter->m_Position);
+        bv_BBox.grow(0.1f);
+        bv_BBox.getsphere(bv_Position, bv_Radius);
+    }
+    else
+    {
+        bv_BBox.grow(p_size);
+        bv_BBox.getsphere(bv_Position, bv_Radius);
+    }
+
+    return static_cast<DWORD>(pv - pv_start);
 }
+
 
 //----------------------------------------------------
 void CPSVisual::Compile(LPCSTR name, PS::SEmitter* E)

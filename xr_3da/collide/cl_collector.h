@@ -68,7 +68,7 @@ namespace RAPID {
 		Fvector* getV() { return verts.empty() ? nullptr : verts.data(); }
 		int      getVS() { return static_cast<int>(verts.size()); }
 		tri* getT() { return faces.empty() ? nullptr : faces.data(); }
-		int      getTS() { return static_cast<int>(faces.size()); }
+		int      getTS() { return static_cast<int>(faces.size()); } 
 	};
 
 	const int clpMX = 28, clpMY=16, clpMZ=28;
@@ -87,7 +87,15 @@ namespace RAPID {
 
 		DWORD			VPack(Fvector& V);
 	public:
-		CollectorPacked	(const Fbox &bb, int apx_vertices=5000, int apx_faces=5000);
+		CollectorPacked(const Fbox &bb)
+		{
+			VMscale.set	(bb.max.x-bb.min.x, bb.max.y-bb.min.y, bb.max.z-bb.min.z);
+			VMmin.set	(bb.min);
+			VMeps.set	(VMscale.x/clpMX/2,VMscale.y/clpMY/2,VMscale.z/clpMZ/2);
+			VMeps.x		= (VMeps.x<EPS_L)?VMeps.x:EPS_L;
+			VMeps.y		= (VMeps.y<EPS_L)?VMeps.y:EPS_L;
+			VMeps.z		= (VMeps.z<EPS_L)?VMeps.z:EPS_L;
+		}
 		
 		void			add_face(
 			Fvector& v0, Fvector& v1, Fvector& v2,	// vertices

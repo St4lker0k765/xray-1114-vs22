@@ -102,7 +102,7 @@ void COccluderSystem::Select(CFrustum& F)
 				
 				// 2. calc area
 				O.area = 0;
-				for (i=2; i<D.size(); i++) O.area += triArea(D[0],D[i-1],D[i]);
+				for (DWORD i=2; i<D.size(); i++) O.area += triArea(D[0],D[i-1],D[i]);
 				if (O.area<psOSSR) continue;
 				
 				// 3. save it and build volume
@@ -120,7 +120,7 @@ void COccluderSystem::Select(CFrustum& F)
 				std::sort(inside.begin(),inside.end());
 				
 				// Cull smallest against largest
-				for (I=0; I<inside.size(); I++)
+				for (DWORD I=0; I<inside.size(); I++)
 				{
 					CFrustum &F = inside[I].F;
 					for (DWORD j=I+1; j<inside.size(); j++)
@@ -139,7 +139,7 @@ void COccluderSystem::Select(CFrustum& F)
 			// Transfer
 			DWORD cnt = (inside.size()>7)?7:inside.size();
 			selected.resize(cnt);
-			for (I=0; I<cnt; I++) selected[I] = inside[I].F;
+			for (DWORD I=0; I<cnt; I++) selected[I] = inside[I].F;
 		} else {
 			selected.clear();
 		}

@@ -86,7 +86,7 @@ IC void RecurseTri(RAPID::tri* T, Fmatrix &mView,CWallmark	&W,CFrustum &F)
 		}
 		
 		// recurse
-		for (i=0; i<3; i++)
+		for (DWORD i=0; i<3; i++)
 		{
 			RAPID::tri* SML = T->adj[i];
 			if (SML)	{
@@ -140,16 +140,16 @@ void CWallmarksEngine::AddWallmark	(RAPID::tri* pTri, const Fvector &contact_poi
 	sml_processed.clear();
 
 	// Calc sphere
-	if (W.verts.size()<3) { marks.pop_back(); return; }
+	if (W.verts.size() < 3) { marks.pop_back(); return; }
 	else {
 		Fbox bb; bb.invalidate();
 
-		CWallmark::Vertex* I=W.verts.begin	();
-		CWallmark::Vertex* E=W.verts.end	();
-		for (; I!=E; I++)	bb.modify(I->P);
+		for (auto it = W.verts.begin(), e = W.verts.end(); it != e; ++it)
+			bb.modify(it->P);
 
-		bb.getsphere(W.S.P,W.S.R);
+		bb.getsphere(W.S.P, W.S.R);
 	}
+
 
 	// Search if similar wallmark exists
 	for (deque<CWallmark>::iterator it=marks.begin(); it!=marks.end(); it++)

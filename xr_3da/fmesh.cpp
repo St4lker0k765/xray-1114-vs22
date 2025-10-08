@@ -136,7 +136,7 @@ void ConvertVertices(DWORD dwTypeDest, void *pDest, DWORD dwTypeSrc, void *pSour
 			TransferMask[tmPos++]=tmPosSrc++;
 		}
 		// Duplicate stage0 TC
-		for (i=dwTSrc; i<dwTDest; i++) {
+		for (DWORD i=dwTSrc; i<dwTDest; i++) {
 			TransferMask[tmPos++]=dwStage0TC;
 			TransferMask[tmPos++]=dwStage0TC+1;
 		}

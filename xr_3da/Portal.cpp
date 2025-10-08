@@ -132,7 +132,7 @@ void CSector::Render(CFrustum &F)
 				if (pSector==::Render.pLastSector) continue;
 			}
 			vector<Fvector> &POLY = PORTAL->getPoly();
-			S.assign(POLY.begin(),POLY.size()); D.clear();
+			S.assign(POLY.data(), POLY.size()); D.clear();
 
 			sPoly*	P = Occluders.clipPortal(S,D);
 			if (P) {
@@ -184,7 +184,7 @@ void CSector::ll_GetObjects	(CFrustum& F)
 		sPoly	S,D;
 		if (Portals[I]->dwFrameObject != oQuery.dwMark) {
 			vector<Fvector> &POLY = Portals[I]->getPoly();
-			S.assign(POLY.begin(),POLY.size()); D.clear();
+			S.assign(POLY.data(), POLY.size()); D.clear();
 			sPoly*	P = Occluders.clipPortal(S,D);
 			if (P) {
 				CFrustum Clip;
@@ -250,7 +250,7 @@ void CSector::Load(CStream& fs)
 		R_ASSERT(0==(size&1));
 		count	= size/sizeof(WORD);
 		Glows.resize(count);
-		fs.Read(Glows.begin(),size);
+		fs.Read(Glows.data(), size);
 	}
 
 	// Load lights
@@ -259,6 +259,6 @@ void CSector::Load(CStream& fs)
 		R_ASSERT(0==(size&1));
 		count	= size/sizeof(WORD);
 		Lights.resize(count);
-		fs.Read(Lights.begin(),size);
+		fs.Read(Glows.data(), size);
 	}
 }
