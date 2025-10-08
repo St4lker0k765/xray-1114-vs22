@@ -68,7 +68,7 @@
 //#include <winnls.h>
 
 #define DIRECTSOUND_VERSION 0x0700
-#define DIRECTINPUT_VERSION 0x0700
+#define DIRECTINPUT_VERSION 0x0800
 
 #include <d3d8.h>
 #include <d3dx8.h>
@@ -154,7 +154,7 @@ using namespace std;
 #pragma comment( lib, "dxerr8.lib"		)
 
 #pragma comment( lib, "dsound.lib"		)
-#pragma comment( lib, "dinput.lib"		)
+#pragma comment( lib, "dinput8.lib"		)
 #pragma comment( lib, "dxguid.lib"		)
 
 //{{AFX_INSERT_LOCATION}}

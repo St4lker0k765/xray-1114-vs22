@@ -568,7 +568,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="X:\game\engine.log" />
     <CustomBuild Include="notes.txt" />
     <CustomBuild Include="Shedule.txt" />
     <CustomBuild Include="todo.txt" />

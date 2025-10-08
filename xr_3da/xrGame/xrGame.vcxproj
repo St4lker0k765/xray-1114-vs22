@@ -406,9 +406,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="X:\game\engine.log">
-      <FileType>Document</FileType>
-    </CustomBuild>
     <CustomBuild Include="notes.txt" />
     <CustomBuild Include="Shedule.txt" />
     <CustomBuild Include="todo.txt" />
