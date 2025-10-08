@@ -1,11 +1,19 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XR_3DA", "xr_3da\XR_3DA.vcxproj", "{0DB2A4C8-CA68-817A-A642-E53AD0391178}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xrCPU_Pipe", "xr_3da\xrCPU_Pipe\xrCPU_Pipe.vcxproj", "{20009DD9-08C4-EAF7-625C-01A707261157}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0DB2A4C8-CA68-817A-A642-E53AD0391178} = {0DB2A4C8-CA68-817A-A642-E53AD0391178}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xrGame", "xr_3da\xrGame\xrGame.vcxproj", "{08E82980-7A35-EB47-609E-4A17C390B99D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0DB2A4C8-CA68-817A-A642-E53AD0391178} = {0DB2A4C8-CA68-817A-A642-E53AD0391178}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
