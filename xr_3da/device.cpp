@@ -248,26 +248,43 @@ void CRenderDevice::Create	()
 	fWidth_2	= float(dwWidth/2);
 	fHeight_2	= float(dwHeight/2);
 	fFOV		= 90.f;
-    {
-        // When moving from fullscreen to windowed mode, it is important to
-        // adjust the window size after recreating the device rather than
-        // beforehand to ensure that you get the window size you want.  For
-        // example, when switching from 640x480 fullscreen to windowed with
-        // a 1000x600 window on a 1024x768 desktop, it is impossible to set
-        // the window size to 1000x600 until after the display mode has
-        // changed to 1024x768, because windows cannot be larger than the
-        // desktop.
-        if( !(psDeviceFlags&rsFullscreen))
-        {
-		    RECT m_rcWindowBounds = {0, 0, dwWidth, dwHeight };
-			AdjustWindowRect( &m_rcWindowBounds, dwWindowStyle, FALSE );
-            SetWindowPos( m_hWnd, HWND_TOP,
-                          m_rcWindowBounds.left, m_rcWindowBounds.top,
-                          ( m_rcWindowBounds.right - m_rcWindowBounds.left ),
-                          ( m_rcWindowBounds.bottom - m_rcWindowBounds.top ),
-                          SWP_SHOWWINDOW|SWP_NOCOPYBITS|SWP_DRAWFRAME );
-        }
-    }
+
+	if (!(psDeviceFlags & rsFullscreen))
+	{
+		BOOL bCenter = FALSE;
+
+		char* pCmdLine = GetCommandLine();
+		if (strstr(pCmdLine, "-center_screen"))
+			bCenter = TRUE;
+
+		RECT m_rcWindowBounds = { 0, 0, (LONG)dwWidth, (LONG)dwHeight };
+
+		if (bCenter)
+		{
+			RECT DesktopRect;
+			GetClientRect(GetDesktopWindow(), &DesktopRect);
+
+			const LONG winW = (LONG)dwWidth;
+			const LONG winH = (LONG)dwHeight;
+			const LONG cx = (DesktopRect.right - winW) / 2;
+			const LONG cy = (DesktopRect.bottom - winH) / 2;
+
+			SetRect(&m_rcWindowBounds, cx, cy, cx + winW, cy + winH);
+		}
+		else
+		{
+			SetRect(&m_rcWindowBounds, 0, 0, (LONG)dwWidth, (LONG)dwHeight);
+		}
+
+		AdjustWindowRect(&m_rcWindowBounds, dwWindowStyle, FALSE);
+		SetWindowPos(
+			m_hWnd, HWND_TOP,
+			m_rcWindowBounds.left, m_rcWindowBounds.top,
+			(m_rcWindowBounds.right - m_rcWindowBounds.left),
+			(m_rcWindowBounds.bottom - m_rcWindowBounds.top),
+			SWP_SHOWWINDOW | SWP_NOCOPYBITS | SWP_DRAWFRAME
+		);
+	}
 
     // Hide the cursor if necessary
 	ShowCursor		(FALSE);
