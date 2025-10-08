@@ -259,6 +259,6 @@ void CSector::Load(CStream& fs)
 		R_ASSERT(0==(size&1));
 		count	= size/sizeof(WORD);
 		Lights.resize(count);
-		fs.Read(Glows.data(), size);
+		fs.Read(Lights.data(), size);
 	}
 }
