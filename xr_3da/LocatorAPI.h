@@ -15,7 +15,7 @@ enum FS_List
 
 class ENGINE_API CLocatorAPI  
 {
-	struct pred_str		: public std::binary_function<char*, char*, bool> 
+	struct pred_str
 	{	
 		IC bool operator()(const char* x, const char* y) const
 		{	return strcmp(x,y)<0;	}

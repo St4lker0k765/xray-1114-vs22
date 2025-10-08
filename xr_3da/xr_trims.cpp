@@ -41,7 +41,7 @@ const char* _SetPos (const char* src, DWORD pos )
 
 char* _CopyVal ( const char* src, char* dst )
 {
-	char*		p;
+	const char*	p;
 	DWORD		n;
 	p			= strchr	( src, ',' );
 	n			= (p>0) ? (p-src) : strlen(src);

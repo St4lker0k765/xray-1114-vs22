@@ -9,12 +9,23 @@
 #define AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_
 
 #pragma once
+#define VC_EXTRALEAN				// Exclude rarely-used stuff from Windows headers
 #define WIN32_LEAN_AND_MEAN			// Exclude rarely-used stuff from Windows headers
-#define STRICT						// Enable strict syntax
-#define IDIRECTPLAY2_OR_GREATER
+#ifndef STRICT
+#	define STRICT					// Enable strict syntax
+#endif // STRICT
+#define IDIRECTPLAY2_OR_GREATER		// ?
+#define _CRT_SECURE_NO_DEPRECATE	// vc8.0 stuff, don't deprecate several ANSI functions
 
 // windows.h
-#define _WIN32_WINNT 0x0400
+#ifndef _WIN32_WINNT
+#	define _WIN32_WINNT 0x0600
+#endif
+
+#ifndef POINTER_64
+#define POINTER_64 __ptr64
+#endif
+
 #define NOGDICAPMASKS
 #define NOSYSMETRICS
 #define NOMENUS
@@ -79,16 +90,20 @@
 #include <string.h>
 #include <process.h>
 
-#ifndef DEBUG
-#pragma inline_depth	( 254 )
-#pragma inline_recursion( on )
-#pragma intrinsic		(abs, fabs, fmod, sin, cos, tan, asin, acos, atan, sqrt, exp, log, log10, strcpy, strcat)
-#define inline			__forceinline
-#define _inline			__forceinline
-#define __inline		__forceinline
-#define IC				__forceinline
+// inline control - redefine to use compiler's heuristics ONLY
+// it seems "IC" is misused in many places which cause code-bloat
+// ...and VC7.1 really don't miss opportunities for inline :)
+#ifdef _EDITOR
+#	define __forceinline	inline
+#endif
+#define _inline			inline
+#define __inline		inline
+#define IC				inline
+#define ICF				__forceinline			// !!! this should be used only in critical places found by PROFILER
+#ifdef _EDITOR
+#	define ICN
 #else
-#define IC				__forceinline
+#	define ICN			__declspec (noinline)	
 #endif
 
 // Warnings

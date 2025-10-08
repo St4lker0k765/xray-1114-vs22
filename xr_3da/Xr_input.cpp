@@ -158,7 +158,7 @@ void CInput::KeyUpdate	( )
 		if ( KBState[key])	cbStack.top()->OnKeyboardPress		( key );
 		if (!KBState[key])	cbStack.top()->OnKeyboardRelease	( key );
 	}
-	for ( i = 0; i < COUNT_KB_BUTTONS; i++ )
+	for (DWORD i = 0; i < COUNT_KB_BUTTONS; i++ )
 		if (KBState[i]) cbStack.top()->OnKeyboardHold( i );
 }
 

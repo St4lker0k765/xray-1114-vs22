@@ -28,7 +28,7 @@ void FDetailPatch::Load(const char* N, CStream* fs, DWORD dwFlags)
 	R_ASSERT(size && (size%sizeof(DPatch) == 0));
 	DWORD count = size/sizeof(DPatch);
 	patches.resize(count);
-	CopyMemory(patches.begin(),fs->Pointer(),size);
+	CopyMemory(&*patches.begin(),fs->Pointer(),size);
 
 	Stream = Device.Streams.Create(FVF::F_TL,count*4);
 }
@@ -37,8 +37,8 @@ void FDetailPatch::Render(float LOD)
 {
 	// actual rendering
 	FVF::TL		PT;
-	DPatch*			i	= patches.begin();
-	DPatch*			end	= patches.end();
+	DPatch*			i	= &*patches.begin();
+	DPatch*			end	= &*patches.end();
 	DWORD			vOffset;
 	FVF::TL*	pv_start= (FVF::TL*)Stream->Lock(patches.size()*4,vOffset);
 	FVF::TL*	pv		= pv_start;

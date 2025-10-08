@@ -5,11 +5,12 @@
 #if !defined(AFX_DEBUGKERNEL_H__F5F12724_363E_42F8_85B5_BAC2BB9B186D__INCLUDED_)
 #define AFX_DEBUGKERNEL_H__F5F12724_363E_42F8_85B5_BAC2BB9B186D__INCLUDED_
 #pragma once
+#include <string>
 
 class CDebugKernel
 {
 private:
-	vector<string>	Stack;
+	vector<std::string>	Stack;
 
 	BOOL            GetFunctionName(HINSTANCE instance, void *pointer, char* fn_name);
 	int             UpdateStack(EXCEPTION_POINTERS *pex, int iSkip=3 );

@@ -25,7 +25,7 @@ void CBlender_DESC::Setup	(LPCSTR N)
 	strcpy(cComputer,buf);
 	
 	// Time
-	_tzset(); time( (long*)&cTime );
+	_tzset(); time( (time_t*)&cTime );
 };
 
 //////////////////////////////////////////////////////////////////////

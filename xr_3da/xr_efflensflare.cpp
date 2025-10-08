@@ -311,7 +311,7 @@ void CLensFlare::Render(BOOL bSun, BOOL bFlares){
 			pv->set(vec.x+vecSx.x+vecSy.x, vec.y+vecSx.y+vecSy.y, vec.z+vecSx.z+vecSy.z, c, 0, 1); pv++;
 			pv->set(vec.x-vecSx.x+vecSy.x, vec.y-vecSx.y+vecSy.y, vec.z-vecSx.z+vecSy.z, c, 0, 0); pv++;
 			pv->set(vec.x-vecSx.x-vecSy.x, vec.y-vecSx.y-vecSy.y, vec.z-vecSx.z-vecSy.z, c, 1, 0); pv++;
-			rlist.push_back(it);
+			rlist.push_back(&*it);
 		}
 	}
 	

@@ -175,7 +175,7 @@ void CreateLog(BOOL bQuiet)
 	}
 
 	// Calculating build
-	long Time;
+	long long Time;
 	time(&Time);
 	int build=0, mnum, dnum, ynum, mcnt;
 	char mon[4];

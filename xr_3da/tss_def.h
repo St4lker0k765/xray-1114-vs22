@@ -44,7 +44,7 @@ public:
 	IC BOOL			equal	(SimulatorStates& S)
 	{
 		if (States.size()!=S.States.size())	return FALSE;
-		if (0!=memcmp(States.begin(),S.States.begin(),States.size()*sizeof(State))) return FALSE;
+		if (0!=memcmp(&*States.begin(),&*S.States.begin(),States.size()*sizeof(State))) return FALSE;
 		return TRUE;
 	}
 	IC void			clear	()

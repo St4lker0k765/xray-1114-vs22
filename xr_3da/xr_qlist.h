@@ -54,7 +54,7 @@ void CQList<TYPE>::SetSize( int x, int z )
 	data						= (TYPE**) malloc(x * sizeof(TYPE*));
 	VERIFY						( data );
 	ZeroMemory					( data, x*sizeof(TYPE*) );
-	for (i=0; i<x; i++){
+	for (int i=0; i<x; i++){
 		data[i]					= new TYPE[z];
 		VERIFY					( data[i] );
 	}
