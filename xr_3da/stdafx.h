@@ -67,7 +67,6 @@
 //#include <winbase.h>
 //#include <winnls.h>
 
-#define DIRECTSOUND_VERSION 0x0700
 #define DIRECTINPUT_VERSION 0x0800
 
 #include <d3d8.h>
