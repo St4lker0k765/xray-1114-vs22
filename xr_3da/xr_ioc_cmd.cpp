@@ -267,6 +267,7 @@ public:
 };
 //-----------------------------------------------------------------------
 ENGINE_API float	psHUD_FOV=0.5f;
+ENGINE_API float	g_fov=67.5f;
 
 extern float		psOSSR;
 extern int			psSkeletonUpdate;

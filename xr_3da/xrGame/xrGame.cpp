@@ -17,7 +17,8 @@ extern int	 				psPhysicsFPS;
 extern float				psSqueezeVelocity;
 ENGINE_API extern DWORD		psAlwaysRun;
 ENGINE_API extern float		psHUD_FOV;
-  
+ENGINE_API extern float		g_fov;
+
 // console commands
 class CCC_Spawn : public CConsoleCommand
 {
@@ -59,6 +60,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 		CMD3(CCC_Mask,		"hud_info",				&psHUD_Flags,	HUD_INFO);
 		CMD3(CCC_Mask,		"hud_draw",				&psHUD_Flags,	HUD_DRAW);
 		CMD2(CCC_Float,		"hud_fov",				&psHUD_FOV);
+		CMD4(CCC_Float,		"fov",					&g_fov, 5, 180);
 
 		// ai
 		CMD3(CCC_Mask,		"ai_debug",				&psAI_Flags,	aiDebug);
