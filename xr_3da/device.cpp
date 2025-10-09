@@ -244,52 +244,21 @@ void CRenderDevice::Create	()
 	if (bReady)	return;		// prevent double call
 	Log("Starting RENDER device...");
 
-	DWORD dwWindowStyle = HW.CreateDevice(m_hWnd,dwWidth,dwHeight);
+	DWORD style = 0;
+	{
+		DWORD w = 0, h = 0;
+		style = HW.CreateDevice(m_hWnd, w, h);
+		dwWidth = w;
+		dwHeight = h;
+	}
+
 	fWidth_2	= float(dwWidth/2);
 	fHeight_2	= float(dwHeight/2);
 	fFOV		= 90.f;
 
-	if (!(psDeviceFlags & rsFullscreen))
-	{
-		BOOL bCenter = FALSE;
-
-		char* pCmdLine = GetCommandLine();
-		if (strstr(pCmdLine, "-center_screen"))
-			bCenter = TRUE;
-
-		RECT m_rcWindowBounds = { 0, 0, (LONG)dwWidth, (LONG)dwHeight };
-
-		if (bCenter)
-		{
-			RECT DesktopRect;
-			GetClientRect(GetDesktopWindow(), &DesktopRect);
-
-			const LONG winW = (LONG)dwWidth;
-			const LONG winH = (LONG)dwHeight;
-			const LONG cx = (DesktopRect.right - winW) / 2;
-			const LONG cy = (DesktopRect.bottom - winH) / 2;
-
-			SetRect(&m_rcWindowBounds, cx, cy, cx + winW, cy + winH);
-		}
-		else
-		{
-			SetRect(&m_rcWindowBounds, 0, 0, (LONG)dwWidth, (LONG)dwHeight);
-		}
-
-		AdjustWindowRect(&m_rcWindowBounds, dwWindowStyle, FALSE);
-		SetWindowPos(
-			m_hWnd, HWND_TOP,
-			m_rcWindowBounds.left, m_rcWindowBounds.top,
-			(m_rcWindowBounds.right - m_rcWindowBounds.left),
-			(m_rcWindowBounds.bottom - m_rcWindowBounds.top),
-			SWP_SHOWWINDOW | SWP_NOCOPYBITS | SWP_DRAWFRAME
-		);
-	}
-
-    // Hide the cursor if necessary
-	ShowCursor		(FALSE);
-
 	_Create			("shaders.xr");
+
+	HW.updateWindowProps(m_hWnd);
 }
 
 void CRenderDevice::_Destroy	(BOOL bKeepTextures)
@@ -317,14 +286,24 @@ void CRenderDevice::Destroy	(void) {
 	HW.DestroyDevice			();
 }
 
-void CRenderDevice::Reset		(LPCSTR shName, BOOL bKeepTextures)
+void CRenderDevice::Reset(LPCSTR shName, BOOL bKeepTextures)
 {
-	u32 tm_start	= TimerAsync();
-	_Destroy		(bKeepTextures);
-	_Create			(shName);
-	u32 tm_end		= TimerAsync();
-	Msg				("*** RESET [%d ms]",tm_end-tm_start);
+    u32 tm_start = TimerAsync();
+
+    _Destroy(bKeepTextures);
+    HW.Reset(m_hWnd);
+
+    dwWidth  = HW.CurrBBWidth;
+    dwHeight = HW.CurrBBHeight;
+    fWidth_2  = float(dwWidth) * 0.5f;
+    fHeight_2 = float(dwHeight) * 0.5f;
+
+    _Create(shName);
+
+    u32 tm_end = TimerAsync();
+    Msg("*** RESET [%d ms]", tm_end - tm_start);
 }
+
 
 void __cdecl mt_Thread(void *ptr) {
 	while (true) {

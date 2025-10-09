@@ -16,7 +16,7 @@ ENGINE_API FS_Defs		Path =
 struct _GUID g_AppGUID		= { 0xeb89097, 0x1520, 0x11d4, { 0xb4, 0xe3, 0x48, 0x54, 0xe8, 0x2a, 0x9, 0xd } };
 
 // Video
-DWORD	psCurrentMode		= 800;
+DWORD	psCurrentVidMode[2] = { 1024,768 };
 DWORD	psCurrentBPP		= 32;
 DWORD	psDeviceFlags		= rsFullscreen|rsNoVSync|mtSound|mtInput;
 

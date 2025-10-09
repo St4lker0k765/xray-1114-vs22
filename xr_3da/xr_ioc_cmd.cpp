@@ -17,6 +17,25 @@
 
 #include "xr_object.h"
 
+xr_token							snd_freq_token[] = {
+	{ "22khz",						sf_22K										},
+	{ "44khz",						sf_44K										},
+	{ 0,							0											}
+};
+xr_token							snd_model_token[] = {
+	{ "Default",					0											},
+	{ "Normal",						1											},
+	{ "Light",						2											},
+	{ "High",						3											},
+	{ 0,							0											}
+};
+extern xr_token						vid_mode_token[];
+xr_token							vid_bpp_token[] = {
+	{ "16",							16											},
+	{ "32",							32											},
+	{ 0,							0											}
+};
+
 //-----------------------------------------------------------------------
 class CCC_Quit : public CConsoleCommand
 {
@@ -217,6 +236,35 @@ public:
 		Device.Gamma.Update();
 	}
 };
+
+class CCC_VidMode : public CCC_Token
+{
+	DWORD		_dummy;
+public:
+	CCC_VidMode(LPCSTR N) : CCC_Token(N, &_dummy, NULL) { bEmptyArgsHandled = FALSE; };
+	virtual void	Execute(LPCSTR args) {
+		u32 _w, _h;
+		int cnt = sscanf(args, "%dx%d", &_w, &_h);
+		if (cnt == 2) {
+			psCurrentVidMode[0] = _w;
+			psCurrentVidMode[1] = _h;
+		}
+		else {
+			Msg("! Wrong video mode [%s]", args);
+			return;
+		}
+	}
+	virtual void	Status(TStatus& S)
+	{
+		sprintf_s(S, sizeof(S), "%dx%d", psCurrentVidMode[0], psCurrentVidMode[1]);
+	}
+	virtual xr_token* GetToken() { return vid_mode_token; }
+	virtual void	Info(TInfo& I)
+	{
+		strcpy_s(I, sizeof(I), "change screen resolution WxH");
+	}
+
+};
 //-----------------------------------------------------------------------
 ENGINE_API float	psHUD_FOV=0.5f;
 
@@ -299,7 +347,7 @@ void CCC_Register()
 	CMD3(CCC_Mask,		"texture_show_mips",	&psTextureFlags, TF_ShowMipmaps);
 
 	// General video control
-	CMD3(CCC_Token,		"vid_mode",				&psCurrentMode, vid_mode_token);
+	CMD1(CCC_VidMode,	"vid_mode"				);
 	CMD3(CCC_Token,		"vid_bpp",				&psCurrentBPP,	vid_bpp_token);
 	CMD1(CCC_VID_Restart,"vid_restart"			);
 	CMD1(CCC_VID_Reset, "vid_reset"				);

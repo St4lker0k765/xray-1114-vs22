@@ -80,7 +80,7 @@ enum {
 	mtSound				= (1ul<<24ul),
 	mtInput				= (1ul<<25ul)
 };
-ENGINE_API extern	DWORD	psCurrentMode		;
+ENGINE_API extern	DWORD	psCurrentVidMode[]	;
 ENGINE_API extern	DWORD	psCurrentBPP		;
 ENGINE_API extern	DWORD	psDeviceFlags		;
 

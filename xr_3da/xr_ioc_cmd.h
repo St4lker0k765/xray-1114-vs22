@@ -72,11 +72,12 @@ public:
 	{	strcpy(I,"'on/off' or '1/0'"); }
 };
 
-class ENGINE_API CCC_Token : public CConsoleCommand
+class ENGINE_API	CCC_Token : public CConsoleCommand
 {
+protected	:
 	DWORD*			value;
 	xr_token*		tokens;
-public:
+public		:
 	CCC_Token(LPCSTR N, DWORD* V, xr_token* T) :
 	  CConsoleCommand(N),
 	  value(V),
@@ -119,6 +120,7 @@ public:
 		}
 	}
 };
+
 
 class ENGINE_API CCC_Float : public CConsoleCommand
 {

@@ -75,16 +75,20 @@ void CRenderTarget::OnDeviceCreate	()
 
 void CRenderTarget::OnDeviceDestroy	()
 {
-	Device.Shader.Delete		(pShaderBlend);
-	Device.Shader.Delete		(pShaderGray);
-	Device.Shader.Delete		(pShaderSet);
-	pTexture->surface_set		(0);
-	Device.Shader._DeleteTexture(pTexture);
-	
-	_RELEASE	(pBaseZB	);
-	_RELEASE	(pBaseRT	);
-	_RELEASE	(pRT		);
-	_RELEASE	(pSurface	);
+	if (pTexture) {
+		pTexture->surface_set(0);
+		Device.Shader._DeleteTexture(pTexture);
+		pTexture = nullptr;
+	}
+
+	Device.Shader.Delete(pShaderBlend); pShaderBlend = nullptr;
+	Device.Shader.Delete(pShaderGray);  pShaderGray = nullptr;
+	Device.Shader.Delete(pShaderSet);   pShaderSet = nullptr;
+
+	if (pSurface) { pSurface->Release(); pSurface = nullptr; }
+	if (pRT) { pRT->Release();      pRT = nullptr; }
+	if (pBaseRT) { pBaseRT->Release();  pBaseRT = nullptr; }
+	if (pBaseZB) { pBaseZB->Release();  pBaseZB = nullptr; }
 }
 
 void CRenderTarget::Begin	()
