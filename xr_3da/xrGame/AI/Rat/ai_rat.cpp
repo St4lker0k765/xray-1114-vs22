@@ -1617,7 +1617,8 @@ void CAI_Rat::SelectAnimation(const Fvector& _view, const Fvector& _move, float 
 	//R_ASSERT(fsimilar(_move.magnitude(),1));
 
 	CMotionDef*	S=0;
-	if ((iHealth<=0)){// && ((!m_bAttackStarted) || (m_bAttackFinished))) {
+	if ((iHealth<=0))
+	{// && ((!m_bAttackStarted) || (m_bAttackFinished))) {
 		for (int i=0 ;i<2; i++)
 			if (m_tpaDeathAnimations[i] == m_current) {
 				S = m_current;
@@ -1625,6 +1626,7 @@ void CAI_Rat::SelectAnimation(const Fvector& _view, const Fvector& _move, float 
 			}
 		if (!S)
 			S = m_tpaDeathAnimations[::Random.randI(0,2)];
+		bStopThinking = true;
 	}
 	else {
 		if (m_bAttackStarted) {
