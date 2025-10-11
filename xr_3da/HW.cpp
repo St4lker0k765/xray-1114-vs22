@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <windows.h>
 
 ENGINE_API CHW HW;
 
@@ -81,6 +82,29 @@ void fill_vid_mode_list(CHW* _hw)
 void free_vid_mode_list() {}
 void fill_vid_mode_list(CHW* _hw) {}
 #endif
+
+static void GetMonitorRectForWindow(HWND hWnd, RECT& out)
+{
+    HMONITOR mon = MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST);
+    MONITORINFO mi = {}; mi.cbSize = sizeof(mi);
+    if (GetMonitorInfo(mon, &mi)) out = mi.rcMonitor;
+    else GetClientRect(GetDesktopWindow(), &out);
+}
+
+static void MakeBorderlessFullscreenWindow(HWND hWnd, u32& outW, u32& outH) // было DWORD outW, outH по значению
+{
+    RECT r; GetMonitorRectForWindow(hWnd, r);
+    outW = (u32)(r.right - r.left);
+    outH = (u32)(r.bottom - r.top);
+
+    LONG style = GetWindowLong(hWnd, GWL_STYLE);
+    style &= ~(WS_OVERLAPPEDWINDOW | WS_BORDER | WS_DLGFRAME | WS_THICKFRAME | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
+    style |= WS_POPUP | WS_VISIBLE;
+    SetWindowLong(hWnd, GWL_STYLE, style);
+
+    SetWindowPos(hWnd, HWND_TOP, r.left, r.top, (int)outW, (int)outH, SWP_SHOWWINDOW | SWP_NOOWNERZORDER);
+}
+
 
 // ------------------------------------------------------------
 
@@ -221,173 +245,94 @@ DWORD CHW::CreateDevice(HWND m_hWnd, DWORD& dwWidth, DWORD& dwHeight)
 {
     CreateD3D();
 
-    BOOL bWindowed = !(psDeviceFlags & rsFullscreen);
+    const BOOL wantFullscreenLook = (psDeviceFlags & rsFullscreen);
+    const BOOL bWindowedSwap = TRUE;
 
-    DWORD dwWindowStyle;
-    if (bWindowed) SetWindowLong(m_hWnd, GWL_STYLE, dwWindowStyle = (WS_BORDER | WS_DLGFRAME | WS_VISIBLE));
-    else           SetWindowLong(m_hWnd, GWL_STYLE, dwWindowStyle = (WS_POPUP | WS_VISIBLE));
+    if (wantFullscreenLook) {
+        SetWindowLong(m_hWnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+        MakeBorderlessFullscreenWindow(m_hWnd, (u32&)dwWidth, (u32&)dwHeight);
+    } else {
+        SetWindowLong(m_hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE | WS_SYSMENU | WS_MINIMIZEBOX);
+        u32 w = 0, h = 0; selectResolution(w, h, TRUE);
+        dwWidth = w; dwHeight = h;
+        RECT rc = { 0,0,(LONG)dwWidth,(LONG)dwHeight };
+        AdjustWindowRect(&rc, GetWindowLong(m_hWnd, GWL_STYLE), FALSE);
+        SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right - rc.left, rc.bottom - rc.top, SWP_SHOWWINDOW | SWP_NOCOPYBITS);
+    }
 
     D3DADAPTER_IDENTIFIER8 adapterID;
     R_CHK(pD3D->GetAdapterIdentifier(D3DADAPTER_DEFAULT, D3DENUM_NO_WHQL_LEVEL, &adapterID));
     Msg("* Video board: %s", adapterID.Description);
 
-    D3DDISPLAYMODE mWindowed;
-    R_CHK(pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &mWindowed));
-
-    {
-        u32 w = 0, h = 0;
-        selectResolution(w, h, bWindowed);
-        dwWidth = w;
-        dwHeight = h;
-    }
-
+    D3DDISPLAYMODE desk;
+    R_CHK(pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &desk));
     D3DFORMAT& fTarget = Caps.fTarget;
     D3DFORMAT& fDepth  = Caps.fDepth;
 
-    if (bWindowed)
-    {
-        fTarget = mWindowed.Format;
-        R_CHK(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, TRUE));
-        fDepth = selectDepthStencil(fTarget);
-    }
-    else
-    {
-        switch (psCurrentBPP) {
-        case 32:
-            fTarget = D3DFMT_X8R8G8B8;
-            if (SUCCEEDED(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, FALSE)))
-                break;
-            fTarget = D3DFMT_R8G8B8;
-            if (SUCCEEDED(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, FALSE)))
-                break;
-            fTarget = D3DFMT_UNKNOWN;
-            break;
-        case 16:
-        default:
-            fTarget = D3DFMT_R5G6B5;
-            if (SUCCEEDED(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, FALSE)))
-                break;
-            fTarget = D3DFMT_X1R5G5B5;
-            if (SUCCEEDED(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, FALSE)))
-                break;
-            fTarget = D3DFMT_X4R4G4B4;
-            if (SUCCEEDED(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, FALSE)))
-                break;
-            fTarget = D3DFMT_UNKNOWN;
-            break;
-        }
-        fDepth = selectDepthStencil(fTarget);
-    }
-
+    fTarget = desk.Format;
+    R_CHK(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, TRUE));
+    fDepth = selectDepthStencil(fTarget);
     R_ASSERT(fTarget != D3DFMT_UNKNOWN);
     R_ASSERT(fDepth  != D3DFMT_UNKNOWN);
 
-    D3DPRESENT_PARAMETERS P;
-    ZeroMemory(&P, sizeof(P));
-
+    D3DPRESENT_PARAMETERS P = {};
     P.BackBufferWidth  = dwWidth;
     P.BackBufferHeight = dwHeight;
     P.BackBufferFormat = fTarget;
-    P.BackBufferCount  = bWindowed ? 1 : ((psDeviceFlags & rsTriplebuffer) ? 2 : 1);
-
-    if ((!bWindowed) && (psDeviceFlags & rsAntialias))
-        P.MultiSampleType = D3DMULTISAMPLE_2_SAMPLES;
-    else
-        P.MultiSampleType = D3DMULTISAMPLE_NONE;
-
-    P.SwapEffect     = D3DSWAPEFFECT_DISCARD;
-    P.hDeviceWindow  = m_hWnd;
-    P.Windowed       = bWindowed;
-
+    P.BackBufferCount  = 1;
+    P.MultiSampleType  = D3DMULTISAMPLE_NONE;
+    P.SwapEffect       = D3DSWAPEFFECT_COPY;
+    P.hDeviceWindow    = m_hWnd;
+    P.Windowed         = TRUE;
     P.EnableAutoDepthStencil = TRUE;
     P.AutoDepthStencilFormat = fDepth;
-
-    if (!bWindowed)
-        P.FullScreen_RefreshRateInHz = selectRefresh(dwWidth, dwHeight);
-    else
-        P.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
+    P.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
 
     DWORD GPU = selectGPU();
-    R_CHK(HW.pD3D->CreateDevice(D3DADAPTER_DEFAULT,
-        D3DDEVTYPE_HAL,
-        m_hWnd,
-        GPU,
-        &P,
-        &pDevice));
+    R_CHK(HW.pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd, GPU, &P, &pDevice));
 
     CurrBBWidth  = P.BackBufferWidth;
     CurrBBHeight = P.BackBufferHeight;
 
-    switch (GPU)
-    {
-    case D3DCREATE_SOFTWARE_VERTEXPROCESSING:      Log("* Geometry Processor: SOFTWARE"); break;
-    case D3DCREATE_MIXED_VERTEXPROCESSING:         Log("* Geometry Processor: MIXED");    break;
-    case D3DCREATE_HARDWARE_VERTEXPROCESSING:      Log("* Geometry Processor: HARDWARE"); break;
-    case D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE:
-        Log("* Geometry Processor: PURE HARDWARE"); break;
-    }
-
 #ifndef _EDITOR
     fill_vid_mode_list(this);
 #endif
-
-    return dwWindowStyle;
+    return GetWindowLong(m_hWnd, GWL_STYLE);
 }
+
 
 void CHW::updateWindowProps(HWND m_hWnd)
 {
 #ifndef DEDICATED_SERVER
-    BOOL bWindowed = !(psDeviceFlags & rsFullscreen);
+    const bool wantFullscreenLook = (psDeviceFlags & rsFullscreen);
 #else
-    BOOL bWindowed = TRUE;
+    const bool wantFullscreenLook = false;
 #endif
 
-    u32 dwWindowStyle = 0;
-
-    const int W = (int)CurrBBWidth;
-    const int H = (int)CurrBBHeight;
-
-    if (bWindowed)
+    if (wantFullscreenLook)
     {
-        SetWindowLong(m_hWnd, GWL_STYLE, dwWindowStyle = (WS_BORDER | WS_DLGFRAME | WS_VISIBLE | WS_SYSMENU | WS_MINIMIZEBOX));
-
-        RECT m_rcWindowBounds;
-        BOOL bCenter = FALSE;
-
-        if (strstr(GetCommandLineA(), "-center_screen")) bCenter = TRUE;
-#ifdef DEDICATED_SERVER
-        bCenter = TRUE;
-#endif
-
-        if (bCenter)
-        {
-            RECT DesktopRect;
-            GetClientRect(GetDesktopWindow(), &DesktopRect);
-
-            SetRect(&m_rcWindowBounds,
-                (DesktopRect.right - W) / 2,
-                (DesktopRect.bottom - H) / 2,
-                (DesktopRect.right + W) / 2,
-                (DesktopRect.bottom + H) / 2);
-        }
-        else
-        {
-            SetRect(&m_rcWindowBounds, 0, 0, W, H);
-        }
-
-        AdjustWindowRect(&m_rcWindowBounds, dwWindowStyle, FALSE);
-
-        SetWindowPos(m_hWnd,
-            HWND_TOP,
-            m_rcWindowBounds.left,
-            m_rcWindowBounds.top,
-            (m_rcWindowBounds.right - m_rcWindowBounds.left),
-            (m_rcWindowBounds.bottom - m_rcWindowBounds.top),
-            SWP_SHOWWINDOW | SWP_NOCOPYBITS | SWP_DRAWFRAME);
+        u32 w=0, h=0;
+        SetWindowLong(m_hWnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+        MakeBorderlessFullscreenWindow(m_hWnd, w, h);
     }
     else
     {
-        SetWindowLong(m_hWnd, GWL_STYLE, dwWindowStyle = (WS_POPUP | WS_VISIBLE));
+        const DWORD style = (WS_OVERLAPPEDWINDOW | WS_VISIBLE | WS_SYSMENU | WS_MINIMIZEBOX);
+        SetWindowLong(m_hWnd, GWL_STYLE, style);
+
+        RECT rc = { 0,0,(LONG)CurrBBWidth,(LONG)CurrBBHeight };
+        AdjustWindowRect(&rc, style, FALSE);
+
+        BOOL bCenter = FALSE;
+        if (strstr(GetCommandLineA(), "-center_screen")) bCenter = TRUE;
+        int x = 0, y = 0, w = rc.right - rc.left, h = rc.bottom - rc.top;
+        if (bCenter)
+        {
+            RECT desk; GetClientRect(GetDesktopWindow(), &desk);
+            x = (desk.right - w) / 2;
+            y = (desk.bottom - h) / 2;
+        }
+        SetWindowPos(m_hWnd, HWND_TOP, x, y, w, h, SWP_SHOWWINDOW | SWP_NOCOPYBITS | SWP_DRAWFRAME);
     }
 
 #ifndef DEDICATED_SERVER
@@ -396,78 +341,56 @@ void CHW::updateWindowProps(HWND m_hWnd)
 #endif
 }
 
+
 void CHW::Reset(HWND hwnd)
 {
 #ifdef DEBUG
     _RELEASE(dwDebugSB);
 #endif
-
-     _RELEASE(pBaseZB);
-     _RELEASE(pBaseRT);
+    _RELEASE(pBaseZB);
+    _RELEASE(pBaseRT);
 
 #ifndef _EDITOR
-#ifndef DEDICATED_SERVER
-    BOOL bWindowed = !(psDeviceFlags & rsFullscreen);
-#else
-    BOOL bWindowed = TRUE;
-#endif
+    const bool wantFullscreenLook = (psDeviceFlags & rsFullscreen);
 
     u32 w = 0, h = 0;
-    selectResolution(w, h, bWindowed);
-
-    D3DDISPLAYMODE mWindowed;
-    R_CHK(pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &mWindowed));
-
-    D3DFORMAT fTarget = Caps.fTarget;
-    D3DFORMAT fDepth  = Caps.fDepth;
-    if (bWindowed)
+    if (wantFullscreenLook)
     {
-        fTarget = mWindowed.Format;
-        R_CHK(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, TRUE));
-        fDepth = selectDepthStencil(fTarget);
+        MakeBorderlessFullscreenWindow(hwnd, w, h);
     }
     else
     {
-        switch (psCurrentBPP) {
-        case 32:
-            fTarget = D3DFMT_X8R8G8B8;
-            if (SUCCEEDED(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, FALSE))) break;
-            fTarget = D3DFMT_R8G8B8;
-            if (SUCCEEDED(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, FALSE))) break;
-            fTarget = D3DFMT_UNKNOWN;
-            break;
-        case 16:
-        default:
-            fTarget = D3DFMT_R5G6B5;
-            if (SUCCEEDED(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, FALSE))) break;
-            fTarget = D3DFMT_X1R5G5B5;
-            if (SUCCEEDED(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, FALSE))) break;
-            fTarget = D3DFMT_X4R4G4B4;
-            if (SUCCEEDED(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, FALSE))) break;
-            fTarget = D3DFMT_UNKNOWN;
-            break;
-        }
-        fDepth = selectDepthStencil(fTarget);
+        w = CurrBBWidth; h = CurrBBHeight;
+        if (!w || !h) { u32 rw=0, rh=0; selectResolution(rw, rh, TRUE); w = rw; h = rh; }
+
+        const DWORD style = (WS_OVERLAPPEDWINDOW | WS_VISIBLE | WS_SYSMENU | WS_MINIMIZEBOX);
+        SetWindowLong(hwnd, GWL_STYLE, style);
+        RECT rc = { 0,0,(LONG)w,(LONG)h };
+        AdjustWindowRect(&rc, style, FALSE);
+        SetWindowPos(hwnd, HWND_TOP, 0, 0, rc.right - rc.left, rc.bottom - rc.top, SWP_SHOWWINDOW | SWP_NOCOPYBITS);
     }
+
+    D3DDISPLAYMODE desk;
+    R_CHK(pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &desk));
+
+    D3DFORMAT fTarget = desk.Format;
+    R_CHK(pD3D->CheckDeviceType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, fTarget, fTarget, TRUE));
+    D3DFORMAT fDepth  = selectDepthStencil(fTarget);
     R_ASSERT(fTarget != D3DFMT_UNKNOWN);
     R_ASSERT(fDepth  != D3DFMT_UNKNOWN);
 
-    D3DPRESENT_PARAMETERS P;
-    ZeroMemory(&P, sizeof(P));
+    D3DPRESENT_PARAMETERS P = {};
     P.BackBufferWidth  = w;
     P.BackBufferHeight = h;
     P.BackBufferFormat = fTarget;
-    P.BackBufferCount  = bWindowed ? 1 : ((psDeviceFlags & rsTriplebuffer) ? 2 : 1);
-    P.MultiSampleType  = ((!bWindowed) && (psDeviceFlags & rsAntialias)) ? D3DMULTISAMPLE_2_SAMPLES : D3DMULTISAMPLE_NONE;
-    P.SwapEffect       = bWindowed ? D3DSWAPEFFECT_COPY : D3DSWAPEFFECT_DISCARD;
+    P.BackBufferCount  = 1;
+    P.MultiSampleType  = D3DMULTISAMPLE_NONE;
+    P.SwapEffect       = D3DSWAPEFFECT_COPY;
     P.hDeviceWindow    = hwnd;
-    P.Windowed         = bWindowed;
+    P.Windowed         = TRUE; // критично: без эксклюзива
     P.EnableAutoDepthStencil = TRUE;
     P.AutoDepthStencilFormat = fDepth;
-    if (!bWindowed)
-        P.FullScreen_RefreshRateInHz = selectRefresh(w, h);
-    else
-        P.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
+    P.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
 
     for (;;)
     {
@@ -482,6 +405,6 @@ void CHW::Reset(HWND hwnd)
 #ifndef _EDITOR
     updateWindowProps(hwnd);
 #endif
-
 #endif // !_EDITOR
 }
+

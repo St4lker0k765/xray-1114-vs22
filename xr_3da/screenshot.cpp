@@ -18,10 +18,6 @@ IC DWORD convert(float c)
 void CRender::MakeScreenshot()
 {
 	if (!Device.bReady) return;
-	if ((psDeviceFlags&rsFullscreen) == 0) {
-		Log("! Can't capture screen while in windowed mode...");
-		return;
-	}
 
 	// Create temp-surface
 	IDirect3DSurface8*	pFB;
