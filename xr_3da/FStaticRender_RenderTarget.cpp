@@ -27,7 +27,7 @@ BOOL CRenderTarget::Create	()
 	HRESULT		_hr;
 	
 	// Get caps
-	D3DCAPS8	caps;
+	D3DCAPS9	caps;
 	R_CHK		(HW.pDevice->GetDeviceCaps(&caps));
 	
 	// Check nonpow2 conditional
@@ -49,12 +49,12 @@ BOOL CRenderTarget::Create	()
 	if (FAILED(_hr))													return FALSE;
 	
 	// Try to create texture/surface
-	_hr = HW.pDevice->CreateTexture(Device.dwWidth,Device.dwHeight,1,D3DUSAGE_RENDERTARGET,HW.Caps.fTarget,D3DPOOL_DEFAULT,&pSurface);
+	_hr = HW.pDevice->CreateTexture(Device.dwWidth,Device.dwHeight,1,D3DUSAGE_RENDERTARGET,HW.Caps.fTarget,D3DPOOL_DEFAULT,&pSurface, nullptr);
 	if (FAILED(_hr) || (0==pSurface))									return FALSE;
 	
 	// OK
 	R_CHK	(pSurface->GetSurfaceLevel			(0,&pRT));
-	R_CHK	(HW.pDevice->GetRenderTarget		(&pBaseRT));
+	R_CHK	(HW.pDevice->GetRenderTarget		(0,&pBaseRT));
 	R_CHK	(HW.pDevice->GetDepthStencilSurface	(&pBaseZB));
 	
 	// Texture and shader
@@ -96,7 +96,8 @@ void CRenderTarget::Begin	()
 	if (!Available() || !NeedPostProcess())	return;
 
 	Device.Statistic.TEST.Begin		();
-	R_CHK		(HW.pDevice->SetRenderTarget	(pRT,		pBaseZB));
+	R_CHK		(HW.pDevice->SetRenderTarget	(0, pRT));
+	R_CHK		(HW.pDevice->SetDepthStencilSurface	(pBaseZB));
 	if (psDeviceFlags&rsClearBB) CHK_DX(HW.pDevice->Clear(0,0,D3DCLEAR_TARGET,D3DCOLOR_XRGB(0,255,0),1,0));
 	Device.Statistic.TEST.End		();
 }
@@ -106,7 +107,8 @@ void CRenderTarget::End		()
 	if (!Available() || !NeedPostProcess())	return;
 	
 	Device.Statistic.TEST.Begin		();
-	R_CHK			(HW.pDevice->SetRenderTarget	(pBaseRT,	pBaseZB));
+	R_CHK			(HW.pDevice->SetRenderTarget	(0, pBaseRT));
+	R_CHK			(HW.pDevice->SetDepthStencilSurface	(pBaseZB));
 	Device.Statistic.TEST.End		();
 	
 	// Draw full-screen quad textured with our scene image

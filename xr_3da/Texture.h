@@ -23,8 +23,8 @@ enum ETextureMipgen {
 
 
 // Utility pack
-extern ENGINE_API IDirect3DSurface8* 	TUCreateSurfaceFromMemory(DWORD w, DWORD h, DWORD p, D3DFORMAT fmt, void *data);
-extern ENGINE_API IDirect3DTexture8* 	TUCreateTexture			(DWORD *f, DWORD *w, DWORD *h, D3DFORMAT *fmt, DWORD *m);
+extern ENGINE_API IDirect3DSurface9* 	TUCreateSurfaceFromMemory(DWORD w, DWORD h, DWORD p, D3DFORMAT fmt, void *data);
+extern ENGINE_API IDirect3DTexture9* 	TUCreateTexture			(DWORD *f, DWORD *w, DWORD *h, D3DFORMAT *fmt, DWORD *m);
 extern ENGINE_API BOOL					TUisAlphaPresents		(D3DFORMAT f);
 extern ENGINE_API char*					TUsf2string				(D3DFORMAT f);
 extern ENGINE_API void					TUSelectMipLevel		(DWORD *w, DWORD *h, DWORD Q);
@@ -32,13 +32,13 @@ extern ENGINE_API void					TUSelectFMT_LM			(D3DFORMAT *fmt);
 extern ENGINE_API void					TUProcess32_contrast	(DWORD _w, DWORD _h, DWORD _p, float _fc, void *data);
 extern ENGINE_API void					TUProcess32_grayscale	(DWORD _w, DWORD _h, DWORD _p, void *data);
 extern ENGINE_API DWORD*				TUBuild32MipLevel		(ETextureMipgen ALG, DWORD &_w, DWORD &_h, DWORD &_p, DWORD *pdwPixelSrc);
-extern ENGINE_API void					TULoadFromMemory		(IDirect3DTexture8* pDest, DWORD dwMipLevel,DWORD* pSrc, DWORD filter);
-extern ENGINE_API void					TULoadFromSurface		(IDirect3DTexture8* pDest, DWORD dwMipLevel,IDirect3DSurface8* pSrc, DWORD filter);
-extern ENGINE_API void					TULoadFromBGR24			(IDirect3DTexture8* pDest, void *pSrc );
+extern ENGINE_API void					TULoadFromMemory		(IDirect3DTexture9* pDest, DWORD dwMipLevel,DWORD* pSrc, DWORD filter);
+extern ENGINE_API void					TULoadFromSurface		(IDirect3DTexture9* pDest, DWORD dwMipLevel,IDirect3DSurface9* pSrc, DWORD filter);
+extern ENGINE_API void					TULoadFromBGR24			(IDirect3DTexture9* pDest, void *pSrc );
 
 // Wizzard pack
 
-extern ENGINE_API IDirect3DTexture8* TWLoader2D(
+extern ENGINE_API IDirect3DTexture9* TWLoader2D(
 		const char *		fname,
 		ETexturePF			Algorithm,
 		ETextureMipgen		Mipgen,

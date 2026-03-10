@@ -22,7 +22,7 @@ class ENGINE_API CVertexStream
 	friend class				CDraw;
 	friend class				CRender;
 private :
-	IDirect3DVertexBuffer8*		pVB;
+	IDirect3DVertexBuffer9*		pVB;
 	DWORD						mFVF;
 	DWORD						mStride;
 	DWORD						mCount;		// requisted count
@@ -34,7 +34,7 @@ private:
 	void						Create	();
 	void						Destroy	();
 public:
-	IC IDirect3DVertexBuffer8*	getBuffer() { return pVB;		}
+	IC IDirect3DVertexBuffer9*	getBuffer() { return pVB;		}
 	IC DWORD					getFVF()	{ return mFVF;		}
 	IC DWORD					getStride()	{ return mStride;	}
 
@@ -54,7 +54,7 @@ public:
 	IC void*					Lock( DWORD Count, DWORD& vOffset )
 	{
 		vOffset				= 0;
-		BYTE* pLockedData	= 0;
+		void* pLockedData	= 0;
 		
 		// Ensure there is enough space in the VB for this data
 		if (0==pVB) Create (); R_ASSERT(Count<=mSize);
@@ -99,7 +99,7 @@ class ENGINE_API CIndexStream
 
 	enum						{ mStride=2ul	};
 private :
-	IDirect3DIndexBuffer8*		pIB;
+	IDirect3DIndexBuffer9*		pIB;
 	DWORD						mCount;		// requisted count
 	DWORD						mSize;		// real size (usually mCount, aligned on 512b boundary)
 	DWORD						mPosition;
@@ -112,7 +112,7 @@ private:
 	void						Create	();
 	void						Destroy	();
 public:
-	IC IDirect3DIndexBuffer8*	getBuffer() { return pIB; }
+	IC IDirect3DIndexBuffer9*	getBuffer() { return pIB; }
 
 	BOOL						RequestStorage(DWORD iCount)
 	{
@@ -130,7 +130,7 @@ public:
 	IC WORD*					Lock( DWORD Count, DWORD& vOffset )
 	{
 		vOffset				= 0;
-		BYTE* pLockedData	= 0;
+		void* pLockedData	= 0;
 		
 		// Ensure there is enough space in the VB for this data
 		if (0==pIB) Create (); R_ASSERT(Count<=mSize);

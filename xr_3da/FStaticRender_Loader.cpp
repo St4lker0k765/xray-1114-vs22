@@ -101,7 +101,7 @@ void CRender::LoadBuffers(CStream *fs)
 	FVF.resize(count);
 	VB.resize(count);
 
-	CHK_DX(HW.pDevice->ResourceManagerDiscardBytes(0));
+	CHK_DX(HW.pDevice->EvictManagedResources());
 
 	for (DWORD i=0; i<count; i++)
 	{
@@ -119,10 +119,11 @@ void CRender::LoadBuffers(CStream *fs)
 			dwUsage,
 			vFVF,
 			(dwUsage&D3DUSAGE_SOFTWAREPROCESSING)?D3DPOOL_SYSTEMMEM:D3DPOOL_DEFAULT,
-			&VB[i]));
+			&VB[i], 
+			0));
 
 		BYTE* pData;
-		R_CHK(VB[i]->Lock(0,0,&pData,D3DLOCK_NOSYSLOCK));
+		R_CHK(VB[i]->Lock(0,0,(void**)&pData,D3DLOCK_NOSYSLOCK));
 
 		CopyMemory(pData,fs->Pointer(),vCount*vSize);
 

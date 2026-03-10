@@ -11,7 +11,7 @@ IC void CDraw::Draw			(CPrimitive& P,		DWORD dwNumVerts, DWORD dwNumPrimitives)
 	Render		(D3DPT_TRIANGLELIST,0,dwNumVerts,0,dwNumPrimitives);
 	UPDATEC		(dwNumVerts,dwNumPrimitives,1);
 }
-IC void CDraw::Draw			(CVertexStream* S,	DWORD dwNumVerts, DWORD dwNumPrimitives, DWORD dwBase, IDirect3DIndexBuffer8* IB)
+IC void CDraw::Draw			(CVertexStream* S,	DWORD dwNumVerts, DWORD dwNumPrimitives, DWORD dwBase, IDirect3DIndexBuffer9* IB)
 {
 	setVertices	(S->mFVF,S->mStride,S->pVB);
 	setIndicesUC(dwBase,IB);;

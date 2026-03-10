@@ -13,7 +13,7 @@ IC void	CShaderManager::set_Code		(DWORD dwCode)
 	if (cache.pass.dwStateBlock!=dwCode)
 	{
 		cache.pass.dwStateBlock=dwCode;
-		CHK_DX(HW.pDevice->ApplyStateBlock(dwCode));
+		CHK_DX(reinterpret_cast<IDirect3DStateBlock9*>(dwCode)->Apply());
 		Device.Statistic.dwShader_Codes++;
 	}
 }
@@ -73,7 +73,7 @@ IC void CShaderManager::set_Constants	(SConstantList* C, BOOL bPS)
 					c->Calculate	();
 					data.push_back	(c->const_float);
 				}
-				CHK_DX(HW.pDevice->SetPixelShaderConstant(0,data.begin(),data.size()));
+				CHK_DX(HW.pDevice->SetPixelShaderConstantF(0,(const float*)data.begin(),data.size()));
 			} else {
 				CConstant* c	= (*C)[0];
 				c->Calculate	();

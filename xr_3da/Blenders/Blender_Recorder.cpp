@@ -85,8 +85,8 @@ void	CBlender_Recorder::StageEnd		()
 }
 void	CBlender_Recorder::StageSET_Address(DWORD adr)
 {
-	RS.SetTSS	(Stage(),D3DTSS_ADDRESSU,	adr);
-	RS.SetTSS	(Stage(),D3DTSS_ADDRESSV,	adr);
+	RS.SetSAMP	(Stage(),D3DSAMP_ADDRESSU,	adr);
+	RS.SetSAMP	(Stage(),D3DSAMP_ADDRESSV,	adr);
 }
 void	CBlender_Recorder::StageSET_XForm	(DWORD tf, DWORD tc)
 {

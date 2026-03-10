@@ -4,7 +4,7 @@
 extern void	 ConvertVertices(DWORD dwTypeDest, void *pDest, DWORD dwTypeSrc, void *pSource, DWORD dwCount);
 
 //***** VB interface
-void	CPrimitive::VB_Attach	(DWORD FVF, IDirect3DVertexBuffer8* VB)
+void	CPrimitive::VB_Attach	(DWORD FVF, IDirect3DVertexBuffer9* VB)
 {
 	_RELEASE(pVertices);
 	pVertices	= VB;
@@ -14,7 +14,7 @@ void	CPrimitive::VB_Attach	(DWORD FVF, IDirect3DVertexBuffer8* VB)
 }
 void	CPrimitive::VB_Create	(DWORD FVF, DWORD dwCount,DWORD dwUsage, DWORD srcFVF, VOID* pData)
 {
-	CHK_DX(HW.pDevice->ResourceManagerDiscardBytes(0));
+	CHK_DX(HW.pDevice->EvictManagedResources());
 
 	vShader = FVF;
 	vSize	= D3DXGetFVFVertexSize(FVF);
@@ -24,7 +24,7 @@ void	CPrimitive::VB_Create	(DWORD FVF, DWORD dwCount,DWORD dwUsage, DWORD srcFVF
 		dwUsage,
 		FVF,
 		(dwUsage&D3DUSAGE_SOFTWAREPROCESSING)?D3DPOOL_SYSTEMMEM:D3DPOOL_DEFAULT,
-		&pVertices));
+		&pVertices, nullptr));
 	if (pData){
 		ConvertVertices(FVF,VB_Lock(),srcFVF,pData,dwCount);
 		VB_Unlock();
@@ -32,7 +32,7 @@ void	CPrimitive::VB_Create	(DWORD FVF, DWORD dwCount,DWORD dwUsage, DWORD srcFVF
 }
 void*	CPrimitive::VB_Lock		(DWORD dwFlags)
 {
-	BYTE* pData;
+	void* pData;
 	VERIFY(pVertices);
 	CHK_DX(pVertices->Lock(0,0,&pData,dwFlags));
 	return pData;
@@ -52,7 +52,7 @@ void	CPrimitive::IB_SetBase	(DWORD dwBaseVert)
 {
 	dwBaseVertex=dwBaseVert;
 }
-void	CPrimitive::IB_Attach	(DWORD dwBaseVert, IDirect3DIndexBuffer8* IB)
+void	CPrimitive::IB_Attach	(DWORD dwBaseVert, IDirect3DIndexBuffer9* IB)
 {
 	_RELEASE(pIndices);
 	pIndices	= IB;
@@ -69,13 +69,13 @@ void	CPrimitive::IB_Replicate(CPrimitive& P)
 }
 void	CPrimitive::IB_Create	(DWORD dwBaseVert, DWORD dwCount, DWORD dwUsage,VOID* pData)
 {
-	CHK_DX(HW.pDevice->ResourceManagerDiscardBytes(0));
+	CHK_DX(HW.pDevice->EvictManagedResources());
 
 	dwBaseVertex=dwBaseVert;
 	if (HW.Caps.vertex.bSoftware)	dwUsage|=D3DUSAGE_SOFTWAREPROCESSING;
 	R_CHK(HW.pDevice->CreateIndexBuffer(
 		dwCount*2,dwUsage,D3DFMT_INDEX16,D3DPOOL_DEFAULT,
-		&pIndices
+		&pIndices, nullptr
 		));
 	if (pData){
 		CopyMemory(IB_Lock(),pData,dwCount*2);
@@ -84,7 +84,7 @@ void	CPrimitive::IB_Create	(DWORD dwBaseVert, DWORD dwCount, DWORD dwUsage,VOID*
 }
 WORD*	CPrimitive::IB_Lock				(DWORD dwFlags)
 {
-	BYTE* pData;
+	void* pData;
 	VERIFY(pIndices);
 	CHK_DX(pIndices->Lock(0,0,&pData,dwFlags));
 	return LPWORD(pData);

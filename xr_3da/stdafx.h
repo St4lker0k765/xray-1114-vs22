@@ -69,8 +69,8 @@
 
 #define DIRECTINPUT_VERSION 0x0800
 
-#include <d3d8.h>
-#include <d3dx8.h>
+#include <d3d9.h>
+#include <d3dx9.h>
 #include <dinput.h>
 #include <dsound.h>
 #include <dplay8.h>
@@ -148,9 +148,8 @@ using namespace std;
 #pragma comment( lib, "imagehlp.lib"	)
 #pragma comment( lib, "winmm.lib"		)
 
-#pragma comment( lib, "d3d8.lib"		)
-#pragma comment( lib, "d3dx8.lib"		)
-#pragma comment( lib, "dxerr8.lib"		)
+#pragma comment( lib, "d3d9.lib"		)
+#pragma comment( lib, "d3dx9.lib"		)
 
 #pragma comment( lib, "dsound.lib"		)
 #pragma comment( lib, "dinput8.lib"		)

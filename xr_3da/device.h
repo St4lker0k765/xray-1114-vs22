@@ -65,7 +65,7 @@ public:
 
 	// Shared Streams
 	CSharedStreams							Streams;
-	IDirect3DIndexBuffer8*					Streams_QuadIB;
+	IDirect3DIndexBuffer9*					Streams_QuadIB;
 
 	// Engine flow-control
 	float									fTimeDelta;

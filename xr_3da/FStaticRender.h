@@ -56,7 +56,7 @@ public:
 public:
 	// Global vertex-buffer container
 	vector<DWORD>					FVF;
-	vector<IDirect3DVertexBuffer8*>	VB;
+	vector<IDirect3DVertexBuffer9*>	VB;
 
 	vecGEO							Visuals;
 	vector<CPortal>					Portals;

@@ -80,7 +80,7 @@ void CRenderDevice::overdrawEnd		()
 	// Draw a rectangle wherever the count equal I
 	Primitive.Reset		();
 	Shader.OnFrameEnd	();
-	CHK_DX	(HW.pDevice->SetVertexShader( FVF::F_TL ));
+	CHK_DX	(HW.pDevice->SetFVF( FVF::F_TL ));
 
 	// Render gradients
 	for (int I=0; I<12; I++ ) 
@@ -154,17 +154,17 @@ void CRenderDevice::_Create	(LPCSTR shName)
 	for (DWORD i=0; i<HW.Caps.pixel.dwStages; i++) 
 	{
 		if (psDeviceFlags&rsAnisotropic)	{
-			CHK_DX(HW.pDevice->SetTextureStageState( i, D3DTSS_MINFILTER,	D3DTEXF_ANISOTROPIC ));
-			CHK_DX(HW.pDevice->SetTextureStageState( i, D3DTSS_MAGFILTER,	D3DTEXF_ANISOTROPIC ));
-			CHK_DX(HW.pDevice->SetTextureStageState( i, D3DTSS_MIPFILTER,	D3DTEXF_LINEAR		));
-			CHK_DX(HW.pDevice->SetTextureStageState( i, D3DTSS_MAXANISOTROPY, 4					));
+			CHK_DX(HW.pDevice->SetSamplerState( i, D3DSAMP_MINFILTER,	D3DTEXF_ANISOTROPIC ));
+			CHK_DX(HW.pDevice->SetSamplerState( i, D3DSAMP_MAGFILTER,	D3DTEXF_ANISOTROPIC ));
+			CHK_DX(HW.pDevice->SetSamplerState( i, D3DSAMP_MIPFILTER,	D3DTEXF_LINEAR		));
+			CHK_DX(HW.pDevice->SetSamplerState( i, D3DSAMP_MAXANISOTROPY, 4					));
 		} else {
-			CHK_DX(HW.pDevice->SetTextureStageState( i, D3DTSS_MINFILTER,	D3DTEXF_LINEAR 		));
-			CHK_DX(HW.pDevice->SetTextureStageState( i, D3DTSS_MAGFILTER,	D3DTEXF_LINEAR 		));
-			CHK_DX(HW.pDevice->SetTextureStageState( i, D3DTSS_MIPFILTER,	D3DTEXF_LINEAR		));
+			CHK_DX(HW.pDevice->SetSamplerState( i, D3DSAMP_MINFILTER,	D3DTEXF_LINEAR 		));
+			CHK_DX(HW.pDevice->SetSamplerState( i, D3DSAMP_MAGFILTER,	D3DTEXF_LINEAR 		));
+			CHK_DX(HW.pDevice->SetSamplerState( i, D3DSAMP_MIPFILTER,	D3DTEXF_LINEAR		));
 		}
 		float fBias = -1.f;
-		CHK_DX(HW.pDevice->SetTextureStageState( i, D3DTSS_MIPMAPLODBIAS, *((LPDWORD) (&fBias))));
+		CHK_DX(HW.pDevice->SetSamplerState( i, D3DSAMP_MIPMAPLODBIAS, *((LPDWORD) (&fBias))));
 	}
 	CHK_DX(HW.pDevice->SetRenderState( D3DRS_DITHERENABLE,		TRUE				));
     CHK_DX(HW.pDevice->SetRenderState( D3DRS_COLORVERTEX,		TRUE				));
@@ -217,8 +217,8 @@ void CRenderDevice::_Create	(LPCSTR shName)
 		WORD	*Indices	= 0;
 		DWORD	dwUsage		= D3DUSAGE_WRITEONLY;
 		if (HW.Caps.vertex.bSoftware)	dwUsage|=D3DUSAGE_SOFTWAREPROCESSING;
-		R_CHK(HW.pDevice->CreateIndexBuffer(dwIdxCount*2,dwUsage,D3DFMT_INDEX16,D3DPOOL_DEFAULT,&Streams_QuadIB));
-		R_CHK(Streams_QuadIB->Lock(0,0,(BYTE**)&Indices,D3DLOCK_NOSYSLOCK));
+		R_CHK(HW.pDevice->CreateIndexBuffer(dwIdxCount*2,dwUsage,D3DFMT_INDEX16,D3DPOOL_DEFAULT,&Streams_QuadIB, nullptr));
+		R_CHK(Streams_QuadIB->Lock(0,0,(void**)&Indices,D3DLOCK_NOSYSLOCK));
 		{
 			int		Cnt = 0;
 			int		ICnt= 0;

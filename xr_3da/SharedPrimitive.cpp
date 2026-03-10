@@ -12,7 +12,7 @@ int		rsDIB_Size		= 512;
 
 void CVertexStream::Create	()
 {
-	CHK_DX(HW.pDevice->ResourceManagerDiscardBytes(0));
+	CHK_DX(HW.pDevice->EvictManagedResources());
 
 	// Get vertex size
 	mStride		= D3DXGetFVFVertexSize(mFVF);
@@ -29,7 +29,7 @@ void CVertexStream::Create	()
 	R_ASSERT	(mSize<=65535);
 	
 	// Create VB
-	R_CHK		(HW.pDevice->CreateVertexBuffer( mSize*mStride,D3DUSAGE_WRITEONLY|D3DUSAGE_DYNAMIC,mFVF,D3DPOOL_DEFAULT,&pVB));
+	R_CHK		(HW.pDevice->CreateVertexBuffer( mSize*mStride,D3DUSAGE_WRITEONLY|D3DUSAGE_DYNAMIC,mFVF,D3DPOOL_DEFAULT,&pVB, nullptr));
 
 	R_ASSERT	(pVB);
 	mPosition	= 0;
@@ -44,7 +44,7 @@ void CVertexStream::Destroy	()
 
 void CIndexStream::Create	()
 {
-	CHK_DX(HW.pDevice->ResourceManagerDiscardBytes(0));
+	CHK_DX(HW.pDevice->EvictManagedResources());
 
 	// Calc size
 	R_ASSERT	(mCount);
@@ -55,7 +55,7 @@ void CIndexStream::Create	()
 	if ((dwMEM_Alloc-mSize*mStride)!=0)	mSize+=1;
 	
 	// Create VB
-	R_CHK		(HW.pDevice->CreateIndexBuffer( mSize*mStride, D3DUSAGE_WRITEONLY|D3DUSAGE_DYNAMIC, D3DFMT_INDEX16, D3DPOOL_DEFAULT, &pIB));
+	R_CHK		(HW.pDevice->CreateIndexBuffer( mSize*mStride, D3DUSAGE_WRITEONLY|D3DUSAGE_DYNAMIC, D3DFMT_INDEX16, D3DPOOL_DEFAULT, &pIB, nullptr));
 
 	R_ASSERT	(pIB);
 	mPosition	= 0;

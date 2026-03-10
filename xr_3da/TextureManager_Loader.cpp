@@ -53,7 +53,7 @@ void	CShaderManager::OnDeviceDestroy(BOOL bKeepTextures)
 	// Codes
 	for (it=0; it<codes.size(); it++)			{
 		R_ASSERT(0==codes[it].Reference);
-		CHK_DX	(HW.pDevice->DeleteStateBlock(codes[it].SB));
+		codes[it].SB = 0;
 	}
 	codes.clear	();
 	

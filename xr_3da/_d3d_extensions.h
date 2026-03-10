@@ -18,7 +18,7 @@ public:
     float	        theta;            /* Inner angle of spotlight cone */
     float	        phi;              /* Outer angle of spotlight cone */
 	
-	IC	D3DLIGHT8	*d3d() { return (D3DLIGHT8 *)this; };
+	IC	D3DLIGHT9	*d3d() { return (D3DLIGHT9 *)this; };
 	IC	void	set(DWORD ltType, float x, float y, float z) {
 		VERIFY(sizeof(_light)==sizeof(D3DLIGHT8));
 		ZeroMemory( this, sizeof(_light) );
@@ -42,7 +42,7 @@ public:
     Fcolor			emissive;       /* Emissive color RGB */
     float			power;          /* Sharpness if specular highlight */
 	
-	IC	D3DMATERIAL8	*d3d(void) { return (D3DMATERIAL8 *)this; };
+	IC	D3DMATERIAL9	*d3d(void) { return (D3DMATERIAL9 *)this; };
 	IC	void	set(_material& m)
 	{
 		CopyMemory(this,&m,sizeof(m));

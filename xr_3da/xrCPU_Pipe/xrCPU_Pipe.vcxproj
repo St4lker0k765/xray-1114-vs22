@@ -85,7 +85,7 @@
       <ObjectFileName>.\Release\</ObjectFileName>
       <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
       <CallingConvention>StdCall</CallingConvention>
-      <AdditionalIncludeDirectories>$(SolutionDir)\SDK\dx8sdk\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>scripting\;$(SolutionDir)SDK\DPlay;$(SolutionDir)SDK\d3dx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -110,7 +110,7 @@
       <ImportLibrary>
       </ImportLibrary>
       <AdditionalDependencies>xr_3da.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\bin\;$(SolutionDir)\SDK\dx8sdk\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\bin\;$(SolutionDir)\SDK\d3dx\lib_x86\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

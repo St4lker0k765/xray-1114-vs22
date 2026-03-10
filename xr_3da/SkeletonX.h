@@ -49,7 +49,7 @@ protected:
 	vertBoned1W*			Vertices;		// shared
 
 	void					_Copy			(CSkeletonX *V);
-	void					_Render			(DWORD vCount, DWORD pCount, IDirect3DIndexBuffer8* IB);
+	void					_Render			(DWORD vCount, DWORD pCount, IDirect3DIndexBuffer9* IB);
 	void					_Release		();
 	void					_Load			(const char* N, CStream *data, DWORD& dwVertCount);
 public:

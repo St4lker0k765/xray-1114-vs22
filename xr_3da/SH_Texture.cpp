@@ -27,14 +27,14 @@ CTexture::~CTexture()
 	Unload	();
 }
 
-void				CTexture::surface_set	(IDirect3DTexture8* surf)
+void				CTexture::surface_set	(IDirect3DTexture9* surf)
 {
 	if (surf)			surf->AddRef		();
 	_RELEASE			(pSurface);
 	pSurface			= surf;
 }
 
-IDirect3DTexture8*	CTexture::surface_get	()
+IDirect3DTexture9*	CTexture::surface_get	()
 {
 	if (pSurface)		pSurface->AddRef	();
 	return pSurface;
@@ -93,7 +93,7 @@ void CTexture::Load(LPCSTR cName)
 			// Now create texture
 			HRESULT hrr = HW.pDevice->CreateTexture(
 				pAVI->dwWidth,pAVI->dwHeight,1,0,D3DFMT_X8R8G8B8,D3DPOOL_MANAGED,
-				&pSurface
+				&pSurface, nullptr
 				);
 			if (FAILED(hrr)) 
 			{
@@ -180,7 +180,7 @@ void CTexture::Load(LPCSTR cName)
 	}
 }
 
-DWORD CTexture::Calculate_MemUsage	(IDirect3DTexture8* T)
+DWORD CTexture::Calculate_MemUsage	(IDirect3DTexture9* T)
 {
 	DWORD dwMemory	= 0;
 	if (T) {
@@ -188,7 +188,64 @@ DWORD CTexture::Calculate_MemUsage	(IDirect3DTexture8* T)
 		{
 			D3DSURFACE_DESC	desc;
 			R_CHK			(T->GetLevelDesc(L,&desc));
-			dwMemory		+= desc.Size;
+			switch (static_cast<DWORD>(desc.Format))
+			{
+			default:
+			case D3DFMT_UNKNOWN:
+				break;
+			case D3DFMT_R3G3B2:
+			case D3DFMT_A8:
+			case D3DFMT_P8:
+			case D3DFMT_L8:
+			case D3DFMT_A4L4:
+				dwMemory += desc.Width * desc.Height;
+				break;
+			case D3DFMT_R5G6B5:
+			case D3DFMT_X1R5G5B5:
+			case D3DFMT_A1R5G5B5:
+			case D3DFMT_A4R4G4B4:
+			case D3DFMT_A8R3G3B2:
+			case D3DFMT_X4R4G4B4:
+			case D3DFMT_A8P8:
+			case D3DFMT_A8L8:
+			case D3DFMT_V8U8:
+			case D3DFMT_L6V5U5:
+			case D3DFMT_D16_LOCKABLE:
+			case D3DFMT_D15S1:
+			case D3DFMT_D16:
+			case D3DFMT_UYVY:
+			case D3DFMT_YUY2:
+				dwMemory += desc.Width * 2 * desc.Height;
+				break;
+			case D3DFMT_R8G8B8:
+				dwMemory += desc.Width * 3 * desc.Height;
+				break;
+			case D3DFMT_A8R8G8B8:
+			case D3DFMT_X8R8G8B8:
+			case D3DFMT_A2B10G10R10:
+			case D3DFMT_A8B8G8R8:
+			case D3DFMT_X8B8G8R8:
+			case D3DFMT_G16R16:
+			case D3DFMT_X8L8V8U8:
+			case D3DFMT_Q8W8V8U8:
+			case D3DFMT_V16U16:
+			case D3DFMT_A2W10V10U10:
+			case D3DFMT_D32:
+			case D3DFMT_D24S8:
+			case D3DFMT_D24X8:
+			case D3DFMT_D24X4S4:
+				dwMemory += desc.Width * 4 * desc.Height;
+				break;
+			case D3DFMT_DXT1:
+				dwMemory += ((desc.Width + 3) >> 2) * ((desc.Height + 3) >> 2) * 8;
+				break;
+			case D3DFMT_DXT2:
+			case D3DFMT_DXT3:
+			case D3DFMT_DXT4:
+			case D3DFMT_DXT5:
+				dwMemory += ((desc.Width + 3) >> 2) * ((desc.Height + 3) >> 2) * 16;
+				break;
+			}
 		}
 	}
 	return dwMemory;

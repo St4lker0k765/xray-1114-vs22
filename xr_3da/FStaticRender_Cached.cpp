@@ -64,10 +64,10 @@ void __fastcall render_Cached(CList<FCached*>& cache)
 
 		// Render
 		DWORD	dwNumPrimitives			= i_count/3;
-		CHK_DX(HW.pDevice->SetVertexShader		(vs->getFVF()));
-		CHK_DX(HW.pDevice->SetStreamSource		(0,vs->getBuffer(),vs->Stride()));
-		CHK_DX(HW.pDevice->SetIndices			(is->getBuffer(),vBase));
-		CHK_DX(HW.pDevice->DrawIndexedPrimitive	(D3DPT_TRIANGLELIST,0,v_count,iBase,dwNumPrimitives));
+		CHK_DX(HW.pDevice->SetFVF				(vs->getFVF()));
+		CHK_DX(HW.pDevice->SetStreamSource		(0,vs->getBuffer(),0, vs->Stride()));
+		CHK_DX(HW.pDevice->SetIndices			(is->getBuffer()));
+		CHK_DX(HW.pDevice->DrawIndexedPrimitive	(D3DPT_TRIANGLELIST,vBase,0,v_count,iBase,dwNumPrimitives));
 		UPDATEC(v_count,dwNumPrimitives,1);
 
 		Start = End;

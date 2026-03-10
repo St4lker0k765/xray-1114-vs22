@@ -9,11 +9,11 @@
 
 class ENGINE_API CHW {
 public:
-	IDirect3D8* 			pD3D;		// direct 3d
-	IDirect3DDevice8*       pDevice;	// render device
+	IDirect3D9* 			pD3D;		// direct 3d
+	IDirect3DDevice9*       pDevice;	// render device
 
-	IDirect3DSurface8*		pBaseRT;
-	IDirect3DSurface8*		pBaseZB;
+	IDirect3DSurface9*		pBaseRT;
+	IDirect3DSurface9*		pBaseZB;
 
 	u32                     CurrBBWidth;
 	u32                     CurrBBHeight;
@@ -34,7 +34,7 @@ public:
     D3DFORMAT               selectDepthStencil      (D3DFORMAT);
     DWORD                   selectPresentInterval   ();
     DWORD                   selectGPU               ();
-    DWORD                   selectRefresh           (DWORD dwWidth, DWORD dwHeight);
+    DWORD                   selectRefresh           (DWORD dwWidth, DWORD dwHeight, D3DFORMAT fmt);
     void                    selectResolution        (u32 &dwWidth, u32 &dwHeight, BOOL bWindowed);
 
 	void					updateWindowProps		(HWND hw);

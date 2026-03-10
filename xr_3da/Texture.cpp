@@ -398,7 +398,7 @@ IC DWORD GetPowerOf2Plus1(DWORD v)
         return cnt;
 }
 
-ENGINE_API IDirect3DTexture8*	TWLoader2D(
+ENGINE_API IDirect3DTexture9*	TWLoader2D(
 		const char *		fRName,
 		ETexturePF			Algorithm,
 		ETextureMipgen		Mipgen,
@@ -415,7 +415,7 @@ ENGINE_API IDirect3DTexture8*	TWLoader2D(
 {
 	CImage					Image;
 	DWORD					dwMipCount	= 9;
-	IDirect3DTexture8*		pTexture	= NULL;
+	IDirect3DTexture9*		pTexture	= NULL;
 	FILE_NAME				fn;
 
 	// validation
@@ -443,7 +443,7 @@ ENGINE_API IDirect3DTexture8*	TWLoader2D(
 _DDS:
 	Log("* FS: Texture: ",fn);
 	D3DXIMAGE_INFO IMG;
-	
+
 	R_CHK(D3DXGetImageInfoFromFile(fn,&IMG));
 	R_CHK(D3DXCreateTextureFromFileEx(
 		HW.pDevice,
@@ -514,7 +514,7 @@ _TGA:
 	if (Mipgen==tmDisable)
 	{
 		R_CHK(HW.pDevice->CreateTexture(
-			dwWidth,dwHeight,1,0,fmt,D3DPOOL_MANAGED,&pTexture
+			dwWidth,dwHeight,1,0,fmt,D3DPOOL_MANAGED,&pTexture, nullptr
 			));
 	} else {
 		R_CHK(D3DXCreateTexture( 
@@ -529,7 +529,7 @@ _TGA:
 	if (dwMipCount<=1)
 	{
 		// no mip-maps
-		IDirect3DSurface8*	pTMP;
+		IDirect3DSurface9*	pTMP;
 		R_CHK(pTexture->GetSurfaceLevel(0,&pTMP));
 
 		RECT RC = {0,0,dwWidth,dwHeight};
@@ -566,7 +566,7 @@ _TGA:
 		//		pNewPixels		- NULL
 		//		dwW,dwH,dwP		- are correct
 		for (DWORD i=0; i<dwMipCount; i++) {
-			IDirect3DSurface8*	pTMP;
+			IDirect3DSurface9*	pTMP;
 			R_CHK(pTexture->GetSurfaceLevel(i,&pTMP));
 			RECT RC = {0,0,dwW,dwH};
 			R_CHK(D3DXLoadSurfaceFromMemory(

@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "dxerr8.h"
 
 // *****************************************************************************************
 // Error handling
@@ -8,11 +7,8 @@ void CRenderDevice::Error(HRESULT hr, const char *file, int line)
 {
 	char errmsg_buf[1024];
 
-	const char *errStr = DXGetErrorString8A(hr);
-	if (errStr==0) {
-		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,0,hr,0,errmsg_buf,1024,0);
-		errStr = errmsg_buf;
-	}
+	FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,0,hr,0,errmsg_buf,1024,0);
+	LPCSTR errStr = errmsg_buf;
 	_verify(errStr,(char *)file,line);
 }
 

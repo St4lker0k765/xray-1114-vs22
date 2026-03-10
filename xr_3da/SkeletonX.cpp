@@ -47,7 +47,7 @@ void CSkeletonX_ST::Render	(float LOD)
 {
 	_Render		(dwVertCount,dwPrimsCount,P.pIndices);
 }
-void CSkeletonX::_Render	(DWORD vCount, DWORD pCount, IDirect3DIndexBuffer8* IB) 
+void CSkeletonX::_Render	(DWORD vCount, DWORD pCount, IDirect3DIndexBuffer9* IB) 
 {
 //	Parent->Calculate();
 

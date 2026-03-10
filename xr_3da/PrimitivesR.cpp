@@ -42,7 +42,7 @@ void CDraw::Lines_End	()
 void CDraw::dbg_Draw(D3DPRIMITIVETYPE T, FVF::L* pVerts, int vcnt, WORD* pIdx, int pcnt)
 {
 	Reset					();
-	CHK_DX(HW.pDevice->SetVertexShader(vCurShader=FVF::F_L));
+	CHK_DX(HW.pDevice->SetFVF(vCurShader=FVF::F_L));
 	CHK_DX(HW.pDevice->DrawIndexedPrimitiveUP(T, 0, vcnt, pcnt, 
 		pIdx, D3DFMT_INDEX16,
 		pVerts, sizeof(FVF::L)
@@ -51,7 +51,7 @@ void CDraw::dbg_Draw(D3DPRIMITIVETYPE T, FVF::L* pVerts, int vcnt, WORD* pIdx, i
 void CDraw::dbg_Draw(D3DPRIMITIVETYPE T, FVF::L* pVerts, int pcnt)
 {
 	Reset					();
-	CHK_DX(HW.pDevice->SetVertexShader(vCurShader=FVF::F_L));
+	CHK_DX(HW.pDevice->SetFVF(vCurShader=FVF::F_L));
 	CHK_DX(HW.pDevice->DrawPrimitiveUP(T, pcnt, pVerts, sizeof(FVF::L)	));
 }
 

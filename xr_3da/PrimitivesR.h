@@ -10,6 +10,13 @@
 #include "sharedprimitive.h"
 #include "fvf.h"
 
+
+struct VertexShaderInfo
+{
+	IDirect3DVertexShader9* Shader = nullptr;
+	IDirect3DVertexDeclaration9* Declaration = nullptr;
+};
+
 class ENGINE_API CDraw
 {
 	friend class			CRender;
@@ -19,48 +26,55 @@ class ENGINE_API CDraw
 	FVF::TL*				pCurrent;
 	DWORD					dwLN_Offset;
 	
-	IDirect3DVertexBuffer8*	pCurVB;
-	IDirect3DIndexBuffer8*	pCurIB;
+	IDirect3DVertexBuffer9*	pCurVB;
+	IDirect3DIndexBuffer9*	pCurIB;
 	DWORD					vCurShader;
+	int CurrentBaseVertexIndex = 0;
 public:
 	// Tight interface
-	IDirect3DIndexBuffer8*	&CurrentIB()	{ return pCurIB; }
-	IDirect3DVertexBuffer8*	&CurrentVB()	{ return pCurVB; }
+	IDirect3DIndexBuffer9*	&CurrentIB()	{ return pCurIB; }
+	IDirect3DVertexBuffer9*	&CurrentVB()	{ return pCurVB; }
 	
 	// Main interface
-	IC void setVertices		(DWORD FVF,  DWORD STRIDE, IDirect3DVertexBuffer8* VB)
+	IC void setVertices		(DWORD FVF,  DWORD STRIDE, IDirect3DVertexBuffer9* VB)
 	{
-		if (FVF!=vCurShader)HW.pDevice->SetVertexShader(vCurShader=FVF);
-		if (VB!=pCurVB)		HW.pDevice->SetStreamSource(0,pCurVB=VB,STRIDE);
+		if (FVF != vCurShader)
+		{
+			HW.pDevice->SetFVF(vCurShader=FVF);
+		}
+		if (VB!=pCurVB)		HW.pDevice->SetStreamSource(0,pCurVB=VB,0,STRIDE);
 	}
-	IC void setVerticesUC	(DWORD FVF,  DWORD STRIDE, IDirect3DVertexBuffer8* VB)
+	IC void setVerticesUC	(DWORD FVF,  DWORD STRIDE, IDirect3DVertexBuffer9* VB)
 	{
-		HW.pDevice->SetVertexShader	(vCurShader=FVF);
-		HW.pDevice->SetStreamSource	(0,pCurVB=VB,STRIDE);
+		HW.pDevice->SetFVF(vCurShader=FVF);
+		HW.pDevice->SetStreamSource	(0,pCurVB=VB, 0, STRIDE);
 	}
-	IC void setIndices		(DWORD BASE, IDirect3DIndexBuffer8* IB)
+	IC void setIndices		(DWORD BASE, IDirect3DIndexBuffer9* IB)
 	{
-		if (IB!=pCurIB)		HW.pDevice->SetIndices(pCurIB=IB,BASE);
+		if (IB!=pCurIB)		
+			HW.pDevice->SetIndices(pCurIB=IB);
+		CurrentBaseVertexIndex = static_cast<int>(BASE);
 	}
-	IC void setIndicesUC	(DWORD BASE, IDirect3DIndexBuffer8* IB)
+	IC void setIndicesUC	(DWORD BASE, IDirect3DIndexBuffer9* IB)
 	{
-		HW.pDevice->SetIndices		(pCurIB=IB,BASE);
+		HW.pDevice->SetIndices		(pCurIB=IB);
+		CurrentBaseVertexIndex = static_cast<int>(BASE);
 	}
 	IC void Render			(D3DPRIMITIVETYPE T, DWORD SV, DWORD CV, DWORD SI, DWORD PC)
-	{	HW.pDevice->DrawIndexedPrimitive(T,SV,CV,SI,PC);	}
+	{	HW.pDevice->DrawIndexedPrimitive(T, CurrentBaseVertexIndex, SV,CV,SI,PC);	}
 	IC void Render			(D3DPRIMITIVETYPE T, DWORD SV, DWORD PC)
 	{	HW.pDevice->DrawPrimitive(T,	SV, PC);			}
 	IC void Reset			()
 	{
 		vCurShader = 0;
-		HW.pDevice->SetStreamSource(0,pCurVB=0,0);
-		HW.pDevice->SetIndices(pCurIB=0,0);
+		HW.pDevice->SetStreamSource(0,pCurVB=0,0,0);
+		HW.pDevice->SetIndices(pCurIB=0);
 	}
 	
 	// The most used wrappers --- recomendation DON'T USE AT ALL :)
 	IC void Draw			(CPrimitive& P,		DWORD dwNumVerts, DWORD dwNumPrimitives);
 	IC void DrawSubset		(CPrimitive& P,		DWORD dwStartVertex,DWORD dwNumVerts, DWORD dwStartIndex, DWORD dwNumPrimitives);
-	IC void Draw			(CVertexStream* S,	DWORD dwNumVerts, DWORD dwNumPrimitives, DWORD dwBase, IDirect3DIndexBuffer8* IB);
+	IC void Draw			(CVertexStream* S,	DWORD dwNumVerts, DWORD dwNumPrimitives, DWORD dwBase, IDirect3DIndexBuffer9* IB);
 	IC void Draw			(CVertexStream* S,	DWORD dwNumPrimitives, DWORD dwBase);
 	IC void Draw			(CVertexStream* S,  DWORD dwNumVerts, DWORD dwNumPrimitives, DWORD vBase, CIndexStream* IS, DWORD iBase);
 
