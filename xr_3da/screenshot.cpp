@@ -22,7 +22,7 @@ void CRender::MakeScreenshot()
 	// Create temp-surface
 	IDirect3DSurface9*	pFB;
 	R_CHK(HW.pDevice->CreateOffscreenPlainSurface(
-		Device.dwWidth,Device.dwHeight,D3DFMT_A8R8G8B8,D3DPOOL_SYSTEMMEM,&pFB,nullptr));
+		Device.dwWidth,Device.dwHeight,D3DFMT_A8R8G8B8,D3DPOOL_SYSTEMMEM,&pFB,0));
 	R_CHK(HW.pDevice->GetFrontBufferData(0, pFB));
 
 	D3DLOCKED_RECT	D;
