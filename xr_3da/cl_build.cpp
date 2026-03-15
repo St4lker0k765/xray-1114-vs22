@@ -9,7 +9,7 @@ namespace RAPID {
 	void Model::BuildModel( Fvector* V, int Vcnt, tri* T, int Tcnt)
 	{
 		R_ASSERT(V && Vcnt && T && Tcnt);
-//		R_ASSERT(sizeof(tri)==32);
+		R_ASSERT(sizeof(tri)==32);
 
 		// verts
 		num_verts	= Vcnt;
