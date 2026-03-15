@@ -8,14 +8,14 @@
 
 
 // API
-IC void	CShaderManager::set_Code		(DWORD dwCode)
+IC void CShaderManager::set_Code(IDirect3DStateBlock9* sb)
 {
-	if (cache.pass.dwStateBlock!=dwCode)
-	{
-		cache.pass.dwStateBlock=dwCode;
-		CHK_DX(reinterpret_cast<IDirect3DStateBlock9*>(dwCode)->Apply());
-		Device.Statistic.dwShader_Codes++;
-	}
+    if (cache.pass.dwStateBlock != sb)
+    {
+        cache.pass.dwStateBlock = sb;
+        CHK_DX(sb->Apply());
+        Device.Statistic.dwShader_Codes++;
+    }
 }
 
 IC void CShaderManager::set_Textures	(STextureList* T)

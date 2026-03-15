@@ -30,7 +30,7 @@ typedef svector<string64,8>			sh_list;
 
 struct	ENGINE_API		CPass 
 {
-	DWORD				dwStateBlock;
+	IDirect3DStateBlock9* dwStateBlock;
 	STextureList*		T;
 	SMatrixList*		M;
 	SConstantList*		C;

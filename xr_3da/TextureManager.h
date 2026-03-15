@@ -32,7 +32,7 @@ private:
 
 	// shader code array
 	struct sh_Code {
-		DWORD				SB;
+		IDirect3DStateBlock9*	SB;
 		DWORD				Reference;
 		SimulatorStates		Code;
 	};
@@ -88,8 +88,8 @@ public:
 	void							_DeleteConstant		(CConstant* &C);
 
 	// Shader compiling / optimizing
-	DWORD							_CreateCode			(SimulatorStates& Code);
-	void							_DeleteCode			(DWORD& SB);
+	IDirect3DStateBlock9*			_CreateCode			(SimulatorStates& Code);
+	void							_DeleteCode			(IDirect3DStateBlock9*& SB);
 	STextureList*					_CreateTextureList	(STextureList& L);
 	void							_DeleteTextureList	(STextureList* &L);
 	SMatrixList*					_CreateMatrixList	(SMatrixList& L);
@@ -118,7 +118,7 @@ public:
 	void	DeferredUnload	();
 	
 	// API
-	IC void	set_Code		(DWORD dwCode);
+	IC void	set_Code		(IDirect3DStateBlock9* sb);
 	IC void set_Textures	(STextureList* T);
 	IC void set_Matrices	(SMatrixList* M);
 	IC void set_Constants	(SConstantList* C, BOOL bPS);

@@ -60,6 +60,6 @@ public:
 		States.clear();
 	}
 
-	u32			record	();
+	IDirect3DStateBlock9*			record	();
 };
 #endif

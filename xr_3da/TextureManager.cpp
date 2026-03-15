@@ -10,7 +10,7 @@
 #include "blenders\blender.h"
 #include "blenders\blender_recorder.h"
 
-DWORD		CShaderManager::_CreateCode		(SimulatorStates& code)
+IDirect3DStateBlock9*	CShaderManager::_CreateCode		(SimulatorStates& code)
 {
 	// Search equal code
 	for (DWORD it=0; it<codes.size(); it++)
@@ -31,7 +31,7 @@ DWORD		CShaderManager::_CreateCode		(SimulatorStates& code)
 	return codes.back().SB;
 }
 
-void		CShaderManager::_DeleteCode		(DWORD& SB)
+void		CShaderManager::_DeleteCode		(IDirect3DStateBlock9*& SB)
 {
 	R_ASSERT(SB);
 	// Dummy search
