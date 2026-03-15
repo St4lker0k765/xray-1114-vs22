@@ -37,13 +37,11 @@ void CEngine::Initialize(void)
 
 	// Other stuff
 	Engine.FS.Initialize				( );
-	Engine.Scripts.Initialize			( );
 }
 
 void CEngine::Destroy	()
 {
 	Engine.External.Destroy				( );
-	Engine.Scripts.Destroy				( );
 	Engine.FS.Destroy					( );
 
 	if (hPSGP)	{ FreeLibrary(hPSGP); hPSGP=0; }

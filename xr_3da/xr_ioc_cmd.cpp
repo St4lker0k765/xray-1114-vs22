@@ -29,7 +29,7 @@ xr_token							snd_model_token[] = {
 	{ "High",						3											},
 	{ 0,							0											}
 };
-extern xr_token						vid_mode_token[];
+extern xr_token*					vid_mode_token;
 xr_token							vid_bpp_token[] = {
 	{ "16",							16											},
 	{ "32",							32											},

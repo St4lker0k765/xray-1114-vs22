@@ -17,12 +17,57 @@ namespace FPU {
 	ENGINE_API extern 	u16		_64r;
 	
 #ifdef M_VISUAL
+#ifdef _M_AMD64
+	IC void m24	(void)	
+	{	
+#ifdef _M_IX86
+		_control87(_PC_24, MCW_PC);
+#endif
+		_control87(_RC_CHOP, MCW_RC);
+	};
+	IC void m24r(void)	
+	{	
+#ifdef _M_IX86
+		_control87(_PC_24, MCW_PC);
+#endif
+		_control87(_RC_NEAR, MCW_RC);
+	};
+	IC void m53	(void)	
+	{ 	
+#ifdef _M_IX86
+		_control87(_PC_53, MCW_PC);
+#endif
+		_control87(_RC_CHOP, MCW_RC);
+	};
+	IC void m53r(void)	
+	{ 	
+#ifdef _M_IX86
+		_control87(_PC_53, MCW_PC);
+#endif
+		_control87(_RC_NEAR, MCW_RC);
+	};
+	IC void m64	(void)	
+	{ 	
+#ifdef _M_IX86
+		_control87(_PC_64, MCW_PC);
+#endif
+		_control87(_RC_CHOP, MCW_RC);
+	};
+	IC void m64r(void)	
+	{ 	
+#ifdef _M_IX86
+		_control87(_PC_64, MCW_PC);
+#endif
+		_control87(_RC_NEAR, MCW_RC);
+	};
+#else
 	IC void m24	(void)	{	__asm fldcw _24  };
 	IC void m24r(void)	{	__asm fldcw _24r };
 	IC void m53	(void)	{ 	__asm fldcw _53  };
 	IC void m53r(void)	{ 	__asm fldcw _53r };
 	IC void m64	(void)	{ 	__asm fldcw _64  };
 	IC void m64r(void)	{ 	__asm fldcw _64r };
+#endif
 #endif
 #ifdef M_BORLAND
 	void	BCALL	m24		(u16 p=_24);
@@ -44,8 +89,12 @@ namespace CPU {
 	#pragma warning(disable:4035)
 	IC u64	GetCycleCount(void)
 	{
+#ifndef _M_AMD64
 		_asm    _emit 0x0F;
 		_asm    _emit 0x31;
+#else
+		return __rdtsc();
+#endif
 	}
 	#pragma warning(default:4035)
 #endif

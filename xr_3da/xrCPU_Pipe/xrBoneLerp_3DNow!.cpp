@@ -6,6 +6,7 @@
 #define _MS_BUGS_OFF_
 // --  includes -----------------------------------------------------
 #include "stdafx.h"
+#ifndef _M_AMD64
 #include "..\bodyinstance.h"
 
 #pragma warning (disable:4799) // inline asm in x86
@@ -203,3 +204,4 @@ scale_it:
 }
 
 #pragma warning (default:4799)
+#endif

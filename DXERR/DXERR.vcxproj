@@ -105,36 +105,40 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>DxErr</TargetName>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\intermediate\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>DxErr</TargetName>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\intermediate\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>DxErr</TargetName>
-    <OutDir>$(xrLibDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(xrIntDir)$(Platform)\$(Configuration)\$(TargetName)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\intermediate\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetName>DxErr</TargetName>
-    <OutDir>$(SolutionDir)$(Configuration)\bin\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)\intermediate\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\intermediate\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Mixed|x64'">
     <TargetName>DxErr</TargetName>
-    <OutDir>$(xrLibDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(xrIntDir)$(Platform)\$(Configuration)\$(TargetName)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\intermediate\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Mixed|Win32'">
     <TargetName>DxErr</TargetName>
-    <OutDir>$(xrLibDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(xrIntDir)$(Platform)\$(Configuration)\$(TargetName)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\intermediate\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -162,6 +166,7 @@
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <MinimalRebuild>false</MinimalRebuild>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -199,6 +204,7 @@
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <MinimalRebuild>false</MinimalRebuild>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -7,9 +7,13 @@ ENGINE_API CRandom			Random;
 
 WORD getFPUsw() 
 {
+#ifndef _M_AMD64
 	WORD SW;
 	__asm fstcw SW;
 	return SW;
+#else
+	return 0;
+#endif
 }
 
 namespace FPU 

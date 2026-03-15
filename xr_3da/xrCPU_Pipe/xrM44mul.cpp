@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#ifndef _M_AMD64
 void	__stdcall	xrM44_Mul_x86	(_matrix* pfD, _matrix* pfM1, _matrix* pfM2)
 {
     __asm
@@ -250,3 +251,4 @@ void	__stdcall	xrM44_Mul_x86	(_matrix* pfD, _matrix* pfM1, _matrix* pfM2)
         pop         edx
     }
 }
+#endif

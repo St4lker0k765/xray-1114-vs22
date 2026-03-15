@@ -91,12 +91,6 @@
     <Filter Include="Engine\Debug">
       <UniqueIdentifier>{ca030c5e-5c80-4e77-a916-0adafc5b4af3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Scripting">
-      <UniqueIdentifier>{cd4c0b0b-ec16-43cf-925b-feea8126a85d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Scripting\HDR">
-      <UniqueIdentifier>{38d9e906-944c-4f5e-ac77-6009bfef8547}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Client - Server">
       <UniqueIdentifier>{64f22599-9e0f-4d06-94cb-cb5bd071e564}</UniqueIdentifier>
     </Filter>
@@ -567,29 +561,11 @@
     <ClInclude Include="LocatorAPI.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="ScriptAPI.h">
-      <Filter>Engine\Core</Filter>
-    </ClInclude>
     <ClInclude Include="xrCPU_Pipe.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="DebugKernel.h">
       <Filter>Engine\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripting\Code.h">
-      <Filter>Engine\Scripting\HDR</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripting\FIXED.H">
-      <Filter>Engine\Scripting\HDR</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripting\INTERNAL.H">
-      <Filter>Engine\Scripting\HDR</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripting\Seer.h">
-      <Filter>Engine\Scripting\HDR</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripting\Script.h">
-      <Filter>Engine\Scripting</Filter>
     </ClInclude>
     <ClInclude Include="NET_Client.h">
       <Filter>Engine\Client - Server</Filter>
@@ -1105,68 +1081,8 @@
     <ClCompile Include="LocatorAPI.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="ScriptAPI.cpp">
-      <Filter>Engine\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="ScriptAPI_Export.cpp">
-      <Filter>Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="DebugKernel.cpp">
       <Filter>Engine\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\Callasm.c">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\Compiler.c">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\Consts.c">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\DECLARE.C">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\DICT.C">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\EXPR.C">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\HEADERS.C">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\INITIAL.C">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\Instance.c">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\PARSER.C">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\Pmem.c">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\PREPROC.C">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\PROTECT.C">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\Script.cpp">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\Script_int.c">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\VARS.C">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\Vcpucode.c">
-      <Filter>Engine\Scripting</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripting\Vcpudeco.c">
-      <Filter>Engine\Scripting</Filter>
     </ClCompile>
     <ClCompile Include="NET_Client.cpp">
       <Filter>Engine\Client - Server</Filter>

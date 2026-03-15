@@ -2,6 +2,24 @@
 #pragma hdrstop
 
 #include "cpuid.h"
+
+#ifdef _M_AMD64
+
+int _cpuid (_processor_info *pinfo)
+{
+	_processor_info&	P	= *pinfo;
+	strcpy				(P.v_name,		"AuthenticAMD");
+	strcpy				(P.model_name,	"AMD64 family");
+	P.family			=	8;
+	P.model				=	8;
+	P.stepping			=	0;
+	P.feature			=	_CPU_FEATURE_SSE | _CPU_FEATURE_SSE2;
+	P.os_support		=	_CPU_FEATURE_SSE | _CPU_FEATURE_SSE2;
+	return P.feature;
+}
+
+#else
+
 #ifdef	M_VISUAL
 #include "mmintrin.h"
 #endif
@@ -58,14 +76,16 @@ void _os_support(int feature, int& res)
             }
             break;
         case _CPU_FEATURE_3DNOW:
-            __asm {
+            __asm 
+            {
                 __asm _emit 0x0f __asm _emit 0x0f __asm _emit 0xc0 __asm _emit 0x96 
                                         // pfrcp mm0, mm0
                                         // executing 3Dnow instruction
             }
             break;
         case _CPU_FEATURE_MMX:
-            __asm {
+            __asm 
+            {
                 pxor mm0, mm0           // executing MMX instruction
             }
             break;
@@ -298,10 +318,6 @@ notamd:
         _os_support(_CPU_FEATURE_SSE2,os_support);
     }
 
-#ifdef M_VISUAL
-	_mm_empty	();
-#endif
-
     if (pinfo)
     {
         memset(pinfo, 0, sizeof(_processor_info));
@@ -316,3 +332,5 @@ notamd:
     }
    return feature;
 }
+
+#endif

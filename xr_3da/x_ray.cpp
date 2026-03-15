@@ -16,7 +16,6 @@
 #include "xr_trims.h"
 #include "3dsoundrender.h"
 #include "xr_streamsnd.h"
-#include "scripting\script.h"
 #include "std_classes.h"
  
 // global variables

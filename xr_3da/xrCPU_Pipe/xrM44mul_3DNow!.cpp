@@ -1,5 +1,5 @@
 #include "stdafx.h"
-
+#ifndef _M_AMD64
 // D3D Matrix offsets
 #define a_11 0
 #define a_12 1*4
@@ -215,3 +215,4 @@ void	__stdcall	xrM44_Mul_3DNow	(_matrix* D, _matrix* M1, _matrix* M2)
         femms
     }
 }
+#endif

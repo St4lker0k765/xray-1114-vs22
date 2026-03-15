@@ -6,6 +6,7 @@
 #define _MS_BUGS_OFF_
 // -- includes ------------------------------------------------------
 #include "stdafx.h"
+#ifndef _M_AMD64
 #include "..\skeletonX.h"
 #include "..\bodyinstance.h"
 // -- offsets -------------------------------------------------------
@@ -144,3 +145,4 @@ void __stdcall xrSkin1W_3DNow(	vertRender*		D,
 	femms								; Clear MMX/3DNow! state
 // ------------------------------------------------------------------
 }}
+#endif

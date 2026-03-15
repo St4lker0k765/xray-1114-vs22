@@ -17,7 +17,7 @@ static const char * dlgExpr = NULL;
 static const char * dlgFile = NULL;
 static char			dlgLine[16];
 
-static BOOL CALLBACK verifyProc( HWND hw, UINT msg, WPARAM wp, LPARAM lp )
+static INT_PTR CALLBACK verifyProc( HWND hw, UINT msg, WPARAM wp, LPARAM lp )
 {
 	switch( msg ){
 	case WM_INITDIALOG:
@@ -83,11 +83,7 @@ ENGINE_API void __fastcall _verify     (const char *expr, char *file, int line)
         abort();
         break;
     case IDDEBUG:
-#ifdef _MSC_VER
-        __asm { int 3 };
-#else
         DebugBreak();
-#endif
         break;
     case ID_CONTINUE:
         break;
@@ -120,11 +116,7 @@ int __cdecl _out_of_memory(size_t size)
         abort();
         break;
     case IDDEBUG:
-#ifdef _MSC_VER
-        __asm { int 3 };
-#else
         DebugBreak();
-#endif
         break;
     case ID_CONTINUE:
         return 0;
@@ -206,12 +198,21 @@ int		CDebugKernel::UpdateStack	(EXCEPTION_POINTERS *pex, int iSkip)
 
 	//Setup stack frame
 	ZeroMemory(&stack_frame, sizeof(stack_frame));
+#ifdef _M_AMD64
+	stack_frame.AddrPC.Mode		= AddrModeFlat;
+	stack_frame.AddrPC.Offset	= pex->ContextRecord->Rip;
+	stack_frame.AddrStack.Mode	= AddrModeFlat;
+	stack_frame.AddrStack.Offset= pex->ContextRecord->Rsp;
+    stack_frame.AddrFrame.Mode	= AddrModeFlat;
+	stack_frame.AddrFrame.Offset= pex->ContextRecord->Rbp;
+#else
 	stack_frame.AddrPC.Mode		= AddrModeFlat;
 	stack_frame.AddrPC.Offset	= pex->ContextRecord->Eip;
 	stack_frame.AddrStack.Mode	= AddrModeFlat;
 	stack_frame.AddrStack.Offset= pex->ContextRecord->Esp;
     stack_frame.AddrFrame.Mode	= AddrModeFlat;
 	stack_frame.AddrFrame.Offset= pex->ContextRecord->Ebp;
+#endif
 
 	//Skip past some irrelevant functions
 	for(count=0; count < iSkip && b_ret==TRUE; count++)
@@ -254,7 +255,12 @@ int		CDebugKernel::UpdateStack	(EXCEPTION_POINTERS *pex, int iSkip)
 //------------------------------------------------------------------------------------------------------------------------
 BOOL	CDebugKernel::GetFunctionName(HINSTANCE instance, void *pointer, char *text){
 	char				symbol_buffer[sizeof(IMAGEHLP_SYMBOL)+1024];
-	DWORD				displacement=0;
+#ifdef _M_AMD64
+	DWORD64
+#else
+	DWORD				
+#endif
+	displacement=0;
 	HANDLE              process=GetCurrentProcess();
 	PIMAGEHLP_SYMBOL    psymbol=(PIMAGEHLP_SYMBOL)symbol_buffer;
 

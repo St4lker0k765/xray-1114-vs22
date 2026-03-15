@@ -8,7 +8,6 @@
 
 #include "engineAPI.h"
 #include "debugkernel.h"
-#include "scriptAPI.h"
 #include "eventAPI.h"
 #include "locatorAPI.h"
 #include "xrCPU_Pipe.h"
@@ -19,7 +18,6 @@ class ENGINE_API CEngine
 public:
 	// DLL api stuff
 	CEngineAPI			External;
-	CScriptAPI			Scripts;
 	CEventAPI			Event;
 	CLocatorAPI			FS;
 
