@@ -43,7 +43,7 @@ public:
 public:
 							CHUDManager			();
 	virtual					~CHUDManager		();
-	virtual		void		OnEvent				(EVENT E, DWORD P1, DWORD P2);
+	virtual		void		OnEvent				(EVENT E, u64 P1, u64 P2);
 
 	virtual		void		Load				();
 	

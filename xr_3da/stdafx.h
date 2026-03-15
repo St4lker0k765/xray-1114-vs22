@@ -129,6 +129,7 @@ using namespace std;
 // Our headers
 #define NO_XR_NETWORK
 #define	NO_XR_VERTEX
+#include "_types.h"
 #include "engine.h"
 #include "vector.h"
 #ifndef NO_MMGR

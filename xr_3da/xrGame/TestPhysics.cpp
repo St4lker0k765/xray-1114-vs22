@@ -95,7 +95,7 @@ void CTestPhysics::OnRender()
 	::Render.add_leafs_Dynamic	(V);
 }
 
-void CTestPhysics::OnEvent(	EVENT _E, DWORD P1, DWORD P2)
+void CTestPhysics::OnEvent(	EVENT _E, u64 P1, u64 P2)
 {
 	VERIFY(E==_E);
 	C->m_rigidBody.m_sticked	= FALSE;

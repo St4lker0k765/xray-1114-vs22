@@ -73,7 +73,7 @@ public:
 	virtual BOOL				Load_GameSpecific_After ( );
 
 	// Events
-	virtual void				OnEvent					( EVENT E, DWORD P1, DWORD P2 );
+	virtual void				OnEvent					( EVENT E, u64 P1, u64 P2 );
 	virtual void				OnFrame					( void );
 	virtual void				OnRender				( );
 

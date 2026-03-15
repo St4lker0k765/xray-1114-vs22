@@ -174,12 +174,12 @@ BOOL StartGame(DWORD num)
 	return true;
 }
 
-void CApplication::OnEvent(EVENT E, DWORD P1, DWORD P2)
+void CApplication::OnEvent(EVENT E, u64 P1, u64 P2)
 {
 	if (E==eQuit)	{
 		PostQuitMessage	(0);
 		
-		for (DWORD i=0; i<Levels.size(); i++)
+		for (u64 i=0; i<Levels.size(); i++)
 		{
 			_FREE(Levels[i].folder	);
 			_FREE(Levels[i].name	);

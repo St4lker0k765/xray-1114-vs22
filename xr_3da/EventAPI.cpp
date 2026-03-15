@@ -8,14 +8,14 @@ class ENGINE_API CEvent
 private:
 	char*					Name;
 	vector<CEventBase*>		Handlers;
-	DWORD					dwRefCount;
+	u64					dwRefCount;
 public:
 	CEvent	(const char* S);
 	~CEvent	();
 
 	LPCSTR	GetFull()
 	{	return Name; }
-	DWORD	RefCount()
+	u64	RefCount()
 	{	return dwRefCount; }
 
 	BOOL	Equal(CEvent& E)
@@ -32,9 +32,9 @@ public:
 		if (I!=Handlers.end())
 			Handlers.erase(I);
 	}
-	void	Signal(DWORD P1, DWORD P2)
+	void	Signal(u64 P1, u64 P2)
 	{
-		for (DWORD I=0; I<Handlers.size(); I++)
+		for (u64 I=0; I<Handlers.size(); I++)
 			Handlers[I]->OnEvent(this,P1,P2);
 	}
 };
@@ -55,7 +55,7 @@ IC bool ev_sort(CEvent*E1, CEvent*E2)
 void CEventAPI::Dump()
 {
 	std::sort(Events.begin(),Events.end(),ev_sort);
-	for (DWORD i=0; i<Events.size(); i++)
+	for (u64 i=0; i<Events.size(); i++)
 		Msg("* [%d] %s",Events[i]->RefCount(),Events[i]->GetFull());
 }
 
@@ -94,17 +94,17 @@ void	CEventAPI::Handler_Detach(EVENT& E, CEventBase* H)
 	E->Detach(H);
 	Destroy(E);
 }
-void	CEventAPI::Signal(EVENT E, DWORD P1, DWORD P2)
+void	CEventAPI::Signal(EVENT E, u64 P1, u64 P2)
 {
 	E->Signal(P1,P2);	
 }
-void	CEventAPI::Signal(LPCSTR N, DWORD P1, DWORD P2)
+void	CEventAPI::Signal(LPCSTR N, u64 P1, u64 P2)
 {
 	EVENT	E = Create(N);
 	Signal	(E,P1,P2);
 	Destroy	(E);
 }
-void	CEventAPI::Defer(EVENT E, DWORD P1, DWORD P2)
+void	CEventAPI::Defer(EVENT E, u64 P1, u64 P2)
 {
 	E->dwRefCount++;
 	Events_Deferred.push_back	(Deferred());
@@ -112,7 +112,7 @@ void	CEventAPI::Defer(EVENT E, DWORD P1, DWORD P2)
 	Events_Deferred.back().P1	= P1;
 	Events_Deferred.back().P2	= P2;
 }
-void	CEventAPI::Defer(LPCSTR N, DWORD P1, DWORD P2)
+void	CEventAPI::Defer(LPCSTR N, u64 P1, u64 P2)
 {
 	EVENT	E = Create(N);
 	Defer	(E,P1,P2);
@@ -122,7 +122,7 @@ void	CEventAPI::Defer(LPCSTR N, DWORD P1, DWORD P2)
 void	CEventAPI::OnFrame	()
 {
 	if (Events_Deferred.empty())	return;
-	for (DWORD I=0; I<Events_Deferred.size(); I++)
+	for (u64 I=0; I<Events_Deferred.size(); I++)
 	{
 		Deferred&	DEF = Events_Deferred[I];
 		Signal		(DEF.E,DEF.P1,DEF.P2);

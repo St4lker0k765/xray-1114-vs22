@@ -80,7 +80,7 @@ void	CEffect_Rain::OnDeviceCreate	()
 	p_create			();
 }
 
-void	CEffect_Rain::OnEvent	(EVENT E, DWORD P1, DWORD P2)
+void	CEffect_Rain::OnEvent	(EVENT E, u64 P1, u64 P2)
 {
 	if ((E==control_start) && (state!=stWorking))	{
 		state				= stStarting;

@@ -40,7 +40,7 @@ public:
 	void					LoadEnd				();
 	void					LoadTitle			(char* S, char *S2=NULL);
 
-	virtual	void			OnEvent				(EVENT E, DWORD P1, DWORD P2);
+	virtual	void			OnEvent				(EVENT E, u64 P1, u64 P2);
 
 	// Other
 							CApplication	( );

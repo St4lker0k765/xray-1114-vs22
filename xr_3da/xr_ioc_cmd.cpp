@@ -140,7 +140,7 @@ public:
 		}
 		int id		= pApp->Level_ID(args);
 		if (id>=0) {
-			Engine.Event.Defer("KERNEL:server",DWORD(_strdup(args)));
+			Engine.Event.Defer("KERNEL:server",DWORD64(_strdup(args)));
 		} else {
 			Log("! Cannot find level '%s'.",args);
 		}

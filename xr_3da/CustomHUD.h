@@ -27,7 +27,7 @@ public:
 	virtual	void	Render_Direct			() {;}
 	
 	virtual	void	OnMove					(){;}
-	virtual	void	OnEvent					(EVENT E, DWORD P1, DWORD P2){;}
+	virtual	void	OnEvent					(EVENT E, u64 P1, u64 P2){;}
 	
 	virtual void	RenderModel				(FBasicVisual* V, Fmatrix& M, int L) = 0;
 

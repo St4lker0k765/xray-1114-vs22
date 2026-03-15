@@ -23,7 +23,7 @@ class CTestPhysics :
 public:
 	virtual void OnFrame	();
 	virtual void OnRender	();
-	virtual void OnEvent	(EVENT E, DWORD P1, DWORD P2);
+	virtual void OnEvent	(EVENT E, u64 P1, u64 P2);
 
 	CTestPhysics			(Fvector& pos);
 	virtual ~CTestPhysics	();
