@@ -39,7 +39,7 @@ public:
 
 	DWORD									dwFrame;
 
-	DWORD									dwWidth, dwHeight;
+	int										dwWidth, dwHeight;
 	float									fWidth_2, fHeight_2;
 	BOOL									bReady;
 	BOOL									bActive;

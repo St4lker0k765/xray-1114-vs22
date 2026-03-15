@@ -110,7 +110,7 @@ int CKinematics::LL_PartID		(LPCSTR B)
 	for (int id=0; id<MAX_PARTS; id++) {
 		CPartDef&	P = (*partition)[id];
 		if (0==P.Name)	continue;
-		if (0==stricmp(B,P.Name)) return id;
+		if (0==_stricmp(B,P.Name)) return id;
 	}
 	return -1;
 }
@@ -545,14 +545,14 @@ void CKinematics::Load(const char* N, CStream *data, DWORD dwFlags)
 
 		// Bone
 		int		ID = bones->size();
-		data->RstringZ(buf);	strlwr(buf);
+		data->RstringZ(buf);	_strlwr(buf);
 		CBoneData*	pBone = new CBoneData(ID);
 		bones->push_back(pBone);
-		bone_map->insert(make_pair(strdup(buf),ID));
+		bone_map->insert(make_pair(_strdup(buf),ID));
 
 		// It's parent
-		data->RstringZ(buf);	strlwr(buf);
-		L_parents.push_back(strdup(buf));
+		data->RstringZ(buf);	_strlwr(buf);
+		L_parents.push_back(_strdup(buf));
 
 		data->Read(&pBone->obb,sizeof(Fobb));
 	}
@@ -588,7 +588,7 @@ void CKinematics::Load(const char* N, CStream *data, DWORD dwFlags)
 		R_ASSERT(MS->FindChunk(M+1));
         char mname[128];
 		MS->RstringZ(mname);
-		motion_map->insert(make_pair(strdup(strlwr(mname)),M));
+		motion_map->insert(make_pair(_strdup(_strlwr(mname)),M));
 
 		DWORD dwLen = MS->Rdword();
 		for (DWORD i=0; i<bones->size(); i++)
@@ -627,7 +627,7 @@ void CKinematics::Load(const char* N, CStream *data, DWORD dwFlags)
 	{
 		if (pid>=MAX_PARTS)	Device.Fatal("Too many partitions in motion description '%s'",def_N);
 		CPartDef&	PART		= (*partition)[pid];
-		LPSTR	N				= _strlwr(strdup(I->first));
+		LPSTR	N				= _strlwr(_strdup(I->first));
 		PART.Name				= N;
 		CInifile::Sect&		P	= DEF.ReadSection(N);
 		CInifile::SectIt	B	= P.begin();
@@ -646,7 +646,7 @@ void CKinematics::Load(const char* N, CStream *data, DWORD dwFlags)
 		{
 			CMotionDef	D;
 			D.Load(this,&DEF,I->first, true);
-			m_cycle->insert(make_pair(_strlwr(strdup(I->first)),D));
+			m_cycle->insert(make_pair(_strlwr(_strdup(I->first)),D));
 		}
 	}
 	
@@ -657,7 +657,7 @@ void CKinematics::Load(const char* N, CStream *data, DWORD dwFlags)
 		{
 			CMotionDef	D;
 			D.Load(this,&DEF,I->first, false);
-			m_fx->insert(make_pair(_strlwr(strdup(I->first)),D));
+			m_fx->insert(make_pair(_strlwr(_strdup(I->first)),D));
 		}
 	}
 

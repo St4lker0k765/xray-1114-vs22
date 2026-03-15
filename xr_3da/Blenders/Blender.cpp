@@ -13,7 +13,7 @@ void CBlender_DESC::Setup	(LPCSTR N)
 	VERIFY(strlen(N)<128);
 	VERIFY(0==strchr(N,'.'));
 	strcpy(cName,N);
-	strlwr(cName);
+	_strlwr(cName);
 	
 	// Computer
 	const DWORD comp = MAX_COMPUTERNAME_LENGTH + 1;

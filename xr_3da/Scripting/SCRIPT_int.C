@@ -329,12 +329,11 @@ return l.st_size;
 scScript  SAPI scLoad_Script(char *s)
 {
 	int size;
-	FILE* file;
+	FILE* file = 0;
 	scScript script;
 	//<ERASED> scKernelOnly(NULL);
 	size=STfilesize(s);
-	file=fopen(s,"rb");
-	if (!file)
+	if (!fopen_s(&file, s, "rb"))
 		return NULL;
 	script=malloc(size);
 	if (fread(script,size,1,file)==-1) {fclose(file);free(script);return NULL;};

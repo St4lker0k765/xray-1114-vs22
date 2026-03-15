@@ -532,7 +532,7 @@ _TGA:
 		IDirect3DSurface9*	pTMP;
 		R_CHK(pTexture->GetSurfaceLevel(0,&pTMP));
 
-		RECT RC = {0,0,dwWidth,dwHeight};
+		RECT RC = {0,0,(LONG)dwWidth,(LONG)dwHeight};
 		R_CHK(D3DXLoadSurfaceFromMemory(
 			pTMP,0,0,
 			Image.pData,
@@ -568,7 +568,7 @@ _TGA:
 		for (DWORD i=0; i<dwMipCount; i++) {
 			IDirect3DSurface9*	pTMP;
 			R_CHK(pTexture->GetSurfaceLevel(i,&pTMP));
-			RECT RC = {0,0,dwW,dwH};
+			RECT RC = {0,0,(LONG)dwW,(LONG)dwH};
 			R_CHK(D3DXLoadSurfaceFromMemory(
 				pTMP,0,0,
 				pImagePixels,

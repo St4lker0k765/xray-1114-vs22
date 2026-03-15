@@ -189,7 +189,7 @@ void C3DSound::Load		(CInifile *pIni, const char *pSection)
 {
 	VERIFY				(pIni&&pSection);
 	
-	fName				= strlwr(strdup(pIni->ReadSTRING(pSection,"fname")));
+	fName				= _strlwr(_strdup(pIni->ReadSTRING(pSection,"fname")));
 	fBaseVolume			= pIni->ReadFLOAT	( pSection, "volume" );
 	ps.flMinDistance	= pIni->ReadFLOAT	( pSection, "mindist");
 	ps.flMaxDistance	= pIni->ReadFLOAT	( pSection, "maxdist");
@@ -204,7 +204,7 @@ void C3DSound::Load		(LPCSTR name, BOOL ctrl_freq)
 	VERIFY				( pBuffer==0	);
 	
 	if (name){ 
-		fName			= strlwr(strdup(name));
+		fName			= _strlwr(_strdup(name));
 		bCtrlFreq		= ctrl_freq;
 	}
 	
@@ -223,7 +223,7 @@ void C3DSound::Load		(LPCSTR name, BOOL ctrl_freq)
 
 void C3DSound::Load		(const C3DSound *pOriginal)
 {
-	fName				= strdup(pOriginal->fName);
+	fName				= _strdup(pOriginal->fName);
 	bCtrlFreq			= pOriginal->bCtrlFreq;
 	dwFreq				= pOriginal->dwFreq;
 	fVolume				= 1.0f;

@@ -140,7 +140,7 @@ public:
 		}
 		int id		= pApp->Level_ID(args);
 		if (id>=0) {
-			Engine.Event.Defer("KERNEL:server",DWORD(strdup(args)));
+			Engine.Event.Defer("KERNEL:server",DWORD(_strdup(args)));
 		} else {
 			Log("! Cannot find level '%s'.",args);
 		}
@@ -156,7 +156,7 @@ public:
 			Log("! Please disconnect/unload first");
 			return;
 		}
-		Engine.Event.Defer("KERNEL:client",DWORD(strdup(args)));
+		Engine.Event.Defer("KERNEL:client",DWORD(_strdup(args)));
 	}
 };
 

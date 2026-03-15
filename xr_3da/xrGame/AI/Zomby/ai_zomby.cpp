@@ -1405,7 +1405,7 @@ void CAI_Zomby::Exec_Action	( float dt )
 				
 				if ((this->Local()) && (m_tpEnemyBeingAttacked) && (m_tpEnemyBeingAttacked->CLS_ID == CLSID_ENTITY))
 					if (m_tpEnemyBeingAttacked->g_Health() > 0)
-						m_tpEnemyBeingAttacked->Hit(m_fHitPower,tDirection,this);
+						m_tpEnemyBeingAttacked->Hit(int(m_fHitPower),tDirection,this);
 					else
 						m_bAttackStart = false;
 			}

@@ -96,7 +96,7 @@ BOOL IPureClient::Connect(LPCSTR server_name)
 	Pinfo.pwszName				= ClientNameUNICODE;
 	R_CHK(NET->SetClientInfo	(&Pinfo,0,0,DPNSETCLIENTINFO_SYNC));
 
-	if (stricmp(server_name,"localhost")==0)	
+	if (_stricmp(server_name,"localhost")==0)	
 	{
 		R_CHK(NET->Connect(
 			&dpAppDesc,				// pdnAppDesc

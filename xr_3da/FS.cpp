@@ -64,10 +64,10 @@ ENGINE_API void *FileDownload(const char *fn, DWORD *pdwSize)
 	DWORD	size;
 	void*	buf;
 
-	hFile	= open(fn,O_RDONLY|O_BINARY|O_SEQUENTIAL);
+	hFile	= _open(fn,O_RDONLY|O_BINARY|O_SEQUENTIAL);
 	Log("* FS: Download ",fn);
 	R_ASSERT(hFile>0);
-	size	= filelength(hFile);
+	size	= _filelength(hFile);
 
 	buf		= malloc(size);
 	_read	(hFile,buf,size);
@@ -84,7 +84,7 @@ ENGINE_API void		FileCompress	(const char *fn, const char* sign, void* data, DWO
 {
 	MARK M; mk_mark(M,sign);
 
-	int H	= open(fn,O_BINARY|O_CREAT|O_WRONLY|O_TRUNC,S_IREAD|S_IWRITE);
+	int H	= _open(fn,O_BINARY|O_CREAT|O_WRONLY|O_TRUNC,S_IREAD|S_IWRITE);
 	Log("* FS: Compress ",fn);
 	R_ASSERT(H>0);
 	_write	(H,&M,8);
@@ -96,7 +96,7 @@ ENGINE_API void *	FileDecompress	(const char *fn, const char* sign, DWORD* size)
 {
 	MARK M,F; mk_mark(M,sign);
 
-	int	H = open	(fn,O_BINARY|O_RDONLY);
+	int	H = _open	(fn,O_BINARY|O_RDONLY);
 	Log("* FS: Decompress ",fn);
 	R_ASSERT(H>0);
 	_read	(H,&F,8);
@@ -106,7 +106,7 @@ ENGINE_API void *	FileDecompress	(const char *fn, const char* sign, DWORD* size)
     R_ASSERT(strncmp(M,F,8)==0);
 
 	void* ptr = 0; DWORD SZ;
-	SZ = _readLZ (H, ptr, filelength(H)-8);
+	SZ = _readLZ (H, ptr, _filelength(H)-8);
 	_close	(H);
 	if (size) *size = SZ;
 	return ptr;

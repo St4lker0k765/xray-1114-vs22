@@ -70,13 +70,13 @@ public:
 	int						GetID	(LPCSTR name)
 	{
 		for (Shader_xrLCIt it=library.begin(); it!=library.end(); it++)
-			if (0==stricmp(name,it->Name)) return it-library.begin();
+			if (0==_stricmp(name,it->Name)) return it-library.begin();
 		return -1;
 	}
 	Shader_xrLC*			Get		(LPCSTR name)
 	{
 		for (Shader_xrLCIt it=library.begin(); it!=library.end(); it++)
-			if (0==stricmp(name,it->Name)) return it;
+			if (0==_stricmp(name,it->Name)) return it;
 		return NULL;
 	}
 	Shader_xrLC*			Get		(int id)
@@ -91,7 +91,7 @@ public:
 	void					Remove	(LPCSTR name)
 	{
 		for (Shader_xrLCIt it=library.begin(); it!=library.end(); it++)
-			if (0==stricmp(name,it->Name)) library.erase(it);
+			if (0==_stricmp(name,it->Name)) library.erase(it);
 	}
 	void					Remove	(int id)
 	{

@@ -71,7 +71,7 @@ void CTexture::Load(LPCSTR cName)
 	if (pSurface)					return;
 
 	dwMemoryUsage					= 0;
-	if (0==stricmp(cName,"$null"))	return;
+	if (0==_stricmp(cName,"$null"))	return;
 	if (0!=strstr(cName,"$user$"))	return;
 
 	// Check for AVI
@@ -117,7 +117,7 @@ void CTexture::Load(LPCSTR cName)
 
 		seqCycles	= FALSE;
 		fs.Rstring	(buffer);
-		if (0==stricmp	(buffer,"cycled"))
+		if (0==_stricmp	(buffer,"cycled"))
 		{
 			seqCycles	= TRUE;
 			fs.Rstring	(buffer);

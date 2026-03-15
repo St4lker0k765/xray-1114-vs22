@@ -191,8 +191,14 @@ void CInput::MouseUpdate( )
 	offs[0] = offs[1] = 0;
 	for (DWORD i = 0; i < dwElements; i++){
 		switch (od[i].dwOfs){
-		case DIMOFS_X:	offs[0]	+= od[i].dwData; timeStamp[0] = od[i].dwTimeStamp;	break;
-		case DIMOFS_Y:	offs[1]	+= od[i].dwData; timeStamp[1] = od[i].dwTimeStamp;	break;
+		case DIMOFS_X:	
+			offs[0]	+= od[i].dwData; 
+			timeStamp[0] = od[i].dwTimeStamp;	
+			break;
+		case DIMOFS_Y:	
+			offs[1]	+= od[i].dwData; 
+			timeStamp[1] = od[i].dwTimeStamp;	
+			break;
 		case DIMOFS_BUTTON0:
 			if ( od[i].dwData & 0x80 )	{ mouseState[0] = TRUE;				cbStack.top()->OnMousePress(0);		}
 			if ( !(od[i].dwData & 0x80)){ mouseState[0] = FALSE;			cbStack.top()->OnMouseRelease(0);	}

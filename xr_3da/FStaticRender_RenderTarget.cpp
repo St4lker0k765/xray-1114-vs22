@@ -34,8 +34,8 @@ BOOL CRenderTarget::Create	()
 	if (!HW.Caps.pixel.bNonPow2)										return FALSE;
 	
 	// Check width-and-height of render target surface
-	if (Device.dwWidth>caps.MaxTextureWidth)							return FALSE;
-	if (Device.dwHeight>caps.MaxTextureHeight)							return FALSE;
+	if (Device.dwWidth>(int)caps.MaxTextureWidth)							return FALSE;
+	if (Device.dwHeight>(int)caps.MaxTextureHeight)							return FALSE;
 	
 	// Validate render-target usage
 	_hr = HW.pD3D->CheckDeviceFormat(

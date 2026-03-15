@@ -81,7 +81,7 @@ scInstance*  SAPI scCreate_Instance(scScript scrpt,char* vars,...)
 		int addr,cfg;
 		x=(char *)scrpt+ToCodeINT(scrpt)[hdrImportedOffset];//import offs
 		do{
-			strcpy(namer,x);
+			strcpy_s(namer,sizeof(namer),x);
 			x+=strlen(namer)+1;
 			ALIGN_INT(x);
 			deb2("Importing %s at %d\n",namer,(int)x);
@@ -294,7 +294,7 @@ int SAPI scGet_Symbol(scInstance* inst,char *name)
 		return -1;
 	//<ERASED> scKernelOnly(-1);
 	do{
-		strcpy(namer,x);
+		strcpy_s(namer,sizeof(namer),x);
 		if (!namer[0]) return -1;//not found
 		x+=strlen(namer)+1;
 		ALIGN_INT(x);
@@ -623,11 +623,14 @@ BOOL  SAPI scAssignInstance(scScriptTypeHeader *script,scInstance *ins,char *typ
 	script->ins=NULL;
 	if (!typeinfo||!ins) return false;
 	deb1("\nAssigning instance:%s\n",typeinfo);
-	ti=strdup(typeinfo);
-	t=strtok(ti,"{;}");
+	ti=_strdup(typeinfo);
+	char** tokNext1 = 0;
+	t=strtok_s(ti,"{;}",tokNext1);
 	if (strcmp(t,"script"))
     {free(ti);return false;}//not a script
-	for(t=strtok(NULL,"{;}");t;t=strtok(NULL,"{;}"))
+	char** tokNext2 = 0;
+	char** tokNext3 = 0;
+	for(t=strtok_s(NULL,"{;}",tokNext2);t;t=strtok_s(NULL,"{;}",tokNext3))
 	{
 		((int*)script)[i]=scGet_Symbol(ins,t);
 		deb2(" member '%s' at %d\n",t,((int*)script)[i]);

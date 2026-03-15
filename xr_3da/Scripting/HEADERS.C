@@ -274,7 +274,7 @@ typedef struct {
 //" c_import string(char *x);\n"
 void string_string_char(scintString* _this,char *x)
 {if (!x) _this->cstr=NULL;
-    else _this->cstr=strdup(x);
+    else _this->cstr=_strdup(x);
 #ifdef OutputDebug
  printf("string(%d,%d:%s);\n",_this,_this->cstr,_this->cstr);
 #endif
@@ -291,8 +291,8 @@ void string_string(scintString* _this)
 scintString* string_operatorSET_int(scintString* _this,int x)
 {char temp[256];
  if (_this->cstr) free(_this->cstr);
- itoa(x,temp,10);
- _this->cstr=strdup(temp);
+ _itoa_s(x,temp,sizeof(temp),10);
+ _this->cstr=_strdup(temp);
  return _this;
 }
 
@@ -316,7 +316,7 @@ void string_copy(scintString* _this,scintString* f)
 {
  _this->cstr=NULL;
  if (f->cstr)
- _this->cstr=strdup(f->cstr);
+ _this->cstr=_strdup(f->cstr);
 }
 //" c_import string& operator=(string& s);\n"
 // a=x=s; <=> a.operator=(x.operator=(s));
@@ -329,7 +329,7 @@ scintString* string_operatorSET(scintString* _this,scintString* f)
   free(_this->cstr);}
  _this->cstr=NULL;
  if (f->cstr)
- _this->cstr=strdup(f->cstr);
+ _this->cstr=_strdup(f->cstr);
 #ifdef OutputDebug
  printf("%d.set(%d,%s)\n",_this,f,*f);
 #endif
@@ -348,8 +348,8 @@ scintString string_operatorPLUS(scintString* _this,scintString* x)
 {scintString v;
  int i;
  v.cstr=malloc((i=strlen(_this->cstr))+strlen(x->cstr)+1);
- strcpy(v.cstr,_this->cstr);
- strcpy(v.cstr+i,x->cstr);
+ strcpy_s(v.cstr,sizeof(v.cstr),_this->cstr);
+ strcpy_s(v.cstr+i,sizeof(v.cstr+i),x->cstr);
 // printf("add:%s+%s=%s\n",*_this,*x,v);
 #ifdef OutputDebug
  printf("add(%d,%d)\n",_this,x);
@@ -363,8 +363,8 @@ scintString string_operatorPLUS_char(scintString* _this,char *x)
 {scintString v;
  int i;
  v.cstr=malloc((i=strlen(_this->cstr))+strlen(x)+1);
- strcpy(v.cstr,_this->cstr);
- strcpy(v.cstr+i,x);
+ strcpy_s(v.cstr,sizeof(v.cstr),_this->cstr);
+ strcpy_s(v.cstr+i,sizeof(v.cstr+i),x);
 // printf("add:%s+%s=%s\n",*_this,*x,v);
 #ifdef OutputDebug
  printf("add_C(%d,%s)\n",_this,x);
@@ -453,10 +453,10 @@ void string_insert(scintString* _this,int start,scintString* x)
  if (start>i) start=i;
  i+=string_length(x);
  c=malloc(i+1);
- if (_this->cstr) strcpy(c,_this->cstr);
- strcpy(c+start,x->cstr);
+ if (_this->cstr) strcpy_s(c,sizeof(c),_this->cstr);
+ strcpy_s(c+start,sizeof(c+start),x->cstr);
  if (_this->cstr)
-  strcpy(c+strlen(c),_this->cstr+start);
+  strcpy_s(c+strlen(c),sizeof(c+strlen(c)),_this->cstr+start);
  string_destroy(_this);
  _this->cstr=c;
 }
@@ -508,14 +508,14 @@ void string_append(scintString* _this,scintString* x)
  printf("append(%s,%s)",*_this,*x);
 #endif
  if (!x->cstr) return;
- if (!_this->cstr) {_this->cstr=strdup(x->cstr);return;}
+ if (!_this->cstr) {_this->cstr=_strdup(x->cstr);return;}
  i=strlen(_this->cstr);
 // _this->cstr=realloc(_this->cstr,i+strlen(x->cstr)+1);
  z=malloc(i+strlen(x->cstr)+1);
- strcpy(z,_this->cstr);
+ strcpy_s(z,sizeof(z),_this->cstr);
  free(_this->cstr);
  _this->cstr=z;
- strcpy(_this->cstr+i,x->cstr);
+ strcpy_s(_this->cstr+i,sizeof(_this->cstr+i),x->cstr);
 #ifdef OutputDebug
  printf("=%s\n",*_this);
 #endif

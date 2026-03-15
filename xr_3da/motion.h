@@ -52,7 +52,7 @@ public:
 					CCustomMotion	(CCustomMotion* src);
 	virtual			~CCustomMotion	();
 
-	void			SetName			(const char* n)	{if(n) strcpy(name,n); strlwr(name);}
+	void			SetName			(const char* n)	{if(n) strcpy(name,n); _strlwr(name);}
 	const char*		Name			()				{return name;}
     int				FrameStart		()				{return iFrameStart;}
     int				FrameEnd		()				{return iFrameEnd;}
@@ -116,8 +116,8 @@ public:
     void			CopyMotion		(CSMotion* src);
 
     BoneMotionVec&	BoneMotions		()				{return bone_mots;}
-	void			SetStartBone	(const char* n)	{if(n) strcpy(cStartBone,n);strlwr(cStartBone);}
-	void			SetBonePart		(const char* n)	{if(n) strcpy(cBonePart,n);strlwr(cBonePart);}
+	void			SetStartBone	(const char* n)	{if(n) strcpy(cStartBone,n);_strlwr(cStartBone);}
+	void			SetBonePart		(const char* n)	{if(n) strcpy(cBonePart,n);_strlwr(cBonePart);}
 	const char*		GetRootBone		()				{return bone_mots.empty()?0:bone_mots[0].name;}
 	DWORD			GetMotionFlag	(int bone_idx)	{return bone_mots[bone_idx].flag;}
 

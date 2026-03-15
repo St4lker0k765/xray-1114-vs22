@@ -19,7 +19,7 @@ public:
 	{	return dwRefCount; }
 
 	BOOL	Equal(CEvent& E)
-	{ return stricmp(Name,E.Name)==0; }
+	{ return _stricmp(Name,E.Name)==0; }
 
 	void	Attach(CEventBase* H)
 	{
@@ -41,7 +41,7 @@ public:
 //-----------------------------------------
 CEvent::CEvent(const char* S)
 {	
-	Name=strdup(S); 
+	Name=_strdup(S); 
 	_strupr(Name);
 	dwRefCount=1; 
 }

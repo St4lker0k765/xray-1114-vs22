@@ -54,7 +54,7 @@ private:
 	LPDIRECTINPUTDEVICE8		pMouse;			// The DIDevice2 interface
 	LPDIRECTINPUTDEVICE8		pKeyboard;		// The DIDevice2 interface
 	//----------------------
-	DWORD						timeStamp	[COUNT_MOUSE_AXIS];
+	int							timeStamp	[COUNT_MOUSE_AXIS];
 	DWORD						timeSave	[COUNT_MOUSE_AXIS];
 	int 						offs		[COUNT_MOUSE_AXIS];
 	BOOL						mouseState	[COUNT_MOUSE_BUTTONS];

@@ -51,7 +51,7 @@ void SAPI_Export()
 		"import DWORD dwNumTStages;\n"
 	);
 
-	xray_hdr_mem = strdup(xray_hdr);
+	xray_hdr_mem = _strdup(xray_hdr);
 	scAdd_Internal_Header  ("xray",xray_hdr_mem);
 
 	CScript::RegisterSymbol("fTimeDelta",	&Device.fTimeDelta);

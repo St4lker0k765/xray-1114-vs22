@@ -558,7 +558,7 @@ _value* scvalSetImmidiate(_value *v,valTYPE vt,int ival,double dval)
 {
  if (!v) v=New(v);
  //address
- v->adr.flags=vt|adrIMMIDIATE;
+ v->adr.flags=(scAddrFlag)vt|adrIMMIDIATE;
  v->adr.address=-1;
  if (vt==valDOUBLE||vt==valFLOAT)
    v->adr.val.dval=dval;
@@ -587,7 +587,7 @@ _value*  scvalSetRegister(_value *v,valTYPE vt,int reg)
 {
  if (!v) v=New(v);
  //address
- v->adr.flags=vt|adrREGISTER;
+ v->adr.flags=(scAddrFlag)vt|adrREGISTER;
  v->adr.address=reg;
  v->adr.val.ival=0;//don't care
  //type
@@ -1041,11 +1041,11 @@ void sciAddImportedFunction(scSymbol* sym,scSymbol* in_struct)
  {
  while (!(in_struct->adr.flags&adrTYPEONLY))
       in_struct=in_struct->type.main;
-  strcpy(temp,in_struct->name);
-  strcpy(temp+strlen(temp),".");
-  strcpy(temp+strlen(temp),use_name);
+  strcpy_s(temp,sizeof(temp),in_struct->name);
+  strcpy_s(temp+strlen(temp),sizeof(temp+strlen(temp)),".");
+  strcpy_s(temp+strlen(temp),sizeof(temp+strlen(temp)),use_name);
  }
- else strcpy(temp,use_name);
+ else strcpy_s(temp,sizeof(temp),use_name);
 
  //check, if any previous import does have this name
  {
@@ -1054,7 +1054,7 @@ void sciAddImportedFunction(scSymbol* sym,scSymbol* in_struct)
   do{
   if ((int)_pmem-(int)act.imports.mem<act.imports.pos)
   {
-  strcpy(namer,_pmem);
+  strcpy_s(namer,sizeof(namer),_pmem);
   _pmem+=strlen(namer)+1;
   ALIGN_INT((int)_pmem);
   if (strcmp(namer,temp)==0)
@@ -1106,7 +1106,7 @@ int getStructMemberFromName(char *name,scSymbol **in_struct)
         *(c++)=0;
         *in_struct=scdicFoundSymbol(list,name);
         scAssert(getStructMemberFromName,*in_struct);
-        strcpy(name,c);
+        strcpy_s(name,sizeof(name),c);
         list=((((*in_struct)->type.flags&typTYPE)==typSTRUCT
                ||((*in_struct)->type.flags&typTYPE)==typSCRIPT)
                &&
@@ -1172,9 +1172,9 @@ static void strrcpy(char *dest,char *src)
   {strrcpy((str)+strlen(x),str);memcpy(str,x,strlen(x));}
 #define chrAddToBegin(str,x)                                    \
   {strrcpy((str)+1,str);str[0]=x;}
-#define strAddToEnd(str,x) strcpy((str)+strlen(str),x);
+#define strAddToEnd(str,x) strcpy_s((str)+strlen(str),sizeof(str+strlen(str)),x);
 #define strAddName(buf,space) \
- if (name) {if (space) strcpy(buf+strlen(buf)," ");strcpy(buf+strlen(buf),name);name=NULL;}
+ if (name) {if (space) strcpy_s(buf+strlen(buf),sizeof(buf+strlen(buf))," ");strcpy_s(buf+strlen(buf),sizeof(buf+strlen(buf)),name);name=NULL;}
 
 ///////////////////////////////////////////////////////////////////////////
 ////sctypTypeOfStr/////////////////////////////////////////////////////////
@@ -1249,18 +1249,18 @@ void sctypTypeOfStr(scType* type,char *name,char *buf)
       switch(type->flags&typTYPE)
       {
        case (typSTRUCT):
-        strcpy(buf,"struct");//strAddName(buf);
+        strcpy_s(buf,sizeof(buf),"struct");//strAddName(buf);
         break;
        case (typSCRIPT):
-        strcpy(buf,"script");
+        strcpy_s(buf,sizeof(buf),"script");
         break;
        case (typPREDEFINED):
-        strcpy(buf,sciValTypeStr((valTYPE)type->main));
+        strcpy_s(buf,sizeof(buf),sciValTypeStr((valTYPE)type->main));
         strAddName(buf,1);
         return;
        case (typUSERDEFINED):
         if (sctypGetValType(&type->main->type)==valSTRUCT)
-        {sprintf(buf,"struct %s",type->main->name);
+        {sprintf_s(buf,sizeof(buf),"struct %s",type->main->name);
          strAddName(buf,1);
          return;//do a short struct Joe, other than struct{list of members}
         }
@@ -1270,17 +1270,17 @@ void sctypTypeOfStr(scType* type,char *name,char *buf)
       }
 
       //script or struct
-      strcpy(buf+strlen(buf),"{");
+      strcpy_s(buf+strlen(buf),sizeof(buf+strlen(buf)),"{");
       x=type->main;
       while(x)
       {if (!(x->adr.flags&adrTYPEONLY))
        {
-       strcpy(buf+strlen(buf),x->name);
-       strcpy(buf+strlen(buf),";");
+       strcpy_s(buf+strlen(buf),sizeof(buf+strlen(buf)),x->name);
+       strcpy_s(buf+strlen(buf),sizeof(buf+strlen(buf)),";");
        }
        x=x->next;
       }
-   strcpy(buf+strlen(buf),"}");
+   strcpy_s(buf+strlen(buf),sizeof(buf+strlen(buf)),"}");
  }
 }
 
@@ -1320,7 +1320,7 @@ int sciReadImport(char **import_name)
            if (lexeq("(")) i++;
            if (i)
            {
-            strcpy(name+strlen(name),ST->lexema);
+            strcpy_s(name+strlen(name), sizeof(name + strlen(name)), ST->lexema);
             Advance;//scget_back(ST);
             if (ST->newline||ST->whitespaces)
              serr(scErr_Declaration, "Import name cannot contain spaces nor new-line characters (possibly thou hast ')' omited)");
@@ -1438,7 +1438,7 @@ void scvalGetAddress(_value *val,int situ)
            val->type.params="*";//set to "*"
    else
     {char *t=scAlloc(strlen(val->type.params)+2);
-     strcpy(t+1,val->type.params);
+     strcpy_s(t+1,sizeof(t+1),val->type.params);
      *t='*';
      val->type.params=t;
     }

@@ -282,17 +282,17 @@ void CRender::flush_Patches()
 
 void	CRender::rmNear		()
 {
-	D3DVIEWPORT9 VP = {0,0,Device.dwWidth,Device.dwHeight,0,0.02f };
+	D3DVIEWPORT9 VP = {0,0,(DWORD)Device.dwWidth,(DWORD)Device.dwHeight,0,0.02f };
 	CHK_DX(HW.pDevice->SetViewport(&VP));
 }
 void	CRender::rmFar		()
 {
-	D3DVIEWPORT9 VP = {0,0,Device.dwWidth,Device.dwHeight,0.99f,1.f };
+	D3DVIEWPORT9 VP = {0,0,(DWORD)Device.dwWidth,(DWORD)Device.dwHeight,0.99f,1.f };
 	CHK_DX(HW.pDevice->SetViewport(&VP));
 }
 void	CRender::rmNormal	()
 {
-	D3DVIEWPORT9 VP = {0,0,Device.dwWidth,Device.dwHeight,0,1.f };
+	D3DVIEWPORT9 VP = {0,0,(DWORD)Device.dwWidth,(DWORD)Device.dwHeight,0,1.f };
 	CHK_DX(HW.pDevice->SetViewport(&VP));
 }
 

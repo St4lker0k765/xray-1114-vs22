@@ -54,7 +54,7 @@ void _decorate(LPSTR dest, LPCSTR src)
 
 CInifile::CInifile( LPCSTR szFileName, BOOL ReadOnly)
 {
-	fName		= strdup(szFileName);
+	fName		= _strdup(szFileName);
     bReadOnly	= ReadOnly;
 
 #ifdef ENGINE_BUILD
@@ -86,7 +86,7 @@ CInifile::CInifile( LPCSTR szFileName, BOOL ReadOnly)
 		LPSTR comment	= 0;
 		if (semi) {
 			*semi		= 0;
-			comment		= strdup(semi+1);
+			comment		= _strdup(semi+1);
 		}
 
 		if (str[0] && (str[0]=='['))
@@ -99,7 +99,7 @@ CInifile::CInifile( LPCSTR szFileName, BOOL ReadOnly)
 				Current.clear	();
 			}
 			int L = strlen(str); str[L-1] = 0;
-			Current.Name = strlwr(strdup(str+1));
+			Current.Name = _strlwr(_strdup(str+1));
 		} else {
 			if (0==Current.Name)	{
 				_FREE(comment);
@@ -115,8 +115,8 @@ CInifile::CInifile( LPCSTR szFileName, BOOL ReadOnly)
 				}
 				
 				Item		I;
-				I.first		= (name[0]?strdup(name):NULL);
-				I.second	= (str2[0]?strdup(str2):NULL);
+				I.first		= (name[0]?_strdup(name):NULL);
+				I.second	= (str2[0]?_strdup(str2):NULL);
 				I.comment	= comment;
 				
 				if (bReadOnly) {
@@ -231,7 +231,7 @@ DWORD	CInifile::LineCount	(LPCSTR Sname)
 
 CInifile::Sect& CInifile::ReadSection( LPCSTR S )
 {
-	char	section[256]; strcpy(section,S); strlwr(section);
+	char	section[256]; strcpy(section,S); _strlwr(section);
 	Sect Test; Test.Name = section; RootIt I = std::lower_bound(DATA.begin(),DATA.end(),Test,sect_pred());
 #ifdef ENGINE_BUILD
 	if (I!=DATA.end() && strcmp(I->Name,section)==0)	return *I;
@@ -304,7 +304,7 @@ BOOL	CInifile::ReadBOOL( LPCSTR S, LPCSTR L )
 	LPCSTR		C = ReadSTRING(S,L);
 	char		B[8];
 	strncpy		(B,C,7);
-	strlwr		(B);
+	_strlwr		(B);
 	if (strcmp(B,"on")==0 || strcmp(B,"yes")==0 || strcmp(B,"true")==0 || strcmp(B,"1")==0) return TRUE;
 	else return FALSE;
 }
@@ -317,7 +317,7 @@ int		CInifile::ReadTOKEN	( LPCSTR S, LPCSTR L, const xr_token *token_list)
 {
 	LPCSTR		C = ReadSTRING(S,L);
 	for( int i=0; token_list[i].name; i++ )
-		if( !stricmp(C,token_list[i].name) )
+		if( !_stricmp(C,token_list[i].name) )
 			return token_list[i].id;
 	return 0;
 }
@@ -345,7 +345,7 @@ void	CInifile::WriteString	( LPCSTR S, LPCSTR L, LPCSTR			V, LPCSTR comment)
 	if (!SectionExists(sect))	{
 		// create new section
 		Sect			NEW;
-		NEW.Name		= strdup(sect);
+		NEW.Name		= _strdup(sect);
 		RootIt I		= std::lower_bound(DATA.begin(),DATA.end(),NEW,sect_pred());
 		DATA.insert		(I,NEW);
 	}
@@ -357,9 +357,9 @@ void	CInifile::WriteString	( LPCSTR S, LPCSTR L, LPCSTR			V, LPCSTR comment)
 	// duplicate & insert
 	Item	I;
 	Sect&	data	= ReadSection	(sect);
-	I.first			= (line[0]?strdup(line):0);
-	I.second		= (value[0]?strdup(value):0);
-	I.comment		= (comment?strdup(comment):0);
+	I.first			= (line[0]?_strdup(line):0);
+	I.second		= (value[0]?_strdup(value):0);
+	I.comment		= (comment?_strdup(comment):0);
 	SectIt	it		= std::lower_bound(data.begin(),data.end(),I,item_pred());
 
     if (it != data.end()) {

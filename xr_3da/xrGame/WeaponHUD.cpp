@@ -46,7 +46,7 @@ void CWeaponHUD::Load(CInifile* ini, const char* section)
 	m_Offset.translate_over		(pos);
 
 	// Visual
-	pVisualName					= strdup(ini->ReadSTRING(section, "visual"));
+	pVisualName					= _strdup(ini->ReadSTRING(section, "visual"));
 	pVisual						= ::Render.Models.Create(pVisualName);
 	R_ASSERT					(pVisual->Type==MT_SKELETON);
 

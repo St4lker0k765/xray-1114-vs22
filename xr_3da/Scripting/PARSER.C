@@ -28,20 +28,20 @@ void scScript_Error(Source_Text* ST,char* filename,int linenum,int errnum,char *
   {
     if (scErrorNo)//show previous errors
      {
-      sprintf (scErrorMsg,"%s,\n%s(%3d) Error",scErrorMsg,ST->name,ST->act_line+1+ST->linedif);
+      sprintf_s (scErrorMsg,sizeof(scErrorMsg),"%s,\n%s(%3d) Error", scErrorMsg, ST->name, ST->act_line + 1 + ST->linedif);
      }
      else
-     sprintf (scErrorMsg,"%s(%3d) Error",ST->name,ST->act_line+1+ST->linedif);
+     sprintf_s (scErrorMsg,sizeof(scErrorMsg),"%s(%3d) Error",ST->name,ST->act_line+1+ST->linedif);
     if (linenum)
-     sprintf (scErrorMsg,"%s[%s:%d] :",scErrorMsg,filename,linenum);
+     sprintf_s (scErrorMsg,sizeof(scErrorMsg),"%s[%s:%d] :",scErrorMsg,filename,linenum);
      else
-     sprintf (scErrorMsg,"%s :",scErrorMsg);
+     sprintf_s (scErrorMsg,sizeof(scErrorMsg),"%s :",scErrorMsg);
     scErrorNo=errnum;
-    vsprintf (scErrorMsg+strlen(scErrorMsg),er, arg);
+    vsprintf_s (scErrorMsg+strlen(scErrorMsg), sizeof(scErrorMsg+strlen(scErrorMsg)), er, arg);
     if ((ST->act_line<ST->num_lines)&&(STALine))
-    strncpy(scErrorLine,STALine,255);
+    strncpy_s(scErrorLine,sizeof(scErrorLine),STALine,255);
     else
-    strcpy(scErrorLine,"<unknown line>");
+    strcpy_s(scErrorLine,sizeof(scErrorLine),"<unknown line>");
 #ifdef DEBUG
    if (debug_flag)
    {
@@ -71,22 +71,22 @@ void scRuntime_Error(char *er, ...)
   {
     if (scErrorNo)//show previous errors
      {
-      sprintf (scErrorMsg,"%s,\nRuntime error ",scErrorMsg);
+      sprintf_s (scErrorMsg,sizeof(scErrorMsg),"%s,\nRuntime error ",scErrorMsg);
      }
      else
-     sprintf (scErrorMsg,"Runtime error ");
+     sprintf_s (scErrorMsg,sizeof(scErrorMsg),"Runtime error ");
     if (scActual_Instance)
      {
       if (scActual_Instance->forked)
-      sprintf(scErrorMsg,"%s in `%s'(%d):",scErrorMsg,scGet_Instance_Title(scActual_Instance),scActual_Instance->flags.forkno);
+      sprintf_s(scErrorMsg,sizeof(scErrorMsg),"%s in `%s'(%d):",scErrorMsg,scGet_Instance_Title(scActual_Instance),scActual_Instance->flags.forkno);
       else
-      sprintf(scErrorMsg,"%s in `%s':",scErrorMsg,scGet_Instance_Title(scActual_Instance));
+      sprintf_s(scErrorMsg,sizeof(scErrorMsg),"%s in `%s':",scErrorMsg,scGet_Instance_Title(scActual_Instance));
      }
      else
-      sprintf(scErrorMsg,"%s in :",scErrorMsg);
+      sprintf_s(scErrorMsg,sizeof(scErrorMsg),"%s in :",scErrorMsg);
     if (scErrorNo!=scErr_Violation)
        scErrorNo=scErr_Runtime;
-    vsprintf (scErrorMsg+strlen(scErrorMsg),er, arg);
+    vsprintf_s (scErrorMsg+strlen(scErrorMsg),sizeof(scErrorMsg+strlen(scErrorMsg)), er, arg);
 #ifdef DEBUG
    if (debug_flag)
    {
@@ -309,7 +309,7 @@ BOOL scget_lexema (Source_Text* ST)
      READ_INSIDE_STRING
     }while(c!='\"');
     temp[i]=0;
-    strcpy(ST->lexema,temp);
+    strcpy_s(ST->lexema,sizeof(ST->lexema), temp);
    }
  else
  if (!parser_Comment&&strcmp(ST->lexema,"'")==0)
@@ -320,7 +320,7 @@ BOOL scget_lexema (Source_Text* ST)
      READ_INSIDE_STRING
     }while(c!='\'');
     temp[i]=0;
-    strcpy(ST->lexema,temp);
+    strcpy_s(ST->lexema,sizeof(ST->lexema), temp);
    }
  else
  if (strcmp(ST->lexema,"..")==0)

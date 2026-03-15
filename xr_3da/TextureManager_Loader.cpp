@@ -114,7 +114,7 @@ void	CShaderManager::OnDeviceCreate	(LPCSTR shName)
 			fs->RstringZ	(name);
 			CConstant*		C = new CConstant;
 			C->Load			(fs);
-			constants.insert(make_pair(strdup(name),C));
+			constants.insert(make_pair(_strdup(name),C));
 		}
 		fs->Close();
 	}
@@ -126,7 +126,7 @@ void	CShaderManager::OnDeviceCreate	(LPCSTR shName)
 			fs->RstringZ	(name);
 			CMatrix*		M = new CMatrix;
 			M->Load			(fs);
-			matrices.insert	(make_pair(strdup(name),M));
+			matrices.insert	(make_pair(_strdup(name),M));
 		}
 		fs->Close();
 	}
@@ -150,7 +150,7 @@ void	CShaderManager::OnDeviceCreate	(LPCSTR shName)
             chunk->Seek		(0);
             B->Load			(*chunk,desc.version);
 
-			pair<BlenderPairIt, bool> I =  blenders.insert	(make_pair(strdup(desc.cName),B));
+			pair<BlenderPairIt, bool> I =  blenders.insert	(make_pair(_strdup(desc.cName),B));
             R_ASSERT2		(I.second,"shader.xr - found duplicate name!!!");
 
 			chunk->Close	();

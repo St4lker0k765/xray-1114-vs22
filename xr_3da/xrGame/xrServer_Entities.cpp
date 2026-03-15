@@ -200,7 +200,7 @@ public:
 			P.r_u16		(A.count);
 			P.r_u64		(A.cls);
 			P.r_string	(str);
-			A.event		= strdup(str);
+			A.event		= _strdup(str);
 			Actions.push_back(A);
 			count--;
 		}

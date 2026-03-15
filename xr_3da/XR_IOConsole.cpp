@@ -327,7 +327,7 @@ outloop:
 	if (I!=Commands.end()) {
 		CConsoleCommand &C = *(I->second);
 		if (C.bEnabled) {
-			if (C.bLowerCaseArgs) strlwr(last_word);
+			if (C.bLowerCaseArgs) _strlwr(last_word);
 			if (last_word[0]==0) {
 				if (C.bEmptyArgsHandled) C.Execute(last_word);
 				else {

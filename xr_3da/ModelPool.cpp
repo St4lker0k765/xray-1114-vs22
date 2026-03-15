@@ -138,7 +138,7 @@ FBasicVisual* CModelPool::Create(const char* name)
 {
 	// 1. Search for already loaded model
 	char low_name[64]; R_ASSERT(strlen(name)<64);
-	strcpy(low_name,name); strlwr(low_name);
+	strcpy(low_name,name); _strlwr(low_name);
 
 	FBasicVisual*				Model=0;
 	vector<ModelDef>::iterator	I;

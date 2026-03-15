@@ -60,7 +60,7 @@ void CObjectAnimator::LoadMotions(const char* fname){
 			Log("ERROR: Can't load motion. Incorrect file version.");
 			THROW;
 		}
-		m_Motions[strdup(M->Name())]=M;
+		m_Motions[_strdup(M->Name())]=M;
 	}
 }
 

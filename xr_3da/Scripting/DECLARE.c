@@ -111,7 +111,7 @@ static char *scsGetFunctionParams()
   Advance;
   if lexeq(")")
     {
-     strcpy(temp+strlen(temp),")");
+     strcpy_s(temp+strlen(temp),sizeof(temp+strlen(temp)),")");
      Advance;
      return scStrdup(temp);
     }
@@ -122,7 +122,7 @@ static char *scsGetFunctionParams()
    scget_back(ST);
    if lexeq("...")
     {was3dots=true;
-     strcpy(temp+strlen(temp),ST->lexema);
+     strcpy_s(temp+strlen(temp),sizeof(temp+strlen(temp)),ST->lexema);
      Advance;
     }
     else
@@ -146,8 +146,8 @@ static char *scsGetFunctionParams()
        if (sm[it]->name&&strcmp(sm[it]->name,ts->name)==0)
         serr4( scErr_Declaration,"Parameters %d and %d has the same name '%s'",it+1,actu,ts->name);
 //     deb1("<%x>\n",(int)ts);
-     sprintf(s,"%x",(int)ts);//TS should be freed
-     strcpy(temp+strlen(temp),s);
+     sprintf_s(s,sizeof(s),"%x",(int)ts);//TS should be freed
+     strcpy_s(temp+strlen(temp),sizeof(temp+strlen(temp)),s);
     }
    Advance;
    if (lexeq("="))
@@ -160,14 +160,14 @@ static char *scsGetFunctionParams()
     sciReadSubExp(1,val,true);
     if (ip!=act.ip)
        serr( scErr_Declaration,"Invalid default initializer")
-    sprintf(s,"=%x",(int)val);
-    strcpy(temp+strlen(temp),s);
+    sprintf_s(s,sizeof(s),"=%x",(int)val);
+    strcpy_s(temp+strlen(temp),sizeof(temp+strlen(temp)),s);
    }
    if (!lexeq(",")) {if(!lexeq(")")) serr2( scErr_Parse,parse_error,ST->lexema)
                       else scget_back(ST);//put back ")"
                     }
                    else
-   strcpy(temp+strlen(temp),",");
+   strcpy_s(temp+strlen(temp),sizeof(temp+strlen(temp)),",");
 
   }
  }
@@ -178,17 +178,17 @@ static char *scsGetFunctionParams()
 }
 
 //return NULL,if not defi1 , eg int x;
-#define ADD_to_end(into) strcpy(into+strlen(into),ST->lexema)
+#define ADD_to_end(into) strcpy_s(into+strlen(into),sizeof(into+strlen(into)),ST->lexema)
 
 #define ADD_to_start(into,what) {char *t;\
-                           strcpy(otemp,what);\
-                           strcpy(otemp+strlen(otemp),temp);\
+                           strcpy_s(otemp,sizeof(otemp),what);\
+                           strcpy_s(otemp+strlen(otemp),sizeof(otemp+strlen(otemp)),temp);\
                            t=otemp;otemp=temp;temp=t;\
                            }
 //****************************************************
 /*
 #ifndef DJGPP
-char* itoa(int v,char *s, int base)//base =10
+char* _itoa(int v,char *s, int base)//base =10
 {
  sprintf(s,"%d",v);
  return s;
@@ -239,15 +239,15 @@ static char* scsGetDefiParams(char **name)
          serr2(scErr_Declaration, "Constant integer array size expected",ST->lexema);
       i=val.adr.val.ival;
       if (!lexeq("]")) serr2(scErr_Declaration, "`]' expected instead of `%s'",ST->lexema);
-      itoa(i,ST->lexema,10);
+      _itoa_s(i,ST->lexema,sizeof(ST->lexema),10);
      }
      ADD_to_end(tmp);
-     strcpy(ST->lexema,"]");
+     strcpy_s(ST->lexema,sizeof(ST->lexema),"]");
      ADD_to_end(tmp);
      Advance;
     }
     scget_back(ST);
-    strcpy(ST->lexema,"]");
+    strcpy_s(ST->lexema,sizeof(ST->lexema),"]");
 //    deb1("add %s\n",tmp);
     ADD_to_start(temp,tmp);
 //    deb1("temp= %s\n",temp);
@@ -302,15 +302,15 @@ static char* scsGetDefiParams(char **name)
            serr2(scErr_Parse, parse_error,ST->lexema);
    if (lexeq("operator"))
    {char *x=scReadOperatorName();
-    strcpy(ST->lexema,x);scFree(x);
+    strcpy_s(ST->lexema,sizeof(ST->lexema),x);scFree(x);
    }
    if (!(newsym=scdicFoundSymbol(structure->type.main,ST->lexema)))
            serr3(scErr_Declaration,"`%s' is not a member of %s",ST->lexema,structure->name);
    {//add to name
         char *x=scAlloc(strlen(*name)+strlen(ST->lexema)+3);
-        strcpy(x,*name);
-        strcpy(x+strlen(x),".");
-        strcpy(x+strlen(x),ST->lexema);
+        strcpy_s(x,sizeof(x),*name);
+        strcpy_s(x+strlen(x),sizeof(x+strlen(x)),".");
+        strcpy_s(x+strlen(x),sizeof(x+strlen(x)),ST->lexema);
         scFree(*name);
         *name=x;
 #if DEBUGLEVEL==0
@@ -608,8 +608,8 @@ scSymbol *scsGetTypeDeli()//scType* type)
             (this_symbol.type.main->type.flags&typSCRIPT||
              this_symbol.type.main->adr.flags&adrSCRIPT))
             {scSymbol *p=this_symbol.type.main;
-             strcpy(prefix,structure->name);
-             strcpy(prefix+strlen(prefix),".");
+             strcpy_s(prefix,sizeof(prefix),structure->name);
+             strcpy_s(prefix+strlen(prefix),sizeof(prefix+strlen(prefix)),".");
              while(p&&!in_script)
              {
 #if DEBUGLEVEL==0
@@ -618,10 +618,10 @@ scSymbol *scsGetTypeDeli()//scType* type)
               if (p->type.flags&typSCRIPT) in_script=p;
               if (!in_script)
                {char prefix2[2048];
-                strcpy(prefix2,prefix);
-                strcpy(prefix,p->name);
-                strcpy(prefix+strlen(prefix),".");
-                strcpy(prefix+strlen(prefix),prefix2);
+                strcpy_s(prefix2,sizeof(prefix2),prefix);
+                strcpy_s(prefix,sizeof(prefix),p->name);
+                strcpy_s(prefix+strlen(prefix),sizeof(prefix+strlen(prefix)),".");
+                strcpy_s(prefix+strlen(prefix),sizeof(prefix+strlen(prefix)),prefix2);
                }
               p=p->parent;
              }
@@ -714,7 +714,7 @@ scSymbol *scsGetTypeDeli()//scType* type)
       {char *x=scAlloc(strlen(sym2->name)+2);
 //       deb1("Renaming to ~%s\n",sym2->name);
        x[0]='~';
-       strcpy(x+1,sym2->name);
+       strcpy_s(x+1,sizeof(x+1),sym2->name);
        scFree(sym2->name);
        sym2->name=x;
       }
@@ -786,7 +786,7 @@ scSymbol *scsGetTypeDeli()//scType* type)
           int i=strlen(prefix);
           t=New(scSymbol);
           *t=*sym2;
-          strcpy(prefix+i,sym2->name);
+          strcpy_s(prefix+i,sizeof(prefix+i),sym2->name);
           deb2("script '%s':add function %s\n",in_script->name,prefix);
           t->name=scStrdup(prefix);
           t->next=NULL;

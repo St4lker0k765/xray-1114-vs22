@@ -40,7 +40,7 @@ void CDemoActor::Load(CInifile* ini, const char * section)
 	}
 	if (ini->LineExists(section,"attached"))
 	{
-		attached		= strdup(ini->ReadSTRING(section,"attached"));
+		attached		= _strdup(ini->ReadSTRING(section,"attached"));
 	}
 	time2start_ltx	= ini->ReadFLOAT(section,"time2start");
 	time2start		= time2start_ltx;

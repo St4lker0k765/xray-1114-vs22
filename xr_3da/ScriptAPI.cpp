@@ -79,7 +79,7 @@ void CScriptAPI::Initialize()
 
 		strcpy	(S.name,F.name);
 		if (strchr(S.name,'.')) *(strchr(S.name,'.'))=0;
-		strlwr	(S.name);
+		_strlwr	(S.name);
 
 		strcpy	(cname,"scripts\\");
 		strcat	(cname,S.name);
@@ -115,7 +115,7 @@ void CScriptAPI::Initialize()
 			_read	(hload,&sign,8);
 			R_ASSERT(sign==signature);
 			void* ptr = 0;
-			_readLZ (hload,ptr,filelength(hload)-8);
+			_readLZ (hload,ptr,_filelength(hload)-8);
 			S.S = (char*)ptr;
 			_close	(hload);
 		}
@@ -143,7 +143,7 @@ CScript*	CScriptAPI::CreateInstance(const char *name)
 {
 	char N[256];
 	strcpy(N,name);
-	strlwr(N);
+	_strlwr(N);
 
 	vector<SScriptDef>::iterator i = Scripts.begin();
 	for (;i<Scripts.end();i++)

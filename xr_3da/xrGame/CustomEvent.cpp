@@ -63,14 +63,14 @@ void CCustomEvent::Parse		(DEF_EVENT& D, LPCSTR DEF)
 		if (sName[0])	{
 			int id		= Level().get_RPID(sName);
 			R_ASSERT	(id>=0);
-			strconcat	(Parsed,sBegin,itoa(id,sBuf,10),sEnd);
+			strconcat	(Parsed,sBegin,_itoa(id,sBuf,10),sEnd);
 		} else {
 			strcpy		(Parsed,Param);
 		}
 		
 		// Create
 		D.E  = Engine.Event.Create(Event); 
-		D.P1 = strdup	(Parsed); 
+		D.P1 = _strdup	(Parsed); 
 	}
 }
 

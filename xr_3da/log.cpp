@@ -60,14 +60,14 @@ void Log(const char *s) {
 		if (s[i]=='\n') {
 			split[j]=0;	// end of line
 			if (split[0]==0) { split[0]=' '; split[1]=0; }
-			AddOne(strdup(split));
+			AddOne(_strdup(split));
 			j=0;
 		} else {
 			split[j++]=s[i];
 		}
 	}
 	split[j]=0;
-	AddOne(strdup(split));
+	AddOne(_strdup(split));
 }
 
 void __cdecl Msg( const char *format, ...)
@@ -185,7 +185,7 @@ void CreateLog(BOOL bQuiet)
 	strcpy(buf,__DATE__);
 	sscanf(buf,"%s %d %d",mon,&dnum, &ynum);
 	for (int i=0; i<12; i++) {
-		if (stricmp(month[i],mon)==0) mnum=i;
+		if (_stricmp(month[i],mon)==0) mnum=i;
 	}
 	for (mcnt=6; mcnt<mnum; mcnt++) build+=day_in_month[mcnt];
 	build+=dnum;

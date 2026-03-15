@@ -92,7 +92,7 @@ void scInitAlloc()
 
 char *scStrdup(char *x)
 {char *y=scAlloc(strlen(x)+1);
- strcpy(y,x);
+ strcpy_s(y,sizeof(y),x);
  return y;
 }
 

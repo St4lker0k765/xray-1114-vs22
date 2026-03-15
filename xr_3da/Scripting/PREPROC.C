@@ -48,7 +48,7 @@ return temp;
 void AddBackSlashes(char *n)
 {char t[1024];
 unsigned int i=0,j=0;
-strcpy(t,n);
+strcpy_s(t,sizeof(t),n);
 while(t[i]==' ') i++;
 for(;i<strlen(t);i++)
 {
@@ -80,7 +80,7 @@ char *render_macro(Source_Text* ST,scSymbol* sym)
 	//actual,formal parameter
 	// ST->num_lines=ST->act_line;
 	
-	strcpy(t1,((char *)sym->reserved)+sym->adr.address+1);
+	strcpy_s(t1,sizeof(t1),((char*)sym->reserved) + sym->adr.address + 1);
 	// deb1("\nMaking macro :%s\n",t1);
 	// deb1("%s<-\n",STALine);
 	Advance;
@@ -97,13 +97,13 @@ char *render_macro(Source_Text* ST,scSymbol* sym)
 		Advance;//next readed
 		//    deb2("`%s':%d;",ST->lexema,li);
 		if (ST->whitespaces)
-			strcpy(nm1+strlen(nm1)," ");
+			strcpy_s(nm1+strlen(nm1),sizeof(nm1+strlen(nm1))," ");
 		if (lexeq("{")) brik++;
 		if (lexeq("}")) brik--;
 		if (lexeq("(")) li++;
 		if (lexeq(")")) (li--,(li>0?dont_end=1:0));
 		
-		strcpy(nm1+strlen(nm1),ST->lexema);//actual parameter
+		strcpy_s(nm1+strlen(nm1),sizeof(nm1+strlen(nm1)),ST->lexema);//actual parameter
 		//    deb1("<%s>\n",nm1);
 		dm1=ST->lexema[0];
 		}
@@ -120,7 +120,7 @@ char *render_macro(Source_Text* ST,scSymbol* sym)
 		ST->act_char=mchr;STALine=(char *)sym->reserved;
 		Advance;//read
 		//  if (IsSymbol(ST->lexema[0])) serr( parse_error);
-		strcpy(nm2,ST->lexema);//actual parameter
+		strcpy_s(nm2,sizeof(nm2),ST->lexema);//actual parameter
 		Advance;//read symbol
 		if (ST->lexema[1])
 		{
@@ -246,7 +246,7 @@ Source_Text* sc_prepro(Source_Text* ST,int until,int skip,char *temp,scDictionar
 				//        difline=ST->act_line-
 				t=atoi(ST->lexema);
 				Advance;
-				strcpy(incfile,ST->lexema);
+				strcpy_s(incfile,sizeof(incfile),ST->lexema);
 				if (strcmp(incfile,"\"!!_internal_Script\"")==0) in_include--;
 				//        if (incfile[0]=='\'') in_include--;
 				else in_include++;
@@ -263,9 +263,9 @@ Source_Text* sc_prepro(Source_Text* ST,int until,int skip,char *temp,scDictionar
 			if (s[0]=='"')//erase "
 			{s++;s[strlen(s)-1]=0;
 			}
-			//        scScript_Title=strdup(s);
-			strcpy(scScript_Title,s);
-			strcpy(ST->name,s);//????
+			//        scScript_Title=_strdup(s);
+			strcpy_s(scScript_Title,sizeof(scScript_Title),s);
+			strcpy_s(ST->name,sizeof(ST->name),s);//????
 			}
 			else
 				if (lexeq("author"))
@@ -275,8 +275,8 @@ Source_Text* sc_prepro(Source_Text* ST,int until,int skip,char *temp,scDictionar
 				if (s[0]=='"')//erase "
 				{s++;s[strlen(s)-1]=0;
 				}
-				strcpy(scScript_Author,s);
-				//        scScript_Author=strdup(s);
+				strcpy_s(scScript_Author,sizeof(scScript_Author),s);
+				//        scScript_Author=_strdup(s);
 				}
 				else
 					if (lexeq("define"))
@@ -416,7 +416,7 @@ Source_Text* sc_prepro(Source_Text* ST,int until,int skip,char *temp,scDictionar
 												//load
 												if (ST->lexema[0]=='"')
 												{//FILE
-													strcpy(sname,ST->lexema+1);
+													strcpy_s(sname,sizeof(sname),ST->lexema+1);
 													sname[strlen(sname)-1]=0;
 													//          printf(" include from file %s!\n",sname);
 													ST1=scLoad_File(sname);
@@ -427,7 +427,7 @@ Source_Text* sc_prepro(Source_Text* ST,int until,int skip,char *temp,scDictionar
 												{//Chars
 													scSymbol* sym=NULL;
 													char *x=NULL;
-													strcpy(sname,ST->lexema);
+													strcpy_s(sname,sizeof(sname),ST->lexema);
 													if (scInternalHeaders)
 														sym=scdicFoundSymbol(scInternalHeaders->first,ST->lexema);
 													if (sym) x=(char *)sym->adr.address;
@@ -451,16 +451,16 @@ Source_Text* sc_prepro(Source_Text* ST,int until,int skip,char *temp,scDictionar
 												for (i=ST->act_line;i<=ST->act_line+ST1->num_lines;i++)
 													ST->lines[i+1]=ST1->lines[i-ST->act_line];
 												{char st[256];
-												sprintf(st,"#! %d \"%s\"",0,sname);
+												sprintf_s(st,sizeof(st),"#! %d \"%s\"",0,sname);
 												ST->lines[ST->act_line]=scStrdup(st);
 												//           if (in_include)
 												//           sprintf(st,"#! %d %s",ST->act_line+1,incfile);
 												//           else
 												//           deb3("Inc[%d]=%d-%d",in_include,ST->act_line+1,included[in_include]);
 												if (in_include)
-													sprintf(st,"#! %d %s",ST->act_line+1-included[in_include],incfile);
+													sprintf_s(st,sizeof(st),"#! %d %s",ST->act_line+1-included[in_include],incfile);
 												else
-													sprintf(st,"#! %d \"%s\"",ST->act_line+1-included[in_include],"!!_internal_Script");
+													sprintf_s(st,sizeof(st),"#! %d \"%s\"",ST->act_line+1-included[in_include],"!!_internal_Script");
 												ST->lines[ST->act_line+ST1->num_lines+1]=scStrdup(st);
 												{int l;
 												for(l=0;l<in_include;l++)included[l]+=ST1->num_lines+1;
@@ -527,7 +527,7 @@ Source_Text* sc_prepro(Source_Text* ST,int until,int skip,char *temp,scDictionar
 						  {scSwap(temp,STALine," ",cl,ST->act_char);
 						  scFree(STALine);
 						  STALine=scAlloc(strlen(temp)+1);
-						  strcpy(STALine,temp);
+						  strcpy_s(STALine,sizeof(STALine),temp);
 						  ST->act_char=cl;
 						  }
 						  else
@@ -537,7 +537,7 @@ Source_Text* sc_prepro(Source_Text* ST,int until,int skip,char *temp,scDictionar
 						  scSwap(temp,STALine,"",0,ST->act_char);
 						  scFree(STALine);
 						  STALine=scAlloc(strlen(temp)+1);
-						  strcpy(STALine,temp);
+						  strcpy_s(STALine,sizeof(STALine),temp);
 						  ST->act_char=0;
 						  }
 					  }
@@ -588,7 +588,7 @@ scdicAddSymbol(macros,"false",0,0,"0");
 //do the job for all the file without skipping
 ST->newline=-1;
 ST->linedif=0;
-strcpy(ST->name,"script");
+strcpy_s(ST->name,sizeof(ST->name),"script");
 sc_prepro(ST,0,0,temp,macros,1/*init*/);
 
 // getchar();
@@ -598,7 +598,6 @@ return ST;
 
 //allegro.h:
 #define PACKFILE FILE
-#define pack_fopen fopen
 #define pack_fclose fclose
 #define pack_feof feof
 #define pack_fgets fgets
@@ -648,15 +647,14 @@ Source_Text*  scLoad_File(char *filename)
 {
 	Source_Text* ST;
 char s[2048];
-PACKFILE *file;
+PACKFILE *file = 0;
 
 //Load ST:
 ST=new_Source_Text();
 ST->alloced_lines=20;
 ST->lines=scAlloc(ST->alloced_lines*sizeof(char *));
 ST->num_lines=-1;
-file=pack_fopen(filename,"r");
-if (!file) return NULL;
+if (!fopen_s(&file, filename, "r")) return NULL;
 while (!pack_feof(file))
 {s[0]=0;
 pack_fgets(s,2047,file);

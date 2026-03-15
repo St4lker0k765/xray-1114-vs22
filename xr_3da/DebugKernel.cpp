@@ -45,8 +45,8 @@ static BOOL CALLBACK verifyProc( HWND hw, UINT msg, WPARAM wp, LPARAM lp )
 		if( LOWORD(wp)==IDSTOP ) {
 			EndDialog(hw, IDSTOP);
 		}
-		if( LOWORD(wp)==IDCONTINUE) {
-			EndDialog(hw, IDCONTINUE);
+		if( LOWORD(wp)==ID_CONTINUE) {
+			EndDialog(hw, ID_CONTINUE);
 		}
 		if( LOWORD(wp)==IDDEBUG) {
 			EndDialog(hw, IDDEBUG);
@@ -89,7 +89,7 @@ ENGINE_API void __fastcall _verify     (const char *expr, char *file, int line)
         DebugBreak();
 #endif
         break;
-    case IDCONTINUE:
+    case ID_CONTINUE:
         break;
     }
 	CS.Leave			();
@@ -126,7 +126,7 @@ int __cdecl _out_of_memory(size_t size)
         DebugBreak();
 #endif
         break;
-    case IDCONTINUE:
+    case ID_CONTINUE:
         return 0;
     }
     return 1;

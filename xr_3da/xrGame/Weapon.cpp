@@ -23,7 +23,7 @@ CWeapon::CWeapon(LPCSTR name)
 	bVisible	= false;
 	SetDefaults	();
 	m_pHUD		= new CWeaponHUD();
-	m_WpnName	= strupr(strdup(name));
+	m_WpnName	= _strupr(_strdup(name));
 	m_pContainer= 0;
 	m_Offset.identity();
 
@@ -140,7 +140,7 @@ void CWeapon::Load		(CInifile* ini, const char* section)
 	ShaderCreate		(hUIIcon,"hud\\default","");
 	
 	LPCSTR	name		= ini->ReadSTRING	(section,"wm_name");
-	pstrWallmark		= strdup(name);
+	pstrWallmark		= _strdup(name);
 	if (0==pstrWallmark)hWallmark = 0; 
 	else				hWallmark = Device.Shader.Create("effects\\wallmark",pstrWallmark);
 	fWallmarkSize		= ini->ReadFLOAT	(section,"wm_size");

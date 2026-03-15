@@ -66,7 +66,7 @@ CTexture* CShaderManager::_CreateTexture	(LPCSTR Name)
 	{
 		CTexture *T		= new CTexture;
 		T->dwReference	= 1;
-		textures.insert	(make_pair(strdup(Name),T));
+		textures.insert	(make_pair(_strdup(Name),T));
 		if (Device.bReady && !bDeferredLoad) T->Load(Name);
 		return		T;
 	}
@@ -88,7 +88,7 @@ LPCSTR	CShaderManager::DBG_GetTextureName	(CTexture* T)
 CMatrix*	CShaderManager::_CreateMatrix	(LPCSTR Name) 
 {
 	R_ASSERT(Name && Name[0]);
-	if (0==stricmp(Name,"$null"))	return NULL;
+	if (0==_stricmp(Name,"$null"))	return NULL;
 
 	LPSTR N = LPSTR(Name);
 	map<LPSTR,CMatrix*,str_pred>::iterator I = matrices.find	(N);
@@ -102,7 +102,7 @@ CMatrix*	CShaderManager::_CreateMatrix	(LPCSTR Name)
 	{
 		CMatrix* M		=	new CMatrix;
 		M->dwReference	=	1;
-		matrices.insert	(make_pair(strdup(Name),M));
+		matrices.insert	(make_pair(_strdup(Name),M));
 		return	M;
 	}
 }
@@ -130,7 +130,7 @@ void	CShaderManager::ED_UpdateMatrix		(LPCSTR Name, CMatrix* data)
 CConstant*	CShaderManager::_CreateConstant	(LPCSTR Name) 
 {
 	R_ASSERT(Name && Name[0]);
-	if (0==stricmp(Name,"$null"))	return NULL;
+	if (0==_stricmp(Name,"$null"))	return NULL;
 	
 	LPSTR N = LPSTR(Name);
 	map<LPSTR,CConstant*,str_pred>::iterator I = constants.find	(N);
@@ -144,7 +144,7 @@ CConstant*	CShaderManager::_CreateConstant	(LPCSTR Name)
 	{
 		CConstant* C	=	new CConstant;
 		C->dwReference	=	1;
-		constants.insert	(make_pair(strdup(Name),C));
+		constants.insert	(make_pair(_strdup(Name),C));
 		return	C;
 	}
 }
@@ -202,7 +202,7 @@ void	CShaderManager::ED_UpdateBlender	(LPCSTR Name, CBlender* data)
 		_DELETE		(I->second);
 		I->second	= data;
 	} else {
-		blenders.insert	(make_pair(strdup(Name),data));
+		blenders.insert	(make_pair(_strdup(Name),data));
 	}
 }
 
@@ -295,7 +295,7 @@ void	CShaderManager::_ParseList(sh_list& dest, LPCSTR names)
 			// flush
 			N.push_back(0);
 			strcpy(dest.last(),N.begin());
-			strlwr(dest.last());
+			_strlwr(dest.last());
             if (strext(dest.last())) *strext(dest.last())=0;
 			dest.inc();
 			N.clear();
@@ -309,7 +309,7 @@ void	CShaderManager::_ParseList(sh_list& dest, LPCSTR names)
 		// flush
 		N.push_back(0);
 		strcpy(dest.last(),N.begin());
-		strlwr(dest.last());
+		_strlwr(dest.last());
 		if (strext(dest.last())) *strext(dest.last())=0;
 		dest.inc();
 	}

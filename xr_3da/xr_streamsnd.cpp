@@ -47,7 +47,7 @@ CSoundStream::CSoundStream	( )
 CSoundStream::~CSoundStream	( )
 {
 	Stop				( );
-    close				(hf);
+    _close				(hf);
 
 	_FREE				(WaveSource);
 	_FREE				(WaveDest);
@@ -86,7 +86,7 @@ void CSoundStream::Play	( BOOL loop, int cnt )
 	WaveSource = (unsigned char *)malloc(dwSrcBufSize);
 
 	// seek to data start
-	lseek		(hf,DataPos,SEEK_SET);
+	_lseek		(hf,DataPos,SEEK_SET);
 	writepos	= 0;
 	Decompress	(WaveDest);
 	writepos	=stream.cbDstLengthUsed;
@@ -283,14 +283,14 @@ void CSoundStream::LoadADPCM( )
 	R_ASSERT		(hf>=0);
 //    VERIFY2			(,"Can't open input file");
 	ZeroMemory		(&riff, sizeof(riff));
-    XRead			(riff);
+    _read			(hf, &riff, sizeof(riff));
     memcpy			(buf,riff.id,4); buf[4]=0;
     memcpy			(buf,riff.wave_id,4); buf[4]=0;
 
-    while (XRead(hdr)) {
+    while (_read(hf, &hdr, sizeof(hdr))) {
         memcpy(buf,hdr.id,4); buf[4]=0;
         pos=_tell(hf);
-        if (stricmp(buf, "fmt ")==0) {
+        if (_stricmp(buf, "fmt ")==0) {
 			dwFMT_Size = hdr.len;
 			psrc = (LPWAVEFORMATEX)malloc(dwFMT_Size);
 			pwfx = (LPWAVEFORMATEX)malloc(dwFMT_Size);
@@ -298,7 +298,7 @@ void CSoundStream::LoadADPCM( )
 			CopyMemory(pwfx,psrc,dwFMT_Size);
 			pwfx->wFormatTag = WAVE_FORMAT_PCM;
         } else {
-            if (stricmp(buf,"data")==0) {
+            if (_stricmp(buf,"data")==0) {
                 DataPos=_tell(hf);
 				dwTotalSize=hdr.len;
             }

@@ -1198,7 +1198,7 @@ int sciReadSubExp(int i,_value *val,BOOL ExpRequired)
          }
          if (lexeq("operator"))
          {char *x=scReadOperatorName();
-          strcpy(ST->lexema,x);scFree(x);
+          strcpy_s(ST->lexema,sizeof(ST->lexema),x); scFree(x);
          }
 
 //         scAssert(SubExpr::Struct,scvalGetValType(val)!=valSCRIPT||(sc->adr.flags&adrSCRIPT));
@@ -1211,7 +1211,7 @@ int sciReadSubExp(int i,_value *val,BOOL ExpRequired)
          }*/
 
          find_among=val->type.main;
-         strcpy(name,ST->lexema);
+         strcpy_s(name,sizeof(name),ST->lexema);
          Advance;
          if (lexeq("("))
          {
@@ -1230,7 +1230,7 @@ int sciReadSubExp(int i,_value *val,BOOL ExpRequired)
           regs=scvalPushUsedRegisters();
           params=scvalReadParameters();
           {char *sname=scAlloc(1024);
-          sprintf(sname,"%%s is not a function member of `%s'.%%s",father->name);
+          sprintf_s(sname,sizeof(sname),"%%s is not a function member of `%s'.%%s",father->name);
           sym=scsFind_Function(name,find_among,NULL,params,sname);
           scFree(sname);
           }
@@ -2079,17 +2079,17 @@ scSymbol *scsFind_Function(char *name,scSymbol *find_among,scSymbol *also_find,_
   //get
   {
    int i=0;
-   strcpy(func,name);
-   strcpy(func+strlen(func),"(");
+   strcpy_s(func,sizeof(func),name);
+   strcpy_s(func+strlen(func),sizeof(func+strlen(func)),"(");
 
    while((params[i].adr.flags!=(adrIMPORTED&adrTYPEONLY))||
           params[i].type.flags!=typINVALID)
    {
-    if (i) strcpy(func+strlen(func),",");
+    if (i) strcpy_s(func+strlen(func),sizeof(func+strlen(func)),",");
     sctypTypeOfStr(&params[i].type,NULL,func+strlen(func));
     i++;
    }
-   strcpy(func+strlen(func),")");
+   strcpy_s(func+strlen(func),sizeof(func+strlen(func)),")");
   }
 
   if (fi>1)
@@ -2097,7 +2097,7 @@ scSymbol *scsFind_Function(char *name,scSymbol *find_among,scSymbol *also_find,_
     char buf[1024];
     for(i=0;i<fi;i++)
     {
-        strcpy(buf+strlen(buf),"\n");
+        strcpy_s(buf+strlen(buf),sizeof(buf+strlen(buf)),"\n");
         sctypTypeOfStr(&found[i]->type,name,buf+strlen(buf));
     }
     serr4(scErr_Operand,"Unable to decide which of %d candidates for function '%s' to use:%s",scStrdup(func),fi,scStrdup(buf));
@@ -2119,8 +2119,8 @@ scSymbol *scsFind_Function(char *name,scSymbol *find_among,scSymbol *also_find,_
       if (strcmp(p->name,name)==0)
        {
         if (!buf[0])
-            strcpy(buf,"\nPossible candidates:");
-        strcpy(buf+strlen(buf),"\n");
+            strcpy_s(buf,sizeof(buf),"\nPossible candidates:");
+        strcpy_s(buf+strlen(buf),sizeof(buf+strlen(buf)),"\n");
         sctypTypeOfStr(&p->type,name,buf+strlen(buf));
        }
 

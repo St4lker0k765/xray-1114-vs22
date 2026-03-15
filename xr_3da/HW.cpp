@@ -22,7 +22,7 @@ struct _uniq_mode
 {
     _uniq_mode(LPCSTR v): _val(v) {}
     LPCSTR _val;
-    bool operator()(const std::string& other) const { return 0 == stricmp(_val, other.c_str()); }
+    bool operator()(const std::string& other) const { return 0 == _stricmp(_val, other.c_str()); }
 };
 
 #ifndef _EDITOR

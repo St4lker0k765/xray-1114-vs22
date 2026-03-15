@@ -27,7 +27,7 @@ void CObject::StatusBegin	()
 void CObject::cNameSET		(LPCSTR N)
 { 
 	_FREE(ObjectName); 
-	ObjectName=strdup(N); 
+	ObjectName=_strdup(N); 
 }
 
 //----------------------------------------------------------------------
@@ -90,7 +90,7 @@ void CObject::Load				( CInifile* ini, const char *section )
 	// Name
 	R_ASSERT					(section);
 	_FREE						(ObjectName);
-	ObjectName					= strdup(section);
+	ObjectName					= _strdup(section);
 
 	// Geometry and transform
 	Fvector dir,norm;
@@ -104,7 +104,7 @@ void CObject::Load				( CInifile* ini, const char *section )
 	R_ASSERT					( pCreator );
 
 	// Visual
-	pVisualName					= strdup(ini->ReadSTRING(section,"visual"));
+	pVisualName					= _strdup(ini->ReadSTRING(section,"visual"));
 	OnDeviceCreate				();
 	
 	// Collision model

@@ -174,7 +174,7 @@ static void scsymCountAndDestruct(scSymbol *sym)
 #endif
   _this=sctypGetStruct(&sym->type);
   scAssert(scsymCountAndDestruct,_this);
-  strcpy(dname+1,_this->name);
+  strcpy_s(dname+1,sizeof(dname+1),_this->name);
   dname[0]='~';
 #if DEBUGLEVEL==0
   deb2("Class %s with %s\n",_this->name,dname);
@@ -308,11 +308,11 @@ static void scsReadFunctionBody(scSymbol* deli,scSymbol *sym,int previous_addres
    {if (p->name[0]!='%'&&(p->type.flags&typSTATIC))
         {char *x=scAlloc(strlen(p->name)+strlen(function->name)+6+3+1);
            x[0]='%';
-           strcpy(x+1,"STATIC");
-           strcpy(x+strlen(x),":");
-           strcpy(x+strlen(x),function->name);
-           strcpy(x+strlen(x),"-");
-           strcpy(x+strlen(x),p->name);
+           strcpy_s(x+1,sizeof(x+1),"STATIC");
+           strcpy_s(x+strlen(x),sizeof(x+strlen(x)),":");
+           strcpy_s(x+strlen(x),sizeof(x+strlen(x)),function->name);
+           strcpy_s(x+strlen(x),sizeof(x+strlen(x)),"-");
+           strcpy_s(x+strlen(x),sizeof(x+strlen(x)),p->name);
            scFree(p->name);
            p->name=x;
         }
@@ -833,8 +833,8 @@ static void scsReadOneStatement(scSymbol* deli)
                     ST->linedif=atoi(ST->lexema)-ST->act_line-1;
                     Advance;
                     if (lexeq("\"!!_internal_Script\""))
-                    strcpy(ST->name,scScript_Title); else
-                    strcpy(ST->name,ST->lexema);
+                    strcpy_s(ST->name,sizeof(ST->name),scScript_Title); else
+                    strcpy_s(ST->name,sizeof(ST->name),ST->lexema);
                     Advance;
                     scget_back(ST);
 #if DEBUGLEVEL<5
@@ -1019,15 +1019,15 @@ static void scsReadOneStatement(scSymbol* deli)
      Advance;
      if (!sciValidIdentifier(ST->lexema))
        serr2(scErr_Declaration, "Invalid identifier `%s' in declaration",ST->lexema);
-     strcpy(name,ST->lexema);
+     strcpy_s(name,sizeof(name),ST->lexema);
      Advance;
      while (lexeq(".")||lexeq("::"))
       {
-       strcpy(name+strlen(name),".");
+       strcpy_s(name+strlen(name),sizeof(name+strlen(name)),".");
        Advance;
        if (!sciValidIdentifier(ST->lexema))
          serr2(scErr_Declaration, "Invalid identifier `%s' in declaration",ST->lexema);
-       strcpy(name+strlen(name),ST->lexema);
+       strcpy_s(name+strlen(name),sizeof(name+strlen(name)),ST->lexema);
        Advance;
       }
      if (!scdicFoundSymbol(SC_exports->first,name))

@@ -1,7 +1,8 @@
 #ifndef __XR_CDAUDIO_H__
 #define __XR_CDAUDIO_H__
 
-typedef enum CDA_STATE{
+enum CDA_STATE
+{
 	CDA_STATE_PLAY,
 	CDA_STATE_STOP,
 	CDA_STATE_PAUSE,

@@ -66,12 +66,12 @@ extern BOOL		psUserLevelsDone	[];
 void CXR_Menu::AddToNames(char *name) {
 	char n[64];
 	strcpy(n,name);
-	strlwr(n);
+	_strlwr(n);
 	n[0]=toupper(n[0]);
 	char *p = strchr(n,'.');
 	if (p) *p=0;
-	Names.Add(strdup(n));
-	if (stricmp(n,psUserName)==0) iCurrentUser = Names.count-1;
+	Names.Add(_strdup(n));
+	if (_stricmp(n,psUserName)==0) iCurrentUser = Names.count-1;
 }
 
 CXR_Menu::CXR_Menu()

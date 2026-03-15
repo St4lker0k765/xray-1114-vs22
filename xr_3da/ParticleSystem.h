@@ -183,7 +183,7 @@ struct ENGINE_API SDef: public SParams
 
 		sh_name new_name;
 		strcpy(new_name,N);
-		strlwr(new_name);
+		_strlwr(new_name);
 		if (strcmp(m_Name,new_name)!=0){
 			strcpy(m_Name,new_name);
 
@@ -195,7 +195,7 @@ struct ENGINE_API SDef: public SParams
 			if (sz > 63) sz=63;
 			buf[sz] = 0;
 			strcpy(m_Computer,buf);
-			strlwr(m_Computer);
+			_strlwr(m_Computer);
 	
 			// Time
 			_tzset(); time( (time_t*)&m_dwCreationTime );

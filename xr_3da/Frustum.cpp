@@ -173,7 +173,7 @@ sPoly*	CFrustum::ClipPoly(sPoly& S, sPoly& D)
 		cls[src->size()] = cls[0];
 		src->push_back((*src)[0]);
 		Fvector D; float denum,t;
-		for (int j=0; j<src->size()-1; j++)
+		for (size_t j=0; j<src->size()-1; j++)
 		{
 			if ((*src)[j].similar((*src)[j+1],EPS_S)) continue;
 

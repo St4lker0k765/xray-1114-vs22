@@ -31,7 +31,7 @@ CCustomMotion::~CCustomMotion(){
 
 void CCustomMotion::Save(CFS_Base& F){
 #ifdef _LWO_EXPORT
-	ReplaceSpace(name);			strlwr(name);
+	ReplaceSpace(name);			_strlwr(name);
 #endif
 	F.WstringZ	(name);
 	F.Wdword	(iFrameStart);	
@@ -192,8 +192,8 @@ bool CSMotion::LoadMotion(const char* buf){
 void CSMotion::Save(CFS_Base& F){
 	CCustomMotion::Save(F);
 #ifdef _LWO_EXPORT
-	ReplaceSpace(cStartBone);	strlwr(cStartBone);
-	ReplaceSpace(cBonePart);	strlwr(cBonePart);
+	ReplaceSpace(cStartBone);	_strlwr(cStartBone);
+	ReplaceSpace(cBonePart);	_strlwr(cBonePart);
 #endif
 	F.Wword		(EOBJ_SMOTION_VERSION);
 	F.WstringZ	(cStartBone);

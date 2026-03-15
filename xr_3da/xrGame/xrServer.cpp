@@ -177,7 +177,7 @@ DWORD xrServer::OnMessage(NET_Packet& P, DPNID sender)	// Non-Zero means broadca
 					if (!(*I))	{ ID = I-ids_used.begin(); break; }
 				}
 				if (0xffff==ID)	{
-					ID			= ids_used.size	();
+					ID			= (u16)ids_used.size	();
 					ids_used.push_back			(false);
 				}
 			} else {

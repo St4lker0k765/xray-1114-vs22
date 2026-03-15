@@ -29,10 +29,10 @@ void CLocatorAPI::ProcessOne(_finddata_t& F, const char* path)
 		if (0==strcmp(F.name,"."))	return;
 		if (0==strcmp(F.name,"..")) return;
 		strcat(N,"\\");
-		files.insert(strlwr(strdup(N)));
+		files.insert(_strlwr(_strdup(N)));
 		Recurse(N);
 	} else {
-		files.insert(strlwr(strdup(N))); 
+		files.insert(_strlwr(_strdup(N))); 
 	}
 }
 
@@ -75,7 +75,7 @@ BOOL CLocatorAPI::Exist(const char* F)
 {
 	FILE_NAME		N;
 	strcpy			(N,F);
-	strlwr			(N);
+	_strlwr			(N);
 
 	set_cstr_it		I = files.find(N);
 	return			I != files.end();
@@ -97,7 +97,7 @@ void CLocatorAPI::List(vector<char*>& dest, const char* path, DWORD flags)
 
 	FILE_NAME		N;
 	strcpy			(N,path);
-	strlwr			(N);
+	_strlwr			(N);
 	if (N[strlen(N)-1]!='\\') strcat(N,"\\");
 
 	set_cstr_it		I = files.find(N);
@@ -120,7 +120,7 @@ void CLocatorAPI::List(vector<char*>& dest, const char* path, DWORD flags)
 
 			if (strstr(entry_begin,"\\")!=end_symbol)	continue;	// folder in folder
 
-			dest.push_back	(strdup(entry_begin));
+			dest.push_back	(_strdup(entry_begin));
 		}
 	}
 	return;
