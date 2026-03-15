@@ -2,21 +2,30 @@
 #include "xr_trims.h"
 #include "xr_tokens.h"
 
-char* _TrimRight( char* str )
+LPSTR _TrimLeft( LPSTR str )
 {
-	DWORD	num = strlen( str ) - 1;
-	while ( (num > 0)&&(isspace(BYTE(str[num]))))
-	{
-		num--;
-	}
-	str[num+1] = 0;
+	LPSTR p 	= str;
+	while( *p && (u8(*p)<=u8(' ')) ) p++;
+    if (p!=str){
+		LPSTR t = str;
+        for (; *p; t++,p++) *t=*p;
+        *t = 0;
+    }
 	return str;
 }
 
-char* _Trim( char* str )
+LPSTR _TrimRight( LPSTR str )
 {
-	_TrimLeft	( str );
-	_TrimRight	( str );
+	LPSTR p 	= str+strlen(str);
+	while( (p!=str) && (u8(*p)<=u8(' ')) ) p--;
+    *(++p) 		= 0;
+	return str;
+}
+
+LPSTR _Trim( LPSTR str )
+{
+	_TrimLeft( str );
+	_TrimRight( str );
 	return str;
 }
 
@@ -95,21 +104,6 @@ char* _ChangeSymbol ( char* name, char src, char dest )
 		sTmpName ++;
 	}
 	return						name;
-}
-
-char* _TrimLeft( char* str )
-{
-	char* p = str;
-	while( *p && isspace(*p) ) p++;
-	DWORD	num1 = strlen( str );
-	DWORD	num2 = strlen( p );
-	if (num1 == num2) return str;
-	for (DWORD	i = 0; i < num1; i++)
-	{
-		if (i < num2) str[i] = p[i];
-			else str[i] = 0;
-	}
-	return str;
 }
 
 

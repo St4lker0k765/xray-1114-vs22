@@ -39,7 +39,7 @@ void CLocatorAPI::ProcessOne(_finddata_t& F, const char* path)
 void CLocatorAPI::Recurse(const char* path)
 {
     _finddata_t		sFile;
-    int				hFile;
+    intptr_t		hFile;
 
 	FILE_NAME		N;
 	strcpy			(N,path);
